@@ -1,13 +1,16 @@
-name: "Paul Julian II, PhD"                                # CHANGE HERE 
+name: "Paul Julian II, PhD"                                
 output_dir: "."
 navbar:
-  title: "Paul Julian II, PhD"                             # CHANGE HERE 
+  title: "Paul Julian II, PhD"                             
   type: inverse
   left:
     - text: "Home"
       icon: fa-home
       href: index.html
     - text: "About"
+      icon: fa-user 
+      href: about.html
+    - text: "Research"
       icon: fa-user 
       href: about.html
     - text: "CV"
@@ -18,12 +21,14 @@ navbar:
       href: https://SwampThingPaul.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
   right:
     - icon: fa-envelope-o
-      href: mailto:pjulian@ufl.edu                     
+      href: mailto:pjulian@ufl.edu                    
     - icon: fa-twitter
-      href: httpe://twitter.com/swampthingpaul
+      href: https://twitter.com/swampthingpaul
     - icon: fa-github
-      href: https://github.com/SwampThingPaul       
+      href: https://github.com/SwampThingPaul        
 output:
   html_document:
-    theme: cosmo
+    theme: readable
     highlight: textmate
+    lib_dir: site_libs
+    self_contained: no
