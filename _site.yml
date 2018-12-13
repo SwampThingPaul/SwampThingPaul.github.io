@@ -17,12 +17,12 @@ navbar:
       icon: fa-rss
       href: https://SwampThingPaul.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
   right:
-    - text: "Contact me"
-      icon: fa-envelope-o
-      href: mailto:pjulian@ufl.edu                    # CHANGE HERE 
-    - text: "GitHub"
-      icon: fa-github
-      href: https://github.com/SwampThingPaul       # CHANGE HERE 
+    - icon: fa-envelope-o
+      href: mailto:pjulian@ufl.edu                     
+    - icon: fa-twitter
+      href: httpe://twitter.com/swampthingpaul
+    - icon: fa-github
+      href: https://github.com/SwampThingPaul       
 output:
   html_document:
     theme: cosmo
