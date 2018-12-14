@@ -26,7 +26,7 @@ Follow me on twitter for recent development on manuscripts, ongoing studies, col
 href="https://twitter.com/SwampThingPaul?ref_src=twsrc%5Etfw"
 data-width="500" 
 data-height="300"
-data-tweet-limit="1" >
+data-tweet-limit="2" >
 Tweets by SwampThingPaul
 </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -41,7 +41,8 @@ __Henry David Thoreau__, _Walden and Other Writings_
 
 ![](images/waldenpond.jpg)
 
-
+<br>
+<br>
 _“Whatever you want to do in this world, it is achievable. The most important thing that I’ve found, that perhaps you could use, is be passionate and enthusiastic in the direction that you choose in life, and you’ll be a winner.”_
 
 __Steve Irwin__
@@ -49,12 +50,12 @@ __Steve Irwin__
 <center>
 ![](images/IrwinCroc.jpg)
 </center>
+<br>
+<br>
 
 </div>
 
-<br>
 
-****
 
 <br>
 
