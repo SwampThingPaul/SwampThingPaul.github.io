@@ -3,11 +3,14 @@ title: "Greetings!! Welcome to my webpage."
 output:
   html_document:
     includes:
-      in_header: cover.html
+      in_header: images/cover_header.html
+      after_body: images/cover_foot.html
 ---
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. My background includes studying biogoechemical processes along the freshwater to marine aquatic continuum. 
 
 A couple of word to describe me: Wetland Biogeochemistry, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R
 
-_#rstats_ _#geospatial_ _#GIS_ _#soil_
+This website will host some general information about myself, my research interests and publications.
+
+_#rstats_ _#geospatial_ _#GIS_ _#soil_ _#ecology_ _#climatechange_ _#biogeochemistry_ _#wetland_ _#aquatic_

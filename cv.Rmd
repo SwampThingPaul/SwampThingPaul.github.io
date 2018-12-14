@@ -1,9 +1,18 @@
 ---
-title: "CV"
+title: "Background"
+output:
+  html_document:
+    includes:
+      in_header: images/cv_header.html
 ---
 
-<a href="CV.pdf#" class="download" title="Download CV as PDF">Download CV</a>			
+<a href="files/Julian_CV_20181213.pdf#" class="download" title="Download CV as PDF">Download CV</a>			
 
-## Header
+## Education
 
-Say more about your CV here.
+* University of Florida, Soil and Water Science, PhD (2018)
+* Florida Gulf Coast University, Environmental Science, MSc (2010)
+* Benedictine College, Biochemistry, BSc (2005) 
+
+
+...work in progress, pardon the mess. 
