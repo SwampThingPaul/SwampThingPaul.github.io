@@ -4,7 +4,6 @@ output:
   html_document:
     includes:
       in_header: images/cover_header.html
-      after_body: images/cover_foot.html
 ---
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying biogoechemical processes along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.  
@@ -49,3 +48,10 @@ __Steve Irwin__
 </div>
 
 ****
+
+<center><div><img src="images/wca3b_marsh.jpg" width="80%" align="center"></div></center>
+
+
+****
+
+Webpage devloped using [rmarkdown website template](https://github.com/privefl/rmarkdown-website-template) developed by [privefl](https://github.com/privefl)
