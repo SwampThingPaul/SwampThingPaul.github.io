@@ -6,15 +6,15 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      #icon: fa-user 
-      href: about.html
     - text: "Publications"
       #icon: fa-user 
       href: pubs.html
     - text: "Research"
       #icon: fa-user 
       href: research.html
+    - text: "About"
+      #icon: fa-user 
+      href: about.html
     - text: "CV"
       icon: fa-file-pdf-o
       href: cv.html
