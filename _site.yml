@@ -9,6 +9,9 @@ navbar:
     - text: "About"
       #icon: fa-user 
       href: about.html
+    - text: "Publications"
+      #icon: fa-user 
+      href: about.html
     - text: "Research"
       #icon: fa-user 
       href: about.html
@@ -24,7 +27,9 @@ navbar:
     - icon: fa-twitter
       href: https://twitter.com/swampthingpaul
     - icon: fa-github
-      href: https://github.com/SwampThingPaul        
+      href: https://github.com/SwampThingPaul
+    - icon: fa-youtube
+      href: https://www.youtube.com/channel/UCykDhSIQwiO_7ESoLV72mMw
 output:
   html_document:
     theme: readable
