@@ -7,10 +7,25 @@ output:
       after_body: images/cover_foot.html
 ---
 
-I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. My background includes studying biogoechemical processes along the freshwater to marine aquatic continuum. 
+I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying biogoechemical processes along the freshwater to marine aquatic continuum. But wetlands hold a special place in my heart.  
 
 A couple of word to describe me: Wetland Biogeochemistry, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R
 
 This website will host some general information about myself, my research interests and publications.
 
 _#rstats_ _#geospatial_ _#GIS_ _#soil_ _#ecology_ _#climatechange_ _#biogeochemistry_ _#wetland_ _#aquatic_
+
+## Social Media
+
+Follow me on twitter for the some recent development on manuscripts, colleagues work or oppurtunities (and some ranting)
+[SampThingPaul](https://twitter.com/swampthingpaul)
+
+<a class="twitter-timeline" 
+href="https://twitter.com/SwampThingPaul?ref_src=twsrc%5Etfw"
+data-width="500" 
+data-height="800"
+data-tweet-limit="5" >
+Tweets by SwampThingPaul
+</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+***
