@@ -11,16 +11,16 @@ navbar:
       href: about.html
     - text: "Publications"
       #icon: fa-user 
-      href: about.html
+      href: pubs.html
     - text: "Research"
       #icon: fa-user 
-      href: about.html
+      href: research.html
     - text: "CV"
       icon: fa-file-pdf-o
       href: cv.html
-    - text: "Blog"
-      icon: fa-rss
-      href: https://SwampThingPaul.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
+#    - text: "Blog"
+#      icon: fa-rss
+#      href: https://SwampThingPaul.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
   right:
     - icon: fa-envelope-o
       href: mailto:pjulian@ufl.edu                    

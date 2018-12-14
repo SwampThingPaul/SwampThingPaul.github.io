@@ -1,0 +1,9 @@
+---
+title: "Publications"
+output:
+  html_document:
+    includes:
+      in_header: 
+---
+
+...work in progress, pardon the mess. 

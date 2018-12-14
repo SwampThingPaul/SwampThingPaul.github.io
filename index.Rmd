@@ -15,6 +15,8 @@ This website will host some general information about myself, my research intere
 
 _#rstats_ _#geospatial_ _#GIS_ _#soil_ _#ecology_ _#climatechange_ _#biogeochemistry_ _#wetland_ _#aquatic_
 
+****
+
 <div class = "row">
 <div class = "col-md-6">
 ## Social Media
@@ -24,7 +26,7 @@ Follow me on twitter for the some recent development on manuscripts, colleagues 
 <a class="twitter-timeline" 
 href="https://twitter.com/SwampThingPaul?ref_src=twsrc%5Etfw"
 data-width="500" 
-data-height="500"
+data-height="300"
 data-tweet-limit="5" >
 Tweets by SwampThingPaul
 </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -36,8 +38,14 @@ Tweets by SwampThingPaul
 
 _“My temple is the swamp …When I would recreate myself, I seek the darkest wood, the thickest and most impenetrable and to the citizen, most dismal, swamp. I enter a swamp as a sacred place, a sanctum sanctorum… I seemed to have reached a new world, so wild a place …far away from human society. What’s the need of visiting far-off mountains and bogs, if a half-hour’s walk will carry me into such wildness and novelty.”_
 
-*Henry David Thoreau*, _Walden and Other Writings_
+__Henry David Thoreau__, _Walden and Other Writings_
+
+
+_“Whatever you want to do in this world, it is achievable. The most important thing that I’ve found, that perhaps you could use, is be passionate and enthusiastic in the direction that you choose in life, and you’ll be a winner.”_
+
+__Steve Irwin__
+
 
 </div>
 
-***
+****
