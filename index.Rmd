@@ -29,6 +29,7 @@ data-height="300"
 data-tweet-limit="1" >
 Tweets by SwampThingPaul
 </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 </div>
 
 <div class = "col-md-6">
@@ -38,14 +39,24 @@ _“My temple is the swamp …When I would recreate myself, I seek the darkest w
 
 __Henry David Thoreau__, _Walden and Other Writings_
 
+![](images/waldenpond.jpg)
+
 
 _“Whatever you want to do in this world, it is achievable. The most important thing that I’ve found, that perhaps you could use, is be passionate and enthusiastic in the direction that you choose in life, and you’ll be a winner.”_
 
 __Steve Irwin__
+
+<center>
+![](images/IrwinCroc.jpg)
+</center>
+
 </div>
 
+<br>
 
 ****
+
+<br>
 
 <center><div><img src="images/wca3b_marsh.jpg" width="80%" align="center"></div></center>
 
