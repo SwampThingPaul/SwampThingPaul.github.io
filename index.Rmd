@@ -9,7 +9,7 @@ output:
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying biogoechemical processes along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.  
 
-A couple of word to describe me: Wetland Biogeochemistry, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R
+A couple of words/phrases to describe me: Wetland Biogeochemistry, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R.
 
 This website will host some general information about myself, my research interests and publications.
 
