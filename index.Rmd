@@ -1,13 +1,15 @@
 ---
 title: "Greetings!! Welcome to my webpage."
-
+output:
+  html_document:
+    includes:
+      in_header: cover.html
 ---
 
 <!--
 ![](images/CREW_marsh_lansdcape.jpg)
 --->
 
-<center><div><img src="/images/CREW_marsh_lansdcape.jpg" width="80%"></div></center>
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. My background includes studying biogoechemical processes along the freshwater to marine aquatic continuum. 
 
