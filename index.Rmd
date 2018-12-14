@@ -21,13 +21,13 @@ _#rstats_ _#geospatial_ _#GIS_ _#soil_ _#ecology_ _#climatechange_ _#biogeochemi
 <div class = "col-md-6">
 ## Social Media
 
-Follow me on twitter for the some recent development on manuscripts, colleagues work or oppurtunities (and some ranting). 
+Follow me on twitter for recent development on manuscripts, ongoing studies, colleagues work or opportunities (and some ranting). 
 
 <a class="twitter-timeline" 
 href="https://twitter.com/SwampThingPaul?ref_src=twsrc%5Etfw"
 data-width="500" 
 data-height="300"
-data-tweet-limit="5" >
+data-tweet-limit="3" >
 Tweets by SwampThingPaul
 </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
