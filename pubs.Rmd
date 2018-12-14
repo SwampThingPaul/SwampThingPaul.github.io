@@ -5,30 +5,36 @@ output:
     toc: yes
 ---
 
+****
 <font size=5 color="red">Science is only powerful when shared. </font>
 (Unknown)
-
-<br>
-
-```{r network, include=F }
-library(scholarnetwork)
-library(igraph)
-
+<!--
+```{r scholarnetwork}
+library('scholarnetwork')
 d <- extractNetwork(id="lcDejAEAAAAJ", n=500)
-# cleaning network data
 network <- graph_from_data_frame(d$edges, directed=FALSE)
-V(network)$size <- strength(network)*2
-V(network)$color="grey"
+par(family="serif",mar=c(1,0,0.5,0))
+plot(network,
+     vertex.label.font=2,
+     vertex.size=10,
+     vertex.frame.color = "grey", # change color of nodes
+     vertex.color="ivory",
+     vertex.label.color = "black", # change color of labels
+     vertex.label.cex = 0.6, 
+     edge.curved=0.25, # add a 25% curve to the edges
+     edge.color="grey70") # change edge color to grey
+mtext(side=1,paste0("As of ",format(Sys.time(),"%m/%d/%Y")))
 ```
-
-```{r network plot,echo=FALSE,fig.width=5,fig.height=4,fig.align='center'}
-par(family="serif",mar=c(0,0,0,0));
-plot(network, layout=layout_with_fr)
-```
+--->
+![](images/scholarnetwork.jpg)
+<br>
+<font size=4><center>Google Scholar Network Analysis using the [scholarnetwork](https://github.com/pablobarbera/scholarnetwork) r-package.</center></font>
 
 
 [Google Scholar Profile](https://scholar.google.com/citations?user=lcDejAEAAAAJ&hl=en)
 
+<br>
+<br>
 ****
 
 ## Peer Reviewed Literature
