@@ -6,9 +6,6 @@ output:
       in_header: cover.html
 ---
 
-
-
-
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. My background includes studying biogoechemical processes along the freshwater to marine aquatic continuum. 
 
 A couple of word to describe me: Wetland Biogeochemistry, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R
