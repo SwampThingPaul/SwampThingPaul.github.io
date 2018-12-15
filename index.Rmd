@@ -8,7 +8,7 @@ output:
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying biogoechemical processes along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.  
 
-A couple of words/phrases to describe me: Wetland Biogeochemistry, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R.
+A couple of words/phrases to describe me: Wetland Biogeochemist, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R.
 
 This website will host some general information about myself, my research interests and publications.
 
@@ -33,7 +33,7 @@ Tweets by SwampThingPaul
 </div>
 
 <div class = "col-md-6">
-## Words of wisdom
+## Words of inspiration
 
 _“My temple is the swamp …When I would recreate myself, I seek the darkest wood, the thickest and most impenetrable and to the citizen, most dismal, swamp. I enter a swamp as a sacred place, a sanctum sanctorum… I seemed to have reached a new world, so wild a place …far away from human society. What’s the need of visiting far-off mountains and bogs, if a half-hour’s walk will carry me into such wildness and novelty.”_
 
