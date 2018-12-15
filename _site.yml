@@ -11,6 +11,7 @@ navbar:
       href: pubs.html
     - text: "Research"
       #icon: fa-user 
+      #href: research.html
       menus:
       - text: Ecological Stoichiometry
         href: ecostoich.html
@@ -22,7 +23,6 @@ navbar:
         href: EverSTA.html
       - text: Environmental Water 
         href: Ewater.html
-      href: research.html
     - text: "About"
       #icon: fa-user 
       #href: about.html
