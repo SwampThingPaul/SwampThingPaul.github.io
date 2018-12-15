@@ -1,18 +1,15 @@
-name: "Paul Julian II, PhD"                                
+name: Paul Julian II, PhD                                
 output_dir: "."
 navbar:
-  title: "Paul Julian II, PhD"                             
+  title: Paul Julian II, PhD
   type: inverse
   left:
-    - text: "Home"
+    - text: Home
       href: index.html
-    - text: "Publications"
+    - text: Publications
       #icon: fa-user 
       href: pubs.html
-    - text: "Blog"  
-      icon: fa-rss
-      href: https://SwampThingPaul.github.io/blog/  
-    - text: "Research"
+    - text: Research
       #icon: fa-user 
       #href: research.html
       menus:
@@ -26,17 +23,19 @@ navbar:
         href: EverSTA.html
       - text: Environmental Water 
         href: Ewater.html
-    - text: "About"
+    - text: About
       #icon: fa-user 
       #href: about.html
       menus:
-      - text: "About"
+      - text: About
         icon: fa-user 
         href: about.html
-      - text: "CV"
+      - text: CV
         icon: fa-file-pdf-o
         href: cv.html
-    
+    - text: Blog
+      icon: fa-rss
+      href: https://SwampThingPaul.github.io/blog/  
   right:
     - icon: fa-envelope-o
       href: mailto:pjulian@ufl.edu                    
