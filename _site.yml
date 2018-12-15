@@ -16,10 +16,12 @@ navbar:
         href: ecostoich.html
       - text: Ecosystem Metabolism
         href: ecometab.html
-      - text: Wetland Iron-Sulfur
+      - text: Wetland Iron-Sulfur Interactions
         href: Fe_S.html
       - text: Stormwater Treatment Areas
         href: EverSTA.html
+      - text: Environmental Water 
+        href: Ewater.html
       href: research.html
     - text: "About"
       #icon: fa-user 
