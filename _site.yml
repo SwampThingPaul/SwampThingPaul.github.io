@@ -33,7 +33,7 @@ navbar:
       - text: "CV"
         icon: fa-file-pdf-o
         href: cv.html
-    - text: "Aquatic Thoughts"
+    - text: "Blog"
       icon: fa-rss
       href: https://SwampThingPaul.github.io/blog/  
   right:
