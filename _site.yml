@@ -7,41 +7,46 @@ navbar:
     - text: Home
       href: index.html
     - text: Research
-      #icon: fa-user 
+      icon: fa-list-ul 
       #href: research.html
       menus:
       - text: Publications
-        #icon: fa-user 
+        icon: fa-file
         href: pubs.html
       - text: Ecological Stoichiometry
+        icon: fa-chevron-circle-right
         href: ecostoich.html
       - text: Ecosystem Metabolism
+        icon: fa-chevron-circle-right
         href: ecometab.html
       - text: Wetland Iron-Sulfur Interactions
+        icon: fa-chevron-circle-right
         href: Fe_S.html
       - text: Stormwater Treatment Areas
+        icon: fa-chevron-circle-right
         href: EverSTA.html
       - text: Environmental Water 
+        icon: fa-chevron-circle-right
         href: Ewater.html
     - text: About
-      #icon: fa-user 
+      icon: fa-list-ul 
       #href: about.html
       menus:
       - text: About
-        icon: fa-user 
+        icon: fa-user-o 
         href: about.html
       - text: CV
         icon: fa-file-pdf-o
         href: cv.html
-      - text: Blog
-        icon: fa-rss
-        href: https://SwampThingPaul.github.io/blog/  
+    - text: Blog
+      icon: fa-rss-square
+      href: https://SwampThingPaul.github.io/blog/  
   right:
     - icon: fa-envelope-o
       href: mailto:pjulian@ufl.edu                    
-    - icon: fa-twitter
+    - icon: fa-twitter-square
       href: https://twitter.com/swampthingpaul
-    - icon: fa-github
+    - icon: fa-github-alt
       href: https://github.com/SwampThingPaul
     - icon: fa-youtube
       href: https://www.youtube.com/channel/UCykDhSIQwiO_7ESoLV72mMw
