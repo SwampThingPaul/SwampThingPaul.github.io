@@ -6,13 +6,13 @@ navbar:
   left:
     - text: Home
       href: index.html
-    - text: Publications
-      #icon: fa-user 
-      href: pubs.html
     - text: Research
       #icon: fa-user 
       #href: research.html
       menus:
+      - text: Publications
+        #icon: fa-user 
+        href: pubs.html
       - text: Ecological Stoichiometry
         href: ecostoich.html
       - text: Ecosystem Metabolism
