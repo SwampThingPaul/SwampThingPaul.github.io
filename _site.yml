@@ -33,9 +33,9 @@ navbar:
       - text: CV
         icon: fa-file-pdf-o
         href: cv.html
-    - text: Blog
-      icon: fa-rss
-      href: blog/ 
+      - text: Blog
+        icon: fa-rss
+        href: https://SwampThingPaul.github.io/blog/  
   right:
     - icon: fa-envelope-o
       href: mailto:pjulian@ufl.edu                    
