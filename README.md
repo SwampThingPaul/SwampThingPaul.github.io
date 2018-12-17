@@ -1,4 +1,4 @@
 My professional website/blog
 
-Work in progress.
+Any questions feel free to [contact me](mailto:pjulian@ufl.edu).
 
