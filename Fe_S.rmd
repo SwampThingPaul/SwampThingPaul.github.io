@@ -1,5 +1,6 @@
 ---
-  title: "Wetland Iron and Sulfure interactions"
+title: "Wetland Iron and Sulfure interactions"
+
 ---
 
 The interaction of Iron (Fe) and sulfur (S) is dynamic. One of the most common Fe-S minerals is pyrite, also know as fool's gold. In wetlands, the formation of pyrite is a process controlled by both oxidation-reduction conditions, available reactive iron (Fe) and free sulfide.

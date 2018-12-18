@@ -1,5 +1,6 @@
 ---
-  title: "Ecosystem Metabolism"
+title: "Ecosystem Metabolism"
+
 ---
   
   Aquatic productivity or metabolism is a fundamental metric of ecosystem related processes relative to organic matter production and consumption as well as carbon source and sink dynamics. Gross primary productivity is the rate of organic matter production within an ecosystem by photosynthesis, ER is the total consumption of organic matter in an ecosystem via aerobic respiration, and NAP is the balance between GPP and ER. Aquatic metabolism can be driven by several key environmental drivers including water quality (i.e. nutrient concentration) and the quantity, timing and distribution in aquatic ecosystems. 

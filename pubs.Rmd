@@ -1,10 +1,6 @@
 ---
 title: "Publications"
-output: 
-  html_document: 
-    toc: yes
-    includes:
-      in_header: analytics.html
+
 ---
 
 ****

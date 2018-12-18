@@ -1,9 +1,6 @@
 ---
 title: "Background"
-output:
-  html_document:
-    includes:
-      in_header: images/cv_header.html
+
 ---
 
 <a href="files/Julian_CV_20181213.pdf#" class="download" title="Download CV as PDF">Download CV</a>			
