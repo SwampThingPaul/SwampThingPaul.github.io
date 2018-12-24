@@ -13,7 +13,7 @@ A tenant of ecological stoichiometry is that the abundance of carbon (C), nitrog
 <div class = "col-md-6">
 <center><div><img src="images/ClevelandLip.jpg" width="80%" align="center"></div></center>
 
-<center>From [Cleveland CC, Liptzin D (2007) C:N:P stoichiometry in soil: is there a “Redfield ratio” for the microbial biomass? Biogeochemistry 85:235–252.](https://link.springer.com/article/10.1007/s10533-007-9132-0)</center>
+<center>From [Cleveland CC, Liptzin D (2007) C:N:P stoichiometry in soil: is there a “Redfield ratio” for the microbial biomass? Biogeochemistry 85:235–252.](https://link.springer.com/article/10.1007/s10533-007-9132-0){target="_blank"}</center>
 
 <br>
 <br>
@@ -25,12 +25,12 @@ A tenant of ecological stoichiometry is that the abundance of carbon (C), nitrog
 ### Publications/Presentations:
 * Julian, P., S. Gerber, R. Bhomia and A.L. Wright (2017) Stoichiometric Relationships Amongst Ecosystem Compartments of a Treatment Wetland. 12th Southeastern Ecology and Evolution Conference. Fort Myers, Florida. 
 
-* Julian, P., et al (2018) One of these things is not like the other. Evaluation of wetland nutrient stoichiometry and homeostasis in a subtropical treatment wetland. 12th International Symposium on Biogeochemistry of Wetlands, Coral Springs, FL. ([Conference Webpage](http://conference.ifas.ufl.edu/biogeo2018/)).
+* Julian, P., et al (2018) One of these things is not like the other. Evaluation of wetland nutrient stoichiometry and homeostasis in a subtropical treatment wetland. 12th International Symposium on Biogeochemistry of Wetlands, Coral Springs, FL. ([Conference Webpage](http://conference.ifas.ufl.edu/biogeo2018/){target="_blank"}).
 
 * Julian, P., J.S. Kominoski, E.E. Gaiser and A Wymore. (2018) Is the Everglades Ecosystem a stoichiometric deviant? An investigation of ecological stoichiometry along the aquatic continuum of the Everglades ecosystem. 2018 Florida Coastal Everglades Long Term Ecological Research Annual Scientist Meeting, Miami, FL. 
 
 * Julian, P., et al (2018)  Did you guess which thing was not like the others? Evaluation of wetland nutrient stoichiometry and homeostasis in a subtropical treatment wetland. Society of Wetland Scientists. Denver, Colorado.
 
-* Julian, P., A. Wymore and J.S. Kominoski. (2018) Ecological stoichiometry through the lens of long-term data: Using stoichiometry to understand dynamic ecological systems. Long Term Ecological Research All-Scientist Meeting workshop. Asilomar - Conference Center, Pacific Grove, CA USA. ([workshop repository](https://github.com/SwampThingPaul/LTER_EcoStoich))
+* Julian, P., A. Wymore and J.S. Kominoski. (2018) Ecological stoichiometry through the lens of long-term data: Using stoichiometry to understand dynamic ecological systems. Long Term Ecological Research All-Scientist Meeting workshop. Asilomar - Conference Center, Pacific Grove, CA USA. ([workshop repository](https://github.com/SwampThingPaul/LTER_EcoStoich){target="_blank"})
 
 ***

@@ -26,10 +26,10 @@ mtext(side=1,paste0("As of ",format(Sys.time(),"%m/%d/%Y")))
 --->
 ![](images/scholarnetwork.jpg)
 <br>
-<font size=4><center>Google Scholar Network Analysis using the [scholarnetwork](https://github.com/pablobarbera/scholarnetwork) r-package.</center></font>
+<font size=4><center>Google Scholar Network Analysis using the [scholarnetwork](https://github.com/pablobarbera/scholarnetwork){target="_blank"} r-package.</center></font>
 
 
-[Google Scholar Profile](https://scholar.google.com/citations?user=lcDejAEAAAAJ&hl=en)
+[Google Scholar Profile](https://scholar.google.com/citations?user=lcDejAEAAAAJ&hl=en){target="_blank"}
 
 <br>
 <br>
@@ -40,13 +40,13 @@ mtext(side=1,paste0("As of ",format(Sys.time(),"%m/%d/%Y")))
 
 __2018__
 
-* Julian, P. and T.Z. Osborne. 2018. From lake to estuary, the tale of two waters. A study of aquatic continuum biogeochemistry. [Environmental Monitoring and Assessment. 190:96](https://link.springer.com/article/10.1007%2Fs10661-017-6455-8).
+* Julian, P. and T.Z. Osborne. 2018. From lake to estuary, the tale of two waters. A study of aquatic continuum biogeochemistry. [Environmental Monitoring and Assessment. 190:96](https://link.springer.com/article/10.1007%2Fs10661-017-6455-8){target="_blank"}.
 
 __2017__
 
-* Julian, P., S. Gerber, A.L. Wright, B. Gu and T.Z. Osborne. 2017. Carbon pool trends and dynamics within a subtropical peatland during long-term restoration. [Ecological Processes. 6:43.](https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-017-0110-8) 
-* Julian, P. Assessment of Upper Taylor Slough water quality and implications for ecosystem management in Everglades National Park. [Wetlands Ecology and Management 25(2): 191–209](https://link.springer.com/article/10.1007/s11273-016-9509-8).
-* Julian, P., R. Chambers, and T. Russell.  Iron and Pyritization in Wetland Soils of the Florida Coastal Everglades. [Estuaries and Coasts 40(3): 822–831](https://link.springer.com/article/10.1007/s12237-016-0180-3).
+* Julian, P., S. Gerber, A.L. Wright, B. Gu and T.Z. Osborne. 2017. Carbon pool trends and dynamics within a subtropical peatland during long-term restoration. [Ecological Processes. 6:43.](https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-017-0110-8){target="_blank"}. 
+* Julian, P. Assessment of Upper Taylor Slough water quality and implications for ecosystem management in Everglades National Park. [Wetlands Ecology and Management 25(2): 191–209](https://link.springer.com/article/10.1007/s11273-016-9509-8){target="_blank"}.
+* Julian, P., R. Chambers, and T. Russell.  Iron and Pyritization in Wetland Soils of the Florida Coastal Everglades. [Estuaries and Coasts 40(3): 822–831](https://link.springer.com/article/10.1007/s12237-016-0180-3){target="_blank"}.
 
 __2016__
 
@@ -136,7 +136,7 @@ __2005__
 
 __Dissertation__
 
-* Biogeochemical controls of water column productivity and nutrient cycling in semitropical wetlands – A case study from the Everglades Stormwater Treatment Areas. University of Florida Ph.D. Soil and Water Science (Exit Seminar Presentation [link](https://mediasite.video.ufl.edu/Mediasite/Play/1cec00883964429cb70bb64ee9c75b861d?catalog=231f847b-8d7f-48ef-9156-85798805dbcb)).
+* Biogeochemical controls of water column productivity and nutrient cycling in semitropical wetlands – A case study from the Everglades Stormwater Treatment Areas. University of Florida Ph.D. Soil and Water Science (Exit Seminar Presentation [link](https://mediasite.video.ufl.edu/Mediasite/Play/1cec00883964429cb70bb64ee9c75b861d?catalog=231f847b-8d7f-48ef-9156-85798805dbcb){target="_blank"}).
 
 __Thesis__
 

@@ -64,4 +64,4 @@ __Steve Irwin__
 
 ****
 
-Webpage devloped using [rmarkdown website template](https://github.com/privefl/rmarkdown-website-template) developed by [privefl](https://github.com/privefl)
+Webpage devloped using [rmarkdown website template](https://github.com/privefl/rmarkdown-website-template){target="_blank"} developed by [privefl](https://github.com/privefl){target="_blank"}
