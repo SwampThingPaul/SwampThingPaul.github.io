@@ -41,6 +41,8 @@ mtext(side=1,paste0("As of ",format(Sys.time(),"%m/%d/%Y")))
 __2018__
 
 * Julian, P. and T.Z. Osborne. 2018. From lake to estuary, the tale of two waters. A study of aquatic continuum biogeochemistry. [Environmental Monitoring and Assessment. 190:96](https://link.springer.com/article/10.1007%2Fs10661-017-6455-8){target="_blank"}.
+* Marazzi L, Finlayson CM, Gell PA, __Julian, P__, Kominoski, J.S. and Gaiser, E.E. 2018. Balancing Wetland Restoration Benefits to People and Nature. [Solutions 9(3).](https://www.thesolutionsjournal.com/article/balancing-wetland-restoration-benefits-people-nature/){target="_blank"}
+
 
 __2017__
 
