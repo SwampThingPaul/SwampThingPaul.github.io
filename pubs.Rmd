@@ -40,13 +40,13 @@ mtext(side=1,paste0("As of ",format(Sys.time(),"%m/%d/%Y")))
 
 __2018__
 
-* Julian, P. and T.Z. Osborne. 2018. From lake to estuary, the tale of two waters. A study of aquatic continuum biogeochemistry. [Environmental Monitoring and Assessment. 190:96](https://link.springer.com/article/10.1007%2Fs10661-017-6455-8){target="_blank"}.
-* Marazzi L, Finlayson CM, Gell PA, __Julian, P__, Kominoski, J.S. and Gaiser, E.E. 2018. Balancing Wetland Restoration Benefits to People and Nature. [Solutions 9(3).](https://www.thesolutionsjournal.com/article/balancing-wetland-restoration-benefits-people-nature/){target="_blank"}
+* Julian, P. and T.Z. Osborne. From lake to estuary, the tale of two waters. A study of aquatic continuum biogeochemistry. [Environmental Monitoring and Assessment. 190:96](https://link.springer.com/article/10.1007%2Fs10661-017-6455-8){target="_blank"}.
+* Marazzi, L., C.M. Finlayson, P.A. Gell, __P. Julian__, J.S. Kominoski and E.E. Gaiser. Balancing Wetland Restoration Benefits to People and Nature. [Solutions 9(3).](https://www.thesolutionsjournal.com/article/balancing-wetland-restoration-benefits-people-nature/){target="_blank"}
 
 
 __2017__
 
-* Julian, P., S. Gerber, A.L. Wright, B. Gu and T.Z. Osborne. 2017. Carbon pool trends and dynamics within a subtropical peatland during long-term restoration. [Ecological Processes. 6:43.](https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-017-0110-8){target="_blank"}. 
+* Julian, P., S. Gerber, A.L. Wright, B. Gu and T.Z. Osborne. Carbon pool trends and dynamics within a subtropical peatland during long-term restoration. [Ecological Processes. 6:43.](https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-017-0110-8){target="_blank"}. 
 * Julian, P. Assessment of Upper Taylor Slough water quality and implications for ecosystem management in Everglades National Park. [Wetlands Ecology and Management 25(2): 191–209](https://link.springer.com/article/10.1007/s11273-016-9509-8){target="_blank"}.
 * Julian, P., R. Chambers, and T. Russell.  Iron and Pyritization in Wetland Soils of the Florida Coastal Everglades. [Estuaries and Coasts 40(3): 822–831](https://link.springer.com/article/10.1007/s12237-016-0180-3){target="_blank"}.
 
@@ -130,7 +130,7 @@ __2011__
 
 __2005__
 
-* Dixon, L.K. and P. Julian. Phillippi Creek Optical Brightener Investigation for Sarasota County Water Resources. Mote Marine Lab Technical Report No. 1038.
+* Dixon, L.K. and __P. Julian__. Phillippi Creek Optical Brightener Investigation for Sarasota County Water Resources. Mote Marine Lab Technical Report No. 1038.
 
 ****
 
