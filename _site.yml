@@ -28,6 +28,9 @@ navbar:
       - text: Environmental Water 
         icon: fa-chevron-circle-right
         href: Ewater.html
+      - text: Authorship Guidelines
+        icon: fa-file
+        href: authorship.html
     - text: About
       icon: fa-list-ul 
       #href: about.html
