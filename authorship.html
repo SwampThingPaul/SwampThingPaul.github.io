@@ -495,6 +495,30 @@ $(document).ready(function () {
 <h2><strong>A Living Document</strong></h2>
 <p>Expectations for authorship are a set of evolving cultural norms. This means that 1) they must be taught anew to each set of students and/or new individual early in their involvement with the project and 2) the guidelines in this document need to be revisited and updated regularly (~annually or as needed).</p>
 <hr />
+<!---
+## For Fun
+
+When authorship is equal and all participating authors opt for random author order (and everyone participated equally) you can draw names out of a hat...or make a hat draw in #rstats. 
+
+
+```r
+set.seed(1)
+
+authors=c("Author_Name_1", "Author_Name_2",
+          "Author_Name_3", "Author_Name_4",
+          "Author_Name_5", "Author_Name_6")
+auth.order=c()
+for(i in 1:length(authors)){
+  pull=sample(authors,1);#Sample from author list
+  authors=authors[!(authors%in%pull)];#Remove sampled author from existing list
+
+  auth.order=rbind(auth.order,pull)
+}
+auth.order
+```
+
+***
+--->
 </div>
 </div>
 
