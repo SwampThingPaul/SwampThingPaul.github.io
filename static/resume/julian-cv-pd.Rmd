@@ -18,7 +18,7 @@ knitr::include_graphics("SwampHeadShot.jpg")
 
 Contact Info {#contact}
 --------------------------------------------------------------------------------
-- <i class="fa fa-compass"></i> 835 Carpenter St, Lehigh Acres, Florida, USA
+- <i class="fa fa-compass"></i> Lehigh Acres, Florida, USA
 - <i class="fa fa-envelope"></i> [pjulian@ufl.edu](mailto:pjulian@ufl.edu)
 - <i class="fa fa-chrome"></i> [SwampThingPaul.github.io](https://swampthingpaul.github.io/)
 - <i class="fa fa-github"></i> [github.com/SwampThingPaul](https://github.com/SwampThingPaul)
