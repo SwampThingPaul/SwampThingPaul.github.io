@@ -40,7 +40,7 @@ navbar:
         href: about.html
       - text: CV
         icon: fa-file-pdf-o
-        href: cv.html
+        href: https://swampthingpaul.github.io/static/resume/julian-cv-pd.html #cv.html
     - text: Blog
       icon: fa-rss-square
       href: https://SwampThingPaul.github.io/blog/  

@@ -3,8 +3,9 @@ title: "Background"
 
 ---
 
+<!--
 <a href="files/julian-cv-pd.html#" class="download" title="Download CV as PDF">Download CV</a>			
-
+-->
 ## Education
 
 * University of Florida, Soil and Water Sciences, PhD (2018)
