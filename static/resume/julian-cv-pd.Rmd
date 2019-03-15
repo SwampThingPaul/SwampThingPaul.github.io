@@ -314,7 +314,7 @@ Present - 2018
 
 `N/A`
 
-2018 - 2017
+2017- 2018
 
 ###	Florida Coastal Everglades Long Term Ecological Research
 
@@ -322,7 +322,7 @@ Student Organization, Off-Campus Representative.
 
 `N/A`
 
-2018 - 2017
+2017 - 2018 
 
 ### Greater Everglades Ecosystem Restoration Conference, Mercury and Sulfur Special Session co-organizer
 
@@ -432,7 +432,10 @@ Twitter
 
 Publications {data-icon=file-alt}
 --------------------------------------------------------------------------------
+
+::: aside
 A complete list of publications can be found on my webpage ([link](https://swampthingpaul.github.io/pubs.html)).
+:::
 
 ## *In Preparation*
 
@@ -476,6 +479,8 @@ Aquatic Processes
 
 **Julian, P.**, et al.  
 
+<br>
+<br>
 <br>
 
 ### Translating stream spiraling concepts to wetland nutrient uptake and transport mechanisms in a subtropical treatment wetland.
@@ -560,6 +565,8 @@ Estuaries and Coasts. 40(3): 191-209
 
 **Julian, P.**, R. Chambers and T. Russell.
 
+<br>
+<br>
 <br>
 
 ### Mercury stoichiometric relationships in a subtropical peatland. 
@@ -767,7 +774,9 @@ Presentations {data-icon=chalkboard-teacher}
 
 ## Oral (Last five-years)
 
+::: aside
 Multiple technical presentations not listed here have been presented at meetings including technical, environmental policy, restoration project planning and general public audiences.
+:::
 
 ### Don't wave the river red gums goodbye. The role of environmental flows in restoring river water quality and riparian zones along the Wimmera River. 
 
@@ -808,14 +817,6 @@ Coral Springs, Florida
 `N/A`
 
 Osborne, T.Z., M.W. Clark, **P. Julian**, N. Ward, R. Collins, E.J. Philips and P. Fletcher. 
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 ### Biogeochemical response of selected STA flow-ways to different flow scenarios.
 
@@ -906,10 +907,6 @@ Coral Spring, Florida
 
 **Julian, P.**, B. Gu and A. Freitag. 
 
-<br>
-<br>
-<br>
-
 ### Data Integration and Synthesis Framework for Understanding the Phosphorus Cycling and Reduction Mechanisms in STA Flow-ways.
 
 Greater Everglades Ecosystem Restoration
@@ -929,6 +926,12 @@ Coral Spring, Florida
 `N/A`
 
 Gu, B and **P. Julian**.
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Water Quality Along inflow to Outflow Gradient of the Everglades Stormwater Treatment Areas.
 
@@ -1124,10 +1127,6 @@ Miami, Florida
 
 **Julian, P.**, R. Chambers, J. Kominoski and T. Troxler. 
 
-<br>
-<br>
-<br>
-
 ### Key Factors Controlling Wetland Aquatic Productivity in the Everglades Stormwater Treatment Areas.
 
 Greater Everglades Ecosystem Restoration
@@ -1147,6 +1146,10 @@ Coral Spring, Florida
 `N/A`
 
 Osborne, T.Z., R. Bhomia, **P. Julian** and K.R. Reddy. 
+
+<br>
+<br>
+<br>
 
 ### Removal of Mercury from Surface Water by Constructed Wetlands in South Florida, USA.
 
@@ -1168,7 +1171,6 @@ Fort Myers, Florida
 
 **Julian, P.**, G. Redfield and A. Wright.
 
-<!--
 ### Ecosystem Sampling Suitability: Do my monitoring locations represent the water body?
 
 Rookery Bay GIS Symposium
@@ -1179,6 +1181,7 @@ Naples, Florida
 
 **Julian, P.**
 
+<!--
 ### Panthers in EDEN, Florida panther (Puma concolor coryi) home range responses to hydrologic change.
 
 75<sup>th</sup> Florida Academy of Science Annual Meeting 
