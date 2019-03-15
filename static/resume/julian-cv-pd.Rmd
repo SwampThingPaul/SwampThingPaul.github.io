@@ -503,7 +503,7 @@ Journal of Environmental Management
 
 August, K.A., L.T. Simpson, **P. Julian** and T.Z Osborne.
 
-## Peer-Reviewed
+## Peer-Reviewed (Last Five-Years)
 
 ### Balancing Wetland Restoration Benefits to People and Nature.
 
@@ -561,7 +561,7 @@ Estuaries and Coasts. 40(3): 191-209
 
 `N/A`
 
-2017
+`N/A`
 
 **Julian, P.**, R. Chambers and T. Russell.
 
@@ -637,6 +637,7 @@ Bulletin of Environmental Contamination and Toxicology. 93(5):517-521
 
 2014
 
+<!--
 **Julian, P.**
 
 ### Comment on spatial and temporal phosphorous distribution changes in a large wetland ecosystem. 
@@ -703,7 +704,9 @@ Florida Scientist. 74(4): 215 – 223.
 
 **Julian, P.**
 
-## Technical
+-->
+
+## Technical (Last Five-Years)
 
 ### Chapter 3A: Status of water quality in the Everglades Protection Area 
 
@@ -734,6 +737,8 @@ Technical Support Document: Western Everglades Planning Project.
 2017
 
 **Julian, P.**, et al.
+
+<!--
 
 ### A.R.M. Loxahatchee National Wildlife Refuge Total Phosphorous Outlier Analysis and Proposed Alternative Screening Criterion: Distribution Independent Outlier Analysis.
 
@@ -768,6 +773,8 @@ Mote Marine Laboratory Technical Report No. 1038.
 2005
 
 Dixon, L.K. and **P. Julian.**
+
+-->
 
 Presentations {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
@@ -927,12 +934,6 @@ Coral Spring, Florida
 
 Gu, B and **P. Julian**.
 
-<br>
-<br>
-<br>
-<br>
-<br>
-
 ### Water Quality Along inflow to Outflow Gradient of the Everglades Stormwater Treatment Areas.
 
 Greater Everglades Ecosystem Restoration
@@ -942,6 +943,11 @@ Coral Spring, Florida
 `N/A`
 
 Villapando, O., R. Bhomia, J. King and **P. Julian**.
+
+<br>
+<br>
+<br>
+<br>
 
 ### Status and Trends of Landscape-Scale Mercury in South Florida and the Everglades.
 
@@ -1146,10 +1152,6 @@ Coral Spring, Florida
 `N/A`
 
 Osborne, T.Z., R. Bhomia, **P. Julian** and K.R. Reddy. 
-
-<br>
-<br>
-<br>
 
 ### Removal of Mercury from Surface Water by Constructed Wetlands in South Florida, USA.
 
