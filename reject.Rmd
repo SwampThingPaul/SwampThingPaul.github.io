@@ -11,7 +11,9 @@ One thing is certain that rejection is often called the constant companion in sc
 Motivated by Dr Haushofer, [Dr Melanie Stefan](http://melaniestefan.net/Mela_24Nov2017.pdf), [Dr Auriel Fournier](http://aurielfournier.github.io/rejection/) and others I decided to begin documenting my failures as well. This page is organized into three section including publications (*in-progress*), jobs, applications to workshops and grants/funding. I am sure I missed some data in reconstruction efforts but this accounts for the major applications and funding oppurtunities data from 2014/2015 to current.
 
 <br>
+
 ## Jobs 
+
 `r source("D:/commonlyUsedFunctions.R")`
 I have been lucky that in the past ~ `r round(as.numeric(difftime(date.fun(Sys.Date()),date.fun("2011-08-01"),units="days"))/365,0)` years that I have held a very good position that has afforded me the chance to pursue multiple career development opportunities including my Professional Wetland Scientist (PWS) and doctorate. Despite these benefits and the freedom of my current position occasionally I search the job-boards and apply to positions that seem to fit my career trajectory. THIS IS PERFECTLY HEALTHY. However, some employers see this as bad because they don't want people looking to exit, using this job as a stepping stone, not be 100% engaged, etc. I see it as opportunities to advance my career, stay fresh with interviewing skills (not just for jobs) and potentially grow my network.  
 
@@ -46,6 +48,7 @@ mtext(side=2,line=2,"Count")
 ```
 
 <br>
+
 ## Workshops
 
 Professional development workshops, working groups and/or short courses sometimes accompany funding for travel expenses. Therefore, you are evaluated based on productivity, career, etc. like a job application.
@@ -75,6 +78,7 @@ mtext(side=2,line=2,"Count")
 ```
 
 <br>
+
 ## Funding
 
 The next big category is funding including grants, scholarships, fellowships, etc.  
