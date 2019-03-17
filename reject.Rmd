@@ -1,7 +1,7 @@
 ---
 title: "Rejection"
-editor_options: 
-  chunk_output_type: console
+
+
 ---
 
 One thing is certain that rejection is often called the constant companion in science. The collective we often focus on the rejection and don't celebrate the successes sufficently. If you search for any statistics regarding applying for grants, post-docs, jobs, etc. you will find some staggering statistics of number of applications, percent funded, etc. The old expression "Failure is not an option..." is more like failure is constantly an option so much so that back in 2016 [Dr Johannes Haushofer](https://www.princeton.edu/~joha/) became widely know for posting online his [CV of Failures](https://www.princeton.edu/~joha/Johannes_Haushofer_CV_of_Failures.pdf) others have follow suite. An [article](https://www.theguardian.com/education/2016/apr/30/cv-of-failures-princeton-professor-publishes-resume-of-his-career-lows) recounts that Haushofer, wrote the document to *"give some perspective"*. Most times we fail but it is hidden away out-of-sigh so when we do succeed it gives an unbalance representation of the day-to-day work. Another quote from the article helps puts things into context. 
@@ -49,7 +49,7 @@ mtext(side=2,line=2,"Count")
 
 <br>
 
-## Workshops
+## Workshops/Short-Courses
 
 Professional development workshops, working groups and/or short courses sometimes accompany funding for travel expenses. Therefore, you are evaluated based on productivity, career, etc. like a job application.
 
