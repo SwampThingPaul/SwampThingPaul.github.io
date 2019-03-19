@@ -429,6 +429,14 @@ Twitter
 
 `N/A`
 
+### Blog content (Topics: **ecology, biogeochemistry, statistics, etc.**)
+
+[https://swampthingpaul.github.io/blog/](https://swampthingpaul.github.io/blog/)
+
+`N/A`
+
+`N/A`
+
 
 Publications {data-icon=file-alt}
 --------------------------------------------------------------------------------
