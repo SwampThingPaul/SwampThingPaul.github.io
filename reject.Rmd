@@ -1,27 +1,69 @@
 ---
 title: "Rejection"
 
-
 ---
 
-One thing is certain that rejection is often called the constant companion in science. The collective we often focus on the rejection and don't celebrate the successes sufficently. If you search for any statistics regarding applying for grants, post-docs, jobs, etc. you will find some staggering statistics of number of applications, percent funded, etc. The old expression "Failure is not an option..." is more like failure is constantly an option so much so that back in 2016 [Dr Johannes Haushofer](https://www.princeton.edu/~joha/) became widely know for posting online his [CV of Failures](https://www.princeton.edu/~joha/Johannes_Haushofer_CV_of_Failures.pdf) others have follow suite. An [article](https://www.theguardian.com/education/2016/apr/30/cv-of-failures-princeton-professor-publishes-resume-of-his-career-lows) recounts that Haushofer, wrote the document to *"give some perspective"*. Most times we fail but it is hidden away out-of-sigh so when we do succeed it gives an unbalance representation of the day-to-day work. Another quote from the article helps puts things into context. 
+`r source("D:/commonlyUsedFunctions.R")`
+
+One thing that is certain in life is rejection, often called the constant companion in science. As a collective we often focus on the rejection and don’t celebrate the successes sufficiently. If you search for any statistics regarding applying for grants, post-docs, jobs, etc., you will find some staggering statistics on the number of applications, percent funded, etc. The old expression “Failure is not an option…” would be more accurate as failure is constantly an option, so much so that back in 2016 [Dr Johannes Haushofer](https://www.princeton.edu/~joha/) became widely know for posting online his [CV of Failures](https://www.princeton.edu/~joha/Johannes_Haushofer_CV_of_Failures.pdf). Others have followed suit. An [article](https://www.theguardian.com/education/2016/apr/30/cv-of-failures-princeton-professor-publishes-resume-of-his-career-lows) recounts that Haushofer, wrote the document to *"give some perspective"*. Most times we fail but it is hidden away out-of-sight so that when we do succeed it gives an unbalanced representation of the day-to-day work. Another quote from the article helps put things into context:
 
 >“As a result, they are more likely to attribute their own failures to themselves, rather than the fact that the world is stochastic, applications are crapshoots, and selection committees and referees have bad days.”
 
-Motivated by Dr Haushofer, [Dr Melanie Stefan](http://melaniestefan.net/Mela_24Nov2017.pdf), [Dr Auriel Fournier](http://aurielfournier.github.io/rejection/) and others I decided to begin documenting my failures as well. This page is organized into three section including publications (*in-progress*), jobs, applications to workshops and grants/funding. I am sure I missed some data in reconstruction efforts but this accounts for the major applications and funding oppurtunities data from 2014/2015 to current.
+Motivated by Dr Haushofer, [Dr Melanie Stefan](http://melaniestefan.net/Mela_24Nov2017.pdf), [Dr Auriel Fournier](http://aurielfournier.github.io/rejection/) and others have done the same. I decided to begin documenting my failures as well. This page is organized into three sections including publications, applications to workshops/short-courses, and grants/funding. I likely missed some data in my reconstruction efforts, but this accounts for the major applications and funding oppurtunities from 2014/2015 to current.
 
 <br>
 
-## Jobs 
+## Publications
 
-`r source("D:/commonlyUsedFunctions.R")`
-I have been lucky that in the past ~ `r round(as.numeric(difftime(date.fun(Sys.Date()),date.fun("2011-08-01"),units="days"))/365,0)` years that I have held a very good position that has afforded me the chance to pursue multiple career development opportunities including my Professional Wetland Scientist (PWS) and doctorate. Despite these benefits and the freedom of my current position occasionally I search the job-boards and apply to positions that seem to fit my career trajectory. THIS IS PERFECTLY HEALTHY. However, some employers see this as bad because they don't want people looking to exit, using this job as a stepping stone, not be 100% engaged, etc. I see it as opportunities to advance my career, stay fresh with interviewing skills (not just for jobs) and potentially grow my network.  
+A significant amount of work is require to move a manuscript from submission to *in-press*. This process includes peer-review where scientists in and around the field of study (i.e. your peers) review the manuscript so that it meets good scientific standards. If the reviewers determine the manuscript is suitable it will be passed on for consideration for publication. This [**Understanding Science**](https://undsci.berkeley.edu/article/howscienceworks_16) article has a great analogy to put the peer-review process into context:
 
+>	Peer review does the same thing for science that the "inspected by #7" sticker does for your t-shirt.
+
+[Elsevier](https://www.elsevier.com/reviewers/what-is-peer-review) also provides a very robust outline of peer-review including background, understanding the process, the types of peer-review and other additional information.
 
 ```{r,echo=F}
 #source("D:/commonlyUsedFunctions.R")
 library(openxlsx)
 library(plyr)
+
+pub=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=4)
+pub$Date.Submitted=date.fun(convertToDate(pub$Date.Submitted))
+pub$Date.decision=date.fun(convertToDate(pub$Date.decision))
+pub$date.dif=with(pub,difftime(Date.decision,Date.Submitted,units="weeks"))
+pub=pub[order(pub$Date.Submitted),]
+
+```
+
+
+
+```{r pubplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Time series of publication record relative to the number of weeks elaspsed untill final decision. Does not include publication *in-prep*."}
+par(family="serif",mar=c(2,2,1,1),oma=c(1.5,2,0.5,1));
+
+ylim.val=c(0,100);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=date.fun(c("2010-01-01","2019-03-01"));xmaj=seq(xlim.val[1],xlim.val[2],"2 years");xmin=seq(xlim.val[1],xlim.val[2],"1 years")
+plot(date.dif~Date.Submitted,pub,xaxt="n",yaxt="n",ylab=NA,xlab=NA,ylim=ylim.val,xlim=xlim.val,type="n")
+abline(h=ymaj,v=xmaj,lty=3,col="grey")
+with(pub,lines(Date.Submitted,date.dif,col="grey"))
+with(subset(pub,final.decision=="accept"),points(Date.Submitted,date.dif,pch=21,bg="lightgreen",cex=1.25))
+with(subset(pub,final.decision=="reject"),points(Date.Submitted,date.dif,pch=21,bg="indianred2",cex=1.25))
+abline(v=date.fun(c("2010-05-01","2018-05-01")),lty=2)
+text(x=date.fun(c("2010-05-01","2018-05-01"))+lubridate::ddays(45),y=ylim.val[1]+2,labels=c("MSc\nAwarded","PhD\nAwarded"),cex=0.5,adj=0,font=3)
+abline(v=date.fun(c("2007-08-01","2014-08-01")),lty=2)
+text(x=date.fun(c("2007-08-01","2014-08-01"))+lubridate::ddays(45),y=ylim.val[2],labels=c("MSc started","PhD started"),cex=0.5,adj=0,font=3)
+axis_fun(1,line=-0.5,xmaj,xmin,format(xmaj,"%Y"))
+axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+
+legend("topleft",legend=c("Accepted","Rejected"),pch=c(21,21),pt.bg=c("lightgreen","indianred2"),pt.cex=1.5,ncol=2,cex=1,bty="n",y.intersp=1,x.intersp=0.75,xpd=NA,xjust=0.5)
+mtext(side=1,line=2,"Date Submitted (Year)")
+mtext(side=2,line=2,"Time Elapsed untill final Decision (weeks)")
+```
+
+<!--
+## Jobs 
+
+I have been lucky in the past ~ `r round(as.numeric(difftime(date.fun(Sys.Date()),date.fun("2011-08-01"),units="days"))/365,0)` years to have held a very good position that has afforded me the chance to pursue multiple career development opportunities including my Professional Wetland Scientist (PWS) and doctorate. Despite these benefits and the freedom of my current position occasionally I search the job-boards and apply to positions that seem to fit my career trajectory. THIS IS PERFECTLY HEALTHY. However, some employers see this as bad form because they don’t want people looking to exit, using this job as a stepping stone, not being 100% engaged, etc. I see it as opportunities to advance my career, stay fresh with interviewing skills (not just for jobs) and potentially grow my network.
+
+```{r,echo=F}
 
 jobs=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=1)
 jobs$Date=convertToDate(jobs$Date)
@@ -33,7 +75,7 @@ jobs.sum=ddply(jobs,"yr",summarise,N.total=length(Type),N.Inter=sum(Interviewed=
 ```
 
 
-```{r jobplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Total number of job applications, interviews and offer during my job searches. * = Current Year"}
+```{r jobplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Total number of job applications, interviews and offers during my job searches. * = Current Year"}
 par(family="serif",mar=c(2,2,1,1),oma=c(1.5,2,0.5,1));
 
 ylim.val=c(0,10);by.y=2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
@@ -46,12 +88,13 @@ legend("topleft",legend=c("Total Applications","Total Interviews","Total Offers"
 mtext(side=1,line=2,"Year")
 mtext(side=2,line=2,"Count")
 ```
+-->
 
 <br>
 
 ## Workshops/Short-Courses
 
-Professional development workshops, working groups and/or short courses sometimes accompany funding for travel expenses. Therefore, you are evaluated based on productivity, career, etc. like a job application.
+Professional development workshops, working groups and/or short courses sometimes accompany funding for travel expenses. Therefore, you are evaluated based on productivity, career, etc. much like a job application.
 
 ```{r,echo=F}
 work=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=2)
@@ -63,7 +106,7 @@ work.sum=rbind(work.sum,data.frame(yr=2015:2017,N.total=0,N.offer=0,N.tbd=0))
 work.sum=work.sum[order(work.sum$yr),]
 ```
 
-```{r workplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Total number of workshop applications, successful application and applications to-be-determined. * = Current Year"}
+```{r workplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Total number of workshop applications, successful applications and applications to-be-determined. * = Current Year"}
 par(family="serif",mar=c(2,2,1,1),oma=c(1.5,2,0.5,1));
 
 ylim.val=c(0,5);by.y=1;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)

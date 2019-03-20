@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Rejection</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h2 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h3 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h4 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h5 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h6 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Paul Julian II, PhD</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-list-ul"></span>
+     
+    Research
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="pubs.html">
+        <span class="fa fa-file"></span>
+         
+        Publications
+      </a>
+    </li>
+    <li>
+      <a href="ecostoich.html">
+        <span class="fa fa-chevron-circle-right"></span>
+         
+        Ecological Stoichiometry
+      </a>
+    </li>
+    <li>
+      <a href="ecometab.html">
+        <span class="fa fa-chevron-circle-right"></span>
+         
+        Ecosystem Metabolism
+      </a>
+    </li>
+    <li>
+      <a href="Fe_S.html">
+        <span class="fa fa-chevron-circle-right"></span>
+         
+        Wetland Iron-Sulfur Interactions
+      </a>
+    </li>
+    <li>
+      <a href="EverSTA.html">
+        <span class="fa fa-chevron-circle-right"></span>
+         
+        Stormwater Treatment Areas
+      </a>
+    </li>
+    <li>
+      <a href="Ewater.html">
+        <span class="fa fa-chevron-circle-right"></span>
+         
+        Environmental Water
+      </a>
+    </li>
+    <li>
+      <a href="authorship.html">
+        <span class="fa fa-file"></span>
+         
+        Authorship Guidelines
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-list-ul"></span>
+     
+    About
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="about.html">
+        <span class="fa fa-user-o"></span>
+         
+        About
+      </a>
+    </li>
+    <li>
+      <a href="https://swampthingpaul.github.io/static/resume/julian-cv-pd.html">
+        <span class="fa fa-file-pdf-o"></span>
+         
+        CV
+      </a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="https://SwampThingPaul.github.io/blog/">
+    <span class="fa fa-rss-square"></span>
+     
+    Blog
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:pjulian@ufl.edu">
+    <span class="fa fa-envelope-o"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/swampthingpaul">
+    <span class="fa fa-twitter-square"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/SwampThingPaul">
+    <span class="fa fa-github-alt"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.youtube.com/channel/UCykDhSIQwiO_7ESoLV72mMw">
+    <span class="fa fa-youtube"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Rejection</h1>
+
+</div>
+
+
+<p>One thing that is certain in life is rejection, often called the constant companion in science. As a collective we often focus on the rejection and don’t celebrate the successes sufficiently. If you search for any statistics regarding applying for grants, post-docs, jobs, etc., you will find some staggering statistics on the number of applications, percent funded, etc. The old expression “Failure is not an option…” would be more accurate as failure is constantly an option, so much so that back in 2016 <a href="https://www.princeton.edu/~joha/">Dr Johannes Haushofer</a> became widely know for posting online his <a href="https://www.princeton.edu/~joha/Johannes_Haushofer_CV_of_Failures.pdf">CV of Failures</a>. Others have followed suit. An <a href="https://www.theguardian.com/education/2016/apr/30/cv-of-failures-princeton-professor-publishes-resume-of-his-career-lows">article</a> recounts that Haushofer, wrote the document to <em>“give some perspective”</em>. Most times we fail but it is hidden away out-of-sight so that when we do succeed it gives an unbalanced representation of the day-to-day work. Another quote from the article helps put things into context:</p>
+<blockquote>
+<p>“As a result, they are more likely to attribute their own failures to themselves, rather than the fact that the world is stochastic, applications are crapshoots, and selection committees and referees have bad days.”</p>
+</blockquote>
+<p>Motivated by Dr Haushofer, <a href="http://melaniestefan.net/Mela_24Nov2017.pdf">Dr Melanie Stefan</a>, <a href="http://aurielfournier.github.io/rejection/">Dr Auriel Fournier</a> and others have done the same. I decided to begin documenting my failures as well. This page is organized into three sections including publications, applications to workshops/short-courses, and grants/funding. I likely missed some data in my reconstruction efforts, but this accounts for the major applications and funding oppurtunities from 2014/2015 to current.</p>
+<p><br></p>
+<div id="publications" class="section level2">
+<h2>Publications</h2>
+<p>A significant amount of work is require to move a manuscript from submission to <em>in-press</em>. This process includes peer-review where scientists in and around the field of study (i.e. your peers) review the manuscript so that it meets good scientific standards. If the reviewers determine the manuscript is suitable it will be passed on for consideration for publication. This <a href="https://undsci.berkeley.edu/article/howscienceworks_16"><strong>Understanding Science</strong></a> article has a great analogy to put the peer-review process into context:</p>
+<blockquote>
+<p>Peer review does the same thing for science that the “inspected by #7” sticker does for your t-shirt.</p>
+</blockquote>
+<p><a href="https://www.elsevier.com/reviewers/what-is-peer-review">Elsevier</a> also provides a very robust outline of peer-review including background, understanding the process, the types of peer-review and other additional information.</p>
+<div class="figure" style="text-align: center">
+<img src="reject_files/figure-html/pubplot-1.png" alt="Time series of publication record relative to the number of weeks elaspsed untill final decision. Does not include publication *in-prep*." width="528" />
+<p class="caption">
+Time series of publication record relative to the number of weeks elaspsed untill final decision. Does not include publication <em>in-prep</em>.
+</p>
+</div>
+<!--
+## Jobs 
+
+I have been lucky in the past ~ 8 years to have held a very good position that has afforded me the chance to pursue multiple career development opportunities including my Professional Wetland Scientist (PWS) and doctorate. Despite these benefits and the freedom of my current position occasionally I search the job-boards and apply to positions that seem to fit my career trajectory. THIS IS PERFECTLY HEALTHY. However, some employers see this as bad form because they don’t want people looking to exit, using this job as a stepping stone, not being 100% engaged, etc. I see it as opportunities to advance my career, stay fresh with interviewing skills (not just for jobs) and potentially grow my network.
+
+
+
+
+<div class="figure" style="text-align: center">
+<img src="reject_files/figure-html/jobplot-1.png" alt="Total number of job applications, interviews and offers during my job searches. * = Current Year" width="528" />
+<p class="caption">Total number of job applications, interviews and offers during my job searches. * = Current Year</p>
+</div>
+-->
+<p><br></p>
+</div>
+<div id="workshopsshort-courses" class="section level2">
+<h2>Workshops/Short-Courses</h2>
+<p>Professional development workshops, working groups and/or short courses sometimes accompany funding for travel expenses. Therefore, you are evaluated based on productivity, career, etc. much like a job application.</p>
+<div class="figure" style="text-align: center">
+<img src="reject_files/figure-html/workplot-1.png" alt="Total number of workshop applications, successful applications and applications to-be-determined. * = Current Year" width="528" />
+<p class="caption">
+Total number of workshop applications, successful applications and applications to-be-determined. * = Current Year
+</p>
+</div>
+<p><br></p>
+</div>
+<div id="funding" class="section level2">
+<h2>Funding</h2>
+<p>The next big category is funding including grants, scholarships, fellowships, etc.</p>
+<div class="figure" style="text-align: center">
+<img src="reject_files/figure-html/fundplot-1.png" alt="Total number of funding applications, successful funding and applications to-be-determined. * = Current Year" width="528" />
+<p class="caption">
+Total number of funding applications, successful funding and applications to-be-determined. * = Current Year
+</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
