@@ -1,5 +1,9 @@
 ---
 title: "Everglades Stormwater Treatment Areas"
+output:
+  html_document:
+    includes:
+      in_header: ["images/sta_header.html"]
 
 ---
 
