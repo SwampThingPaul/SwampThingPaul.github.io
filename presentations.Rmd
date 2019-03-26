@@ -1,5 +1,6 @@
 ---
   title: "Presentations"
+  paged-footnotes: true
 ---
 
 All presentations are available upon request, some are available here. 

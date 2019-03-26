@@ -6,6 +6,7 @@ output:
   pagedown::html_resume:
   # set it to true for a self-contained HTML page but it'll take longer to render
   self_contained: true
+  paged-footnotes: true
     
 ---
 
@@ -350,6 +351,7 @@ Student Organization, Off-Campus Representative.
 - Environmental Management
 - Ecological Engineering 
 - Science of the Environment
+- Ecology and Evolution
 - and many more
 :::
 
@@ -477,6 +479,11 @@ Environmental Management.
 
 **Julian, P.**
 
+<br>
+<br>
+<br>
+<br>
+
 ### Nutrient homeostasis and mechanisms related to nutrient retention by wetland macrophytes in a subtropical wetland.
 
 Aquatic Processes
@@ -486,10 +493,6 @@ Aquatic Processes
 `N/A`
 
 **Julian, P.**, et al.  
-
-<br>
-<br>
-<br>
 
 ### Translating stream spiraling concepts to wetland nutrient uptake and transport mechanisms in a subtropical treatment wetland.
 
@@ -563,6 +566,11 @@ Wetlands Ecology and Management. 25(2):191-209
 
 **Julian, P.**
 
+<br>
+<br>
+<br>
+<br>
+
 ### Iron and pyritization in wetland soils of the Florida Coastal Everglades. 
 
 Estuaries and Coasts. 40(3): 191-209
@@ -573,9 +581,7 @@ Estuaries and Coasts. 40(3): 191-209
 
 **Julian, P.**, R. Chambers and T. Russell.
 
-<br>
-<br>
-<br>
+
 
 ### Mercury stoichiometric relationships in a subtropical peatland. 
 
@@ -942,6 +948,12 @@ Coral Spring, Florida
 
 Gu, B and **P. Julian**.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Water Quality Along inflow to Outflow Gradient of the Everglades Stormwater Treatment Areas.
 
 Greater Everglades Ecosystem Restoration
@@ -952,10 +964,6 @@ Coral Spring, Florida
 
 Villapando, O., R. Bhomia, J. King and **P. Julian**.
 
-<br>
-<br>
-<br>
-<br>
 
 ### Status and Trends of Landscape-Scale Mercury in South Florida and the Everglades.
 
@@ -1160,6 +1168,10 @@ Coral Spring, Florida
 `N/A`
 
 Osborne, T.Z., R. Bhomia, **P. Julian** and K.R. Reddy. 
+
+<br>
+<br>
+<br>
 
 ### Removal of Mercury from Surface Water by Constructed Wetlands in South Florida, USA.
 
