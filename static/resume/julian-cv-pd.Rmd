@@ -6,9 +6,19 @@ output:
   pagedown::html_resume:
   # set it to true for a self-contained HTML page but it'll take longer to render
   self_contained: true
-  
-    
+
 ---
+
+```{css,echo=FALSE}
+:root{
+  --sidebar-background-color: #f2f2f2;
+}
+
+body{
+  font-family: "serif",serif;
+  
+}
+```
 
 Aside
 ================================================================================
@@ -237,10 +247,6 @@ Professional Association of Diving Instructors
 `N/A`
   
 2009
-
-<br>
-<br>
-<br>
 
 
 Honors & Awards {data-icon=trophy}
@@ -479,11 +485,6 @@ Environmental Management.
 
 **Julian, P.**
 
-<br>
-<br>
-<br>
-<br>
-
 ### Nutrient homeostasis and mechanisms related to nutrient retention by wetland macrophytes in a subtropical wetland.
 
 Aquatic Processes
@@ -503,6 +504,11 @@ Environmental Monitoring and Assessment.
 `N/A`
 
 **Julian, P.**, S. Gerber and A.J. Reisinger.
+
+<br>
+<br>
+<br>
+<br>
 
 ### Reduced soil nutrient enrichment and Typha domingensis expansion due to restoration efforts. A temporal analysis of Taylor Slough in Everglades National Park.
 
@@ -566,11 +572,6 @@ Wetlands Ecology and Management. 25(2):191-209
 
 **Julian, P.**
 
-<br>
-<br>
-<br>
-<br>
-
 ### Iron and pyritization in wetland soils of the Florida Coastal Everglades. 
 
 Estuaries and Coasts. 40(3): 191-209
@@ -580,7 +581,6 @@ Estuaries and Coasts. 40(3): 191-209
 `N/A`
 
 **Julian, P.**, R. Chambers and T. Russell.
-
 
 
 ### Mercury stoichiometric relationships in a subtropical peatland. 
@@ -602,6 +602,10 @@ Ecological Engineering. 108:333-337
 `N/A`
 
 **Julian, P.**
+
+<br>
+<br>
+<br>
 
 ### Iron and Sulfur porewater and surface water biogeochemical interactions in a subtropical peatlands. 
 
@@ -790,14 +794,24 @@ Dixon, L.K. and **P. Julian.**
 
 -->
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 Presentations {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
-
-## Oral (Last five-years)
 
 ::: aside
 Multiple technical presentations not listed here have been presented at meetings including technical, environmental policy, restoration project planning and general public audiences.
 :::
+
+## Oral (Last five-years)
 
 ### Don't wave the river red gums goodbye. The role of environmental flows in restoring river water quality and riparian zones along the Wimmera River. 
 
@@ -878,6 +892,9 @@ Fort Myers, Florida
 
 **Julian, P.**, R Bhomia, S. Gerber, and A.L. Wright.
 
+<br>
+<br>
+
 ### Pyrite formation in the Coastal Everglades:  Can a fool’s gold indicate sea-level rise?
 
 Society of Soil Scientist of America Annual Meeting
@@ -948,12 +965,6 @@ Coral Spring, Florida
 
 Gu, B and **P. Julian**.
 
-<br>
-<br>
-<br>
-<br>
-<br>
-
 ### Water Quality Along inflow to Outflow Gradient of the Everglades Stormwater Treatment Areas.
 
 Greater Everglades Ecosystem Restoration
@@ -974,6 +985,9 @@ Orlando, Florida
 2016
 
 **Julian, P.**, B. Gu, K. Weaver and A. Wright
+
+<br>
+<br>
 
 ### Alteration of hydrology by mangrove encroachment in saltmarsh ecosystems and potential impacts to ecosystem services.
 
@@ -1097,6 +1111,13 @@ Atchison, Kansas
 **Julian, P.**, M. Atteberry and P. Steinbach. 
 -->
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Poster (Last five-years)
 
 ### Is the Everglades Ecosystem a stoichiometric deviant? An investigation of ecological stoichiometry along the aquatic continuum of the Everglades ecosystem.
@@ -1169,10 +1190,6 @@ Coral Spring, Florida
 
 Osborne, T.Z., R. Bhomia, **P. Julian** and K.R. Reddy. 
 
-<br>
-<br>
-<br>
-
 ### Removal of Mercury from Surface Water by Constructed Wetlands in South Florida, USA.
 
 7<sup>th</sup> SETAC World Congress/SETAC North America 37<sup>th</sup> Annual Meeting
@@ -1182,6 +1199,9 @@ Orlando, Florida
 2016
 
 Gu, B., N. Niemeyer and **P. Julian**. 
+
+<br>
+<br>
 
 ### Total Phosphorus and Total Nitrogen trends in Upper Taylor Slough, Everglades National Park, Florida.
 
