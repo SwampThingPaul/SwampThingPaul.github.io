@@ -18,6 +18,9 @@ body{
   font-family: "serif",serif;
   
 }
+a {
+  color: #0000EE
+}
 ```
 
 Aside
@@ -44,7 +47,7 @@ Skills {#skills}
 
 **Computing Skills**
 
-- **Expertise**: ArcGIS, R/RStudio, Markdown, Git/Github, Latex
+- **Expertise**: ArcGIS, R/RStudio, Markdown, Git/Github, LaTex
 
 - **Familiarity**: QGIS, Python, HTML, Inkscape
 
