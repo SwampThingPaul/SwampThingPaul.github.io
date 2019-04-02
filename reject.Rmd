@@ -132,7 +132,7 @@ fund$Date=convertToDate(fund$Date)
 fund$yr=format(fund$Date,"%Y")
 
 fund.sum=ddply(fund,"yr",summarise,N.total=length(Type),N.offer=sum(Offer=="Y",na.rm=T),N.tbd=sum(is.na(Offer)))
-fund.sum=rbind(fund.sum,data.frame(yr=2019,N.total=0,N.offer=0,N.tbd=0))
+#fund.sum=rbind(fund.sum,data.frame(yr=2019,N.total=0,N.offer=0,N.tbd=0))
 ```
 
 ```{r fundplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Total number of funding applications, successful funding and applications to-be-determined. * = Current Year"}
