@@ -7,7 +7,7 @@ output: pdf_document
 
 <sup>1</sup>Adapted from the Saltmarsh Habitat & Avian Research Program ([https://www.tidalmarshbirds.org/](https://www.tidalmarshbirds.org/){target="_blank"}) Guidelines for Authorship Standard Operating Procedure.
 
-<a href="files/Authorship_guide.pdf#" class="download" title="Download as PDF">Download as PDF</a>			
+<a href="files/Authorship_guide.pdf#" target="_blank" class="download" title="Download as PDF">Download as PDF</a>			
 
 **Table of Contents:**
 
