@@ -5,7 +5,7 @@ title: "Research"
 
 My research can be boardly categorized as aquatic biogeochemistry. I am interesting in the physical, biological, geological and chemical processes that govern the composition and function of aquatic ecosystems. While most of my research is wetland centric I am also interested in how biogeochemical processes in lake, river and estuarine ecosystems.
 
-Aquatic ecoystems hold a significant ecological and anthropogenic value. As such human activies (*directly* and *in-directly*) have the potential to significantly alter or degrade these ecosystems. My research is partly shaped by understanding these anthropogenic pressures (i.e. eutrophication, sea-level rise, etc.) in an ecological context and how it influences the ecosystems biogeochemical cycles. Rooted in foundational ecological theory I continue to revist these cornerstone theories and apply them to new ecosystems in novel ways.  
+Aquatic ecoystems hold a significant ecological and anthropogenic value. As such human activies (*directly* and *indirectly*) have the potential to significantly alter or degrade these ecosystems. My research is partly shaped by understanding these anthropogenic pressures (i.e. eutrophication, sea-level rise, etc.) in an ecological context and how it influences the ecosystems biogeochemical cycles. Rooted in foundational ecological theory I continue to revist these cornerstone theories and apply them to new ecosystems in novel ways.  
 
 <!--
 ### Mission Statement
@@ -34,7 +34,8 @@ In the future, I intend to continue develop my research program to address issue
 
 
 ```{r, out.width="70%",fig.align="center",echo=FALSE}
-knitr::include_graphics("../images/bigcypress_sweatwater.jpg")
+knitr::include_graphics("../images/bigcypress_sweatwater.JPG")
 ```
+
 
 ***
