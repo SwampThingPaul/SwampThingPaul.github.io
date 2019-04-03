@@ -16,7 +16,7 @@ navbar:
       - text: Presentations
         icon: fas fa-chalkboard-teacher
         href: presentations.html
-      - text: Research
+      - text: Research Topics
         icon: fa-flask
         href: research.html
       - text: Authorship Guidelines
