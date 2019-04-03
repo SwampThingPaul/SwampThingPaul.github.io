@@ -1,6 +1,6 @@
 ---
 title: "Authorship Agreement"
-
+output: pdf_document
 ---
 
 # Guidelines for Authorship<sup>1</sup>
