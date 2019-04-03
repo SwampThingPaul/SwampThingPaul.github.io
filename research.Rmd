@@ -33,7 +33,7 @@ In the future, I intend to continue develop my research program to address issue
 
 
 ```{r, out.width="70%",fig.align="center",echo=FALSE}
-knitr::include_graphics("../images/bigcypress_sweatwater.JPG")
+knitr::include_graphics("../images/faka_lillies.JPG")
 ```
 
 
