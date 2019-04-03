@@ -3,4 +3,30 @@ title: "Research"
  
 ---
 
-...work in progress, pardon the mess. 
+My research can be boardly categorized as aquatic biogeochemistry. I am interesting in the physical, biological, geological and chemical processes that govern the composition and function of aquatic ecosystems. While most of my research is wetland centric I am also interested in how biogeochemical processes in lake, river and estuarine ecosystems.
+
+Aquatic ecoystems hold a significant ecological and anthropogenic value. As such human activies (*directly* and *in-directly*) have the potential to significantly alter or degrade these ecosystems. My research is partly shaped by understanding these anthropogenic pressures (i.e. eutrophication, sea-level rise, etc.) in an ecological context and how it influences the ecosystems biogeochemical cycles. Rooted in foundational ecological theory I continue to revist these cornerstone theories and apply them to new ecosystems in novel ways.  
+
+<!--
+### Mission Statement
+
+
+
+### Vision Statement
+
+from statement of research interest...need to edit. 
+In the future, I intend to continue develop my research program to address issues such as the impacts of altered rainfall and temperature patterns on ecosystem productivity, the effects of sea-level rise on ecosystem distribution and extent, basal food-web dynamics of ecosystem experiencing long-term restoration. Both my current and future research are multi-disciplinary efforts developed to investigate ecosystem level ecology in an ever-changing landscape. 
+
+-->
+
+Specific areas of previous and ongoing work:
+
+- [Ecological Stoichiometry](https://swampthingpaul.github.io/ecostoich.html)
+
+- [Ecosystem Metabolism](https://swampthingpaul.github.io/ecometab.html)
+
+- [Iron-Sulfur Interactions](https://swampthingpaul.github.io/Fe_S.html)
+
+- [Stormwater Treatment Area](https://swampthingpaul.github.io/EverSTA.html)
+
+- Environmental Water

@@ -16,21 +16,9 @@ navbar:
       - text: Presentations
         icon: fas fa-chalkboard-teacher
         href: presentations.html
-      - text: Ecological Stoichiometry
-        icon: fa-chevron-circle-right
-        href: ecostoich.html
-      - text: Ecosystem Metabolism
-        icon: fa-chevron-circle-right
-        href: ecometab.html
-      - text: Wetland Iron-Sulfur Interactions
-        icon: fa-chevron-circle-right
-        href: Fe_S.html
-      - text: Stormwater Treatment Areas
-        icon: fa-chevron-circle-right
-        href: EverSTA.html
-      - text: Environmental Water 
-        icon: fa-chevron-circle-right
-        href: Ewater.html
+      - text: Research
+        icon: fa-flask
+        href: research.html
       - text: Authorship Guidelines
         icon: fa-file
         href: authorship.html
