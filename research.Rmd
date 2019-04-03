@@ -19,7 +19,8 @@ In the future, I intend to continue develop my research program to address issue
 
 -->
 
-Specific areas of previous and ongoing work:
+
+**Specific areas of previous and ongoing work:**
 
 - [Ecological Stoichiometry](https://swampthingpaul.github.io/ecostoich.html)
 
@@ -30,3 +31,10 @@ Specific areas of previous and ongoing work:
 - [Stormwater Treatment Area](https://swampthingpaul.github.io/EverSTA.html)
 
 - Environmental Water
+
+
+```{r, out.width="70%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../images/bigcypress_sweatwater.jpg")
+```
+
+***
