@@ -448,6 +448,19 @@ Twitter
 
 `N/A`
 
+<!--http://julienmoeys.info/CV/ --->
+
+Informatics and Programming {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+### Creator and maintainer of the R package AnalystHelper
+
+[AnalystHelper](https://github.com/SwampThingPaul/AnalystHelper) (on GitHub)
+
+`N/A`
+
+2019
+
 
 Publications {data-icon=file-alt}
 --------------------------------------------------------------------------------
@@ -498,6 +511,11 @@ Aquatic Processes
 
 **Julian, P.**, et al.  
 
+<br>
+<br>
+<br>
+<br>
+
 ### Translating stream spiraling concepts to wetland nutrient uptake and transport mechanisms in a subtropical treatment wetland.
 
 Environmental Monitoring and Assessment.
@@ -507,11 +525,6 @@ Environmental Monitoring and Assessment.
 `N/A`
 
 **Julian, P.**, S. Gerber and A.J. Reisinger.
-
-<br>
-<br>
-<br>
-<br>
 
 ### Reduced soil nutrient enrichment and Typha domingensis expansion due to restoration efforts. A temporal analysis of Taylor Slough in Everglades National Park.
 
@@ -596,6 +609,11 @@ Water, Air & Soil Pollution. 227(12):472
 
 **Julian, P.**, B. Gu and A. Wright. 
 
+<br>
+<br>
+<br>
+<br>
+
 ###  Commentary on “Mitsch et al 2015, Protecting the Florida Everglades wetlands with wetlands: Can stormwater phosphorus be reduced to oligotrophic conditions?” 
 
 Ecological Engineering. 108:333-337
@@ -606,9 +624,6 @@ Ecological Engineering. 108:333-337
 
 **Julian, P.**
 
-<br>
-<br>
-<br>
 
 ### Iron and Sulfur porewater and surface water biogeochemical interactions in a subtropical peatlands. 
 
@@ -896,7 +911,6 @@ Fort Myers, Florida
 **Julian, P.**, R Bhomia, S. Gerber, and A.L. Wright.
 
 <br>
-<br>
 
 ### Pyrite formation in the Coastal Everglades:  Can a fool’s gold indicate sea-level rise?
 
@@ -1114,13 +1128,6 @@ Atchison, Kansas
 **Julian, P.**, M. Atteberry and P. Steinbach. 
 -->
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 ## Poster (Last five-years)
 
 ### Is the Everglades Ecosystem a stoichiometric deviant? An investigation of ecological stoichiometry along the aquatic continuum of the Everglades ecosystem.
@@ -1202,9 +1209,6 @@ Orlando, Florida
 2016
 
 Gu, B., N. Niemeyer and **P. Julian**. 
-
-<br>
-<br>
 
 ### Total Phosphorus and Total Nitrogen trends in Upper Taylor Slough, Everglades National Park, Florida.
 
