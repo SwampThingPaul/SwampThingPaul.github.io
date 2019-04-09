@@ -51,6 +51,11 @@ Skills {#skills}
 
 - **Familiarity**: QGIS, Python, HTML, Inkscape
 
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Last updated on `r format(Sys.Date(),"%d %B %Y")`.
+
 
 Main
 ================================================================================
@@ -471,9 +476,9 @@ A complete list of publications can be found on my webpage ([link](https://swamp
 
 ## *In Preparation*
 
-### Nutrient stoichiometric relationships amongst ecosystem compartments of a subtropical treatment wetland.
+### Evaluation of nutrient stoichiometric relationships amongst ecosystem compartments of a subtropical treatment wetland. Do we have "Redfield Wetlands"?
 
-Ecological Processes.
+Ecological Processes. *(Submitted)*
 
 `N/A`
 
