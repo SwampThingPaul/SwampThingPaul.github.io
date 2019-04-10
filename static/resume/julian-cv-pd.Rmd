@@ -6,7 +6,6 @@ output:
   pagedown::html_resume:
   # set it to true for a self-contained HTML page but it'll take longer to render
   self_contained: true
-
 ---
 
 ```{css,echo=FALSE}
@@ -21,6 +20,7 @@ body{
 a {
   color: #0000EE
 }
+
 ```
 
 Aside
@@ -47,7 +47,7 @@ Skills {#skills}
 
 **Computing Skills**
 
-- **Expertise**: ArcGIS, R/RStudio, Markdown, Git/Github, LaTex
+- **Expertise**: ArcGIS, R/RStudio, Markdown, Git/Github, LaTex, MS Access
 
 - **Familiarity**: QGIS, Python, HTML, Inkscape
 
@@ -453,7 +453,7 @@ Twitter
 
 `N/A`
 
-<!--http://julienmoeys.info/CV/ --->
+<!--example from http://julienmoeys.info/CV/ --->
 
 Informatics and Programming {data-icon=laptop}
 --------------------------------------------------------------------------------
