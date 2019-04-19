@@ -1,0 +1,18 @@
+---
+  title: "Examples of Work"
+
+---
+  
+Examples of reports generated to inform technical staff and managers related to water quality conditions throughout south Florida. 
+
+1. [Estuary Salinity Report](https://swampthingpaul.github.io/static/examples/SalinityUpdate.html)
+  -  This report is generated daily (posted elsewhere) to support the flow of information related to Lake Okeechobee, the Caloosahatchee River and St. Lucie estuaries.
+
+2. [Caloosahatchee River Estuary Water Quality](https://swampthingpaul.github.io/static/examples/CRE_WQ.html)
+  - This report focuses specifically on water quality (i.e. nutrients) conditions within the Caloosahatchee River estuary with a environmental regulatory spin displaying and distilling several years of data into one graphic.  
+
+3. [South Dade Environmental Information](https://swampthingpaul.github.io/static/examples/SouthDade_summary.html)
+  - This report/page was developed to help inform planning efforts surrounding changes to water management in the region.
+
+---
+  
