@@ -7,14 +7,12 @@ All presentations are available upon request, some are available here.
 
 Multiple technical presentations not listed here have been presented at meetings including technical, environmental policy, restoration project planning and general public audiences.
 
-- **Julian, P.** 2019. Everglades Restoration and Water Quality. Coccoloba Chapter of the Florida Native Plant Society. Guest Speaker.  
-  - [pdf Link](SwampThingPaul.github.io/files/pres/20190321_Everglades.pdf){target="_blank"}
-  - [YouTube Link](https://youtu.be/4YLTccWeVjE){target="_blank"}
+- **Julian, P.**, K. August, L. Simpson, T.Z. Osborne, D. Surratt. 2019. Hydrologic restoration of a shallow oligotrophic marl wetland. What is the soil Telling us? Greater Everglades Ecosystem Restoration Conference. Coral Springs, FL. [`r icon::fa("file-pdf")`](https://SwampThingPaul.github.io/files/pres/20190424_Julianetal_UTS.pdf){target="_blank"} `r icon::fa("youtube")`
 
-- **Julian, P.** and G. Fletcher. 2018. Don't wave the river red gums goodbye. The role of environmental flows in restoring river water quality and riparian zones along the Wimmera River. Society of Wetland Scientists. Denver, CO.
-  -  [pdf Link](SwampThingPaul.github.io/files/pres/Julian_Fletcher_Wimmera_EFlows_postSWS.pdf){target="_blank"}
-  -  [YouTube Link](https://youtu.be/k5w1YYx5r7o){target="_blank"}
+- **Julian, P.** 2019. Everglades Restoration and Water Quality. Coccoloba Chapter of the Florida Native Plant Society. Guest Speaker.  [`r icon::fa("file-pdf")`](https://SwampThingPaul.github.io/files/pres/20190321_Everglades.pdf){target="_blank"} [`r icon::fa("youtube")`](https://youtu.be/4YLTccWeVjE){target="_blank"} 
 
+- **Julian, P.** and G. Fletcher. 2018. Don't wave the river red gums goodbye. The role of environmental flows in restoring river water quality and riparian zones along the Wimmera River. Society of Wetland Scientists. Denver, CO. [`r icon::fa("file-pdf")`](https://SwampThingPaul.github.io/files/pres/Julian_Fletcher_Wimmera_EFlows_postSWS.pdf){target="_blank"} [`r icon::fa("youtube")`](https://youtu.be/k5w1YYx5r7o){target="_blank"}
+  
 - **Julian, P.**, S. Gerber. A.J. Reisinger, K. Larios. 2018. Let’s take a ride downstream. Translating nutrient spiraling concepts to wetland ecosystems. Society of Wetland Scientists. Denver, CO.
 
 - **Julian, P.**, et al. 2018. Did you guess which thing was not like the others? Evaluation of wetland nutrient stoichiometry and homeostasis in a subtropical treatment wetland. Society of Wetland Scientists. Denver, CO.
