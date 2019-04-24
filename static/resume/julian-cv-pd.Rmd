@@ -323,6 +323,14 @@ Synergistic Activities {data-icon=users}
 
 Present - 2018
 
+### Woodstoich 4 
+
+[Silicon Stoichiometry Working Group](https://woodstoich.org/groups#e451d736-5e32-45dc-91f4-39b2090f4ed8)
+
+`N/A`
+
+2019
+
 ### Long Term Ecological Research. 
 
 [All Scientist Meeting](https://lternet.edu/lter-scientists-meeting-2018/) Program Committee.
@@ -496,6 +504,7 @@ Frontiers in Marine Science Marine Biogeochemistry.
 
 **Julian, P.**, et al.  
 
+<!--
 ### Thousand bandages for a thousand cuts. Perspective of water management for the Murray-Darling River.
 
 Environmental Management. 
@@ -505,6 +514,7 @@ Environmental Management.
 `N/A`
 
 **Julian, P.**
+-->
 
 ### Nutrient homeostasis and mechanisms related to nutrient retention by wetland macrophytes in a subtropical wetland.
 
