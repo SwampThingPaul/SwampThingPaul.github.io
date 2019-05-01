@@ -484,15 +484,15 @@ A complete list of publications can be found on my webpage ([link](https://swamp
 
 ## *In Preparation*
 
-### Evaluation of nutrient stoichiometric relationships amongst ecosystem compartments of a subtropical treatment wetland. Do we have "Redfield Wetlands"?
+### Book Review: Spatial Ecology and Conservation Modeling, Applications with R, R. Fletcher and M. Fortin. Springer, 2019. 
 
-Ecological Processes. *(Submitted)*
-
-`N/A`
+Austral Ecology
 
 `N/A`
 
-**Julian, P.**, et al.  
+`N/A`
+
+**Julian, P.**
 
 ### A tale of two storms: effects of sea level rise and pre-existing conditions on biogeochemical response to tropical storms.
 
@@ -552,6 +552,16 @@ Journal of Environmental Management
 August, K.A., L.T. Simpson, **P. Julian** and T.Z Osborne.
 
 ## Peer-Reviewed (Last Five-Years)
+
+### Evaluation of nutrient stoichiometric relationships amongst ecosystem compartments of a subtropical treatment wetland. Do we have "Redfield Wetlands"?
+
+Ecological Processes. *(In Press)*
+
+`N/A`
+
+2019
+
+**Julian, P.**, et al. 
 
 ### Balancing Wetland Restoration Benefits to People and Nature.
 
@@ -613,6 +623,10 @@ Estuaries and Coasts. 40(3): 191-209
 
 **Julian, P.**, R. Chambers and T. Russell.
 
+<br>
+<br>
+<br>
+<br>
 
 ### Mercury stoichiometric relationships in a subtropical peatland. 
 
@@ -623,11 +637,6 @@ Water, Air & Soil Pollution. 227(12):472
 2016
 
 **Julian, P.**, B. Gu and A. Wright. 
-
-<br>
-<br>
-<br>
-<br>
 
 ###  Commentary on “Mitsch et al 2015, Protecting the Florida Everglades wetlands with wetlands: Can stormwater phosphorus be reduced to oligotrophic conditions?” 
 
@@ -827,16 +836,6 @@ Dixon, L.K. and **P. Julian.**
 
 -->
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 Presentations {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
 
@@ -845,6 +844,16 @@ Multiple technical presentations not listed here have been presented at meetings
 :::
 
 ## Oral (Last five-years)
+
+### Hydrologic restoration of a shallow oligotrophic marl wetland. What is the soil telling us?
+
+Greater Everglades Ecosystem Restoration
+
+Coral Springs, Florida
+
+2019
+
+**Julian, P.**, K. August, L. Simpson, T.Z. Osborne, D. Surratt. 
 
 ### Don't wave the river red gums goodbye. The role of environmental flows in restoring river water quality and riparian zones along the Wimmera River. 
 
@@ -916,6 +925,9 @@ New Orleans, Louisiana
 
 Ward, N., T. Dye, **P. Julian** and T.Z. Osborne.
 
+<br>
+<br>
+
 ### Stoichiometric relationships amongst ecosystem compartments of a treatment wetland. 
 Southeastern Ecology and Evolution Conference
 
@@ -924,8 +936,6 @@ Fort Myers, Florida
 `N/A`
 
 **Julian, P.**, R Bhomia, S. Gerber, and A.L. Wright.
-
-<br>
 
 ### Pyrite formation in the Coastal Everglades:  Can a fool’s gold indicate sea-level rise?
 
@@ -1007,6 +1017,8 @@ Coral Spring, Florida
 
 Villapando, O., R. Bhomia, J. King and **P. Julian**.
 
+<br>
+<br>
 
 ### Status and Trends of Landscape-Scale Mercury in South Florida and the Everglades.
 
@@ -1017,9 +1029,6 @@ Orlando, Florida
 2016
 
 **Julian, P.**, B. Gu, K. Weaver and A. Wright
-
-<br>
-<br>
 
 ### Alteration of hydrology by mangrove encroachment in saltmarsh ecosystems and potential impacts to ecosystem services.
 
@@ -1143,7 +1152,21 @@ Atchison, Kansas
 **Julian, P.**, M. Atteberry and P. Steinbach. 
 -->
 
+<br>
+<br>
+<br>
+
 ## Poster (Last five-years)
+
+### Landscape Biogeochemistry: How hurricanes influence biogeochemistry across the Florida Coastal Everglades.
+
+Florida Coastal Everglades Long Term Ecological Research Annual Scientist Meeting
+
+Miami, Florida
+
+2019
+
+**Julian, P.**, E.E. Gaiser, J.S. Kominoski, E. Castaneda, T.G. Troxler, S. Davis, C. Osburn.
 
 ### Is the Everglades Ecosystem a stoichiometric deviant? An investigation of ecological stoichiometry along the aquatic continuum of the Everglades ecosystem.
 
