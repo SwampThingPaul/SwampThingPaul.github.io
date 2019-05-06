@@ -8,7 +8,7 @@ output:
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying biogoechemical processes along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.   
 
-A couple of words/phrases to describe me: Wetland Biogeochemist, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R.
+**A couple of words/phrases to describe me:** Wetland Biogeochemist, Ecologist, Data-scientist, Soil-Scientist, Naturalist, Swamp Walker, Lover of all things R.
 
 This website will host some general information about myself, my research interests and publications.
 
@@ -39,7 +39,7 @@ _“My temple is the swamp …When I would recreate myself, I seek the darkest w
 
 __[Henry David Thoreau](https://www.walden.org/thoreau/){taret="_blank"}__, _Walden and Other Writings_
 
-![](images/waldenpond.jpg)
+<center><img src="images/waldenpond.jpg" width="80%" align="middle"></center>
 
 <br>
 <br>
@@ -47,9 +47,7 @@ _“Whatever you want to do in this world, it is achievable. The most important 
 
 __[Steve Irwin](https://www.australiazoo.com.au/about-us/the-irwins/steve/){target="_blank"}__, _[Crikey! What an Adventure](https://www.imdb.com/title/tt2402314/){target="_blank"}_
 
-<center>
-![](images/IrwinCroc.jpg)
-</center>
+<center><img src="images/IrwinCroc.jpg" width="50%" align="middle"></center>
 
 <br>
 <br>
@@ -65,7 +63,7 @@ __[Carl Safina](http://carlsafina.org/){target="_blank"}__, _[Eye of the Albatro
 
 <br>
 
-<center><div><img src="images/wca3b_marsh.jpg" width="80%" align="center"></div></center>
+<center><div><img src="images/wca3b_marsh.jpg" width="70%" align="center"></div></center>
 
 
 ****

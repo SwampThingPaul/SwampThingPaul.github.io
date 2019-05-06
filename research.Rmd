@@ -6,11 +6,11 @@ My research can be broadly categorized as aquatic biogeochemistry. I am interest
 
 Aquatic ecosystems hold a significant ecological and anthropogenic value. As such human activities (*directly* and *indirectly*) have the potential to significantly alter or degrade these ecosystems. My research is partly shaped by understanding these anthropogenic pressures (i.e. eutrophication, sea-level rise, etc.) in an ecological context and how it influences the ecosystems biogeochemical cycles. Rooted in foundational ecological theory I continue to revisit these cornerstone theories and apply them to new ecosystems in novel ways.  
 
+
+## Mission Statement
+Wetlands and more broadly aquatic ecosystems are under increasing pressure from external pressures and changing internal dynamics. The focus/mission of my research is to understand internal (endogenic) and external (exogenic) processes that influence aquatic ecosystem function and biogeochemistry.
+
 <!--
-### Mission Statement
-
-
-
 ### Vision Statement
 
 from statement of research interest...need to edit. 
@@ -21,13 +21,15 @@ In the future, I intend to continue develop my research program to address issue
 
 **Specific areas of previous and ongoing work:**
 
-- [Ecological Stoichiometry](https://swampthingpaul.github.io/ecostoich.html)
+- [Ecological Stoichiometry](https://swampthingecology.org/ecostoich.html)
 
-- [Ecosystem Metabolism](https://swampthingpaul.github.io/ecometab.html)
+- [Ecosystem Metabolism](https://swampthingecology.org/ecometab.html)
 
-- [Iron-Sulfur Interactions](https://swampthingpaul.github.io/Fe_S.html)
+- [Iron-Sulfur Interactions](https://swampthingecology.org/Fe_S.html)
 
-- [Stormwater Treatment Area](https://swampthingpaul.github.io/EverSTA.html)
+- [Stormwater Treatment Area](https://swampthingecology.org/EverSTA.html)
+
+- Disturbance ecology
 
 - Environmental Water
 
