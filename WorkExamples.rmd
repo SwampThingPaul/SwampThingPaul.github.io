@@ -1,18 +1,37 @@
 ---
-  title: "Examples of Work"
+  title: "Informatics and Programming Portfolio"
 
 ---
+
+I have extensive experience in programming and statistical analysis in [R](https://www.r-project.org/){target="_blank"}, [R-Markrkdown](https://rmarkdown.rstudio.com/){target="_blank"}, [Shiny](https://shiny.rstudio.com/){target="_blank"} and some experience in LaTeX, HTML and Python. Examples of my programming, statistical and web development background include: 
+
+  - My personal webpage, [https://swampthingecology.org](https://swampthingecology.org){target="_blank"} was written using R-Markrkdown and HTML. 
   
-Examples of reports generated to inform technical staff and managers related to water quality conditions throughout south Florida. 
+  - Blog contributions (in R-Markrkdown) related to all things science including geospatial analysis at [https://swampthingecology.org/blog/](https://swampthingecology.org/blog/){target="_blank"}
+  
+  - [R package](https://cran.r-project.org/doc/manuals/R-exts.html){target="_blank"} devleopment including my first package, ["AnalystHelper"](https://github.com/SwampThingPaul/AnalystHelper){target="_blank"}.
+  
+  - Statistical analysis with R featured in several peer-reviewed and technical manuscripted (see [Publications](https://swampthingecology.org/pubs.html){target="_blank"} page).
+  
+  - Automatic report generation using R-Markdown:
+    1. [South Florida Estuary Salinity Report](http://publicfiles.dep.state.fl.us/owp/SalinityReports/SalinityUpdate.html){target="_blank"}
+       -  This report is generated daily to support the flow of information related to Lake Okeechobee, the Caloosahatchee River and St. Lucie estuaries.
+    2. [Caloosahatchee River Estuary Water Quality](https://swampthingpaul.github.io/static/examples/CRE_WQ.html){target="_blank"}
+       - This report focuses specifically on water quality (i.e. nutrients) conditions within the Caloosahatchee River estuary with a environmental regulatory spin displaying and distilling several years of data into one graphic.  
+    3. [South Dade Environmental Information](https://swampthingpaul.github.io/static/examples/SouthDade_summary.html){target="_blank"}
+       - This report/page was developed to help inform planning efforts surrounding changes to water management in the region.
+    4. [Interactive Water Quality Data Explorer](https://swampthingpaul.shinyapps.io/FCE_BGChem_Viewer/){target="_blank"}
+       -  This report is an interactive application developed in R/R-Markrkdown with the Shiny package to actively interact with water quality data collected wihtin the [Florida Coastal Everglades LTER](http://fcelter.fiu.edu/){target="_blank"}.
 
-1. [Estuary Salinity Report](https://swampthingpaul.github.io/static/examples/SalinityUpdate.html)
-  -  This report is generated daily (posted elsewhere) to support the flow of information related to Lake Okeechobee, the Caloosahatchee River and St. Lucie estuaries.
+<br>
 
-2. [Caloosahatchee River Estuary Water Quality](https://swampthingpaul.github.io/static/examples/CRE_WQ.html)
-  - This report focuses specifically on water quality (i.e. nutrients) conditions within the Caloosahatchee River estuary with a environmental regulatory spin displaying and distilling several years of data into one graphic.  
-
-3. [South Dade Environmental Information](https://swampthingpaul.github.io/static/examples/SouthDade_summary.html)
-  - This report/page was developed to help inform planning efforts surrounding changes to water management in the region.
+  - Version control with [GitHub](https://github.com){target="_blank"}, my profile name is [SwampThingPaul](https://github.com/SwampThingPaul){target="_blank"}.
+  
+  - Database experience in MS Access and database interface with R. 
+  
+  - Geographic Information Systems (GIS) experience with [ArcGIS](https://www.arcgis.com/){target="_blank"}, R and some experience in [QGIS](https://www.qgis.org/){target="_blank"}.
+  
+  - Graphic editing experience with [Inkscape](http://inkscape.org/en/){target="_blank"}.
 
 ---
   
