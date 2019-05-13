@@ -21,7 +21,7 @@ I have extensive experience in programming and statistical analysis in [R](https
     3. [South Dade Environmental Information](https://swampthingpaul.github.io/static/examples/SouthDade_summary.html){target="_blank"}
        - This report/page was developed to help inform planning efforts surrounding changes to water management in the region.
     4. [Interactive Water Quality Data Explorer](https://swampthingpaul.shinyapps.io/FCE_BGChem_Viewer/){target="_blank"}
-       -  This report is an interactive application developed in R/R-Markrkdown with the Shiny package to actively interact with water quality data collected wihtin the [Florida Coastal Everglades LTER](http://fcelter.fiu.edu/){target="_blank"}.
+       -  This report is an interactive application developed in R/R-Markdown with the Shiny package to actively interact with water quality data collected wihtin the [Florida Coastal Everglades LTER](http://fcelter.fiu.edu/){target="_blank"}.
 
 <br>
 
