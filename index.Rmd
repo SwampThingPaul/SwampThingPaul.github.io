@@ -1,10 +1,14 @@
 ---
-title: "Greetings!! Welcome to my webpage."
+title: 
 output:
   html_document:
     includes:
       in_header: ["images/cover_header.html","google_analytics.html"]
 ---
+
+<br>
+
+# Welcome to the swamp. <img src="./static/SWE_logo_small.png" align="right" height="120"/>
 
 I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying biogoechemical processes along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.   
 

@@ -355,7 +355,7 @@ Student Organization, Off-Campus Representative.
 
 2017 & 2015
 
-## Peer and Technical Reivew
+## Peer and Technical Review
 
 ### Peer Review
 
@@ -444,6 +444,14 @@ Biogeochemistry Working Group
 `N/A`
 
 Aug. 2018
+
+### Co-organizer Society of Freshwater Science tiwtter poster session
+
+[#2019SFSPostUp](https://twitter.com/search?vertical=default&q=%232019SFSPostUp&src=typd)
+
+`N/A`
+
+May 2019
 
 ### Content contributor to ["#MacrophyteMonday”](https://twitter.com/search?l=&q=%23MacrophyteMonday%20%20%20from%3Aswampthingpaul&src=typd) and [“#WetlandWednesday”](https://twitter.com/search?q=%23WetlandWednesday%20%20from%3Aswampthingpaul&src=typd).
 
@@ -613,6 +621,9 @@ Wetlands Ecology and Management. 25(2):191-209
 
 **Julian, P.**
 
+<br>
+<br>
+
 ### Iron and pyritization in wetland soils of the Florida Coastal Everglades. 
 
 Estuaries and Coasts. 40(3): 191-209
@@ -623,10 +634,6 @@ Estuaries and Coasts. 40(3): 191-209
 
 **Julian, P.**, R. Chambers and T. Russell.
 
-<br>
-<br>
-<br>
-<br>
 
 ### Mercury stoichiometric relationships in a subtropical peatland. 
 
@@ -925,8 +932,6 @@ New Orleans, Louisiana
 
 Ward, N., T. Dye, **P. Julian** and T.Z. Osborne.
 
-<br>
-<br>
 
 ### Stoichiometric relationships amongst ecosystem compartments of a treatment wetland. 
 Southeastern Ecology and Evolution Conference
@@ -1227,6 +1232,9 @@ Coral Spring, Florida
 `N/A`
 
 **Julian, P.**, M. Powers, R. Bhomia, A. Wright and J. Dombrowski.
+
+<br>
+<br>
 
 ### Spatial Distribution of Soil Biogeochemical Properties in Stormwater Treatment Area 3/4 Cells 3A and 3B.
 
