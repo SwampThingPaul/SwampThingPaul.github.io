@@ -18,6 +18,10 @@ title: "Publications"
 
 ## Peer Reviewed Literature
 
+__2019__
+
+* Julian, P., S. Gerber, R.K. Bhomia, J. King, T.Z. Osborne, A.L. Wright, M. Powers and J. Dombrowski. Evaluation of nutrient stoichiometric relationships among ecosystem compartments of a subtropical treatment wetland. Do we have “Redfield wetlands”? [Ecological Processes. 8:20](https://link.springer.com/article/10.1186/s13717-019-0172-x){target="_blank"}.
+
 __2018__
 
 * Julian, P. and T.Z. Osborne. From lake to estuary, the tale of two waters. A study of aquatic continuum biogeochemistry. [Environmental Monitoring and Assessment. 190:96](https://link.springer.com/article/10.1007%2Fs10661-017-6455-8){target="_blank"}.
