@@ -7,7 +7,12 @@ title: "Publications"
 <font size=5 color="red">Science is only powerful when shared. </font>
 (Unknown)
 
-![](images/scholarnetwork.jpg)
+```{r, out.width="55%",fig.align="center",echo=FALSE}
+knitr::include_graphics("images/scholarnetwork.jpg")
+```
+
+<!---![](images/scholarnetwork.jpg)-->
+
 <br>
 <font size=4><center>Google Scholar Network Analysis using the [scholarnetwork](https://github.com/pablobarbera/scholarnetwork){target="_blank"} r-package.</center></font>
 
