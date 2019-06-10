@@ -7,8 +7,8 @@ title: "Publications"
 <font size=5 color="red">Science is only powerful when shared. </font>
 (Unknown)
 
-```{r, out.width="55%",fig.align="center",echo=FALSE}
-knitr::include_graphics("images/scholarnetwork.jpg")
+```{r, out.width="60%",fig.align="center",echo=FALSE}
+knitr::include_graphics("images/scholarnetwork2.jpg")
 ```
 
 <!---![](images/scholarnetwork.jpg)-->
