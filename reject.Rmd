@@ -21,7 +21,7 @@ A significant amount of work is require to move a manuscript from submission to 
 
 [Elsevier](https://www.elsevier.com/reviewers/what-is-peer-review) also provides a very robust outline of peer-review including background, understanding the process, the types of peer-review and other additional information.
 
-```{r,echo=F}
+```{r,echo=F,message=F}
 #source("D:/commonlyUsedFunctions.R")
 library(AnalystHelper)
 library(openxlsx)
@@ -37,14 +37,15 @@ pub=pub[order(pub$Date.Submitted),]
 
 
 
-```{r pubplot,echo=F,fig.width=5.5,fig.height=4,fig.align="center",fig.cap="Time series of publication record relative to the number of weeks elaspsed untill final decision. Does not include publication *in-prep*."}
+```{r pubplot,echo=F,fig.width=6,fig.height=4,fig.align="center",fig.cap="Time series of publication record relative to the number of weeks elaspsed untill final decision. Does not include publication *in-prep*."}
 par(family="serif",mar=c(2,2,1,1),oma=c(1.5,2,0.5,1));
 
 ylim.val=c(0,100);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
 xlim.val=date.fun(c("2010-01-01","2019-03-01"));xmaj=seq(xlim.val[1],xlim.val[2],"2 years");xmin=seq(xlim.val[1],xlim.val[2],"1 years")
 plot(date.dif~Date.Submitted,pub,xaxt="n",yaxt="n",ylab=NA,xlab=NA,ylim=ylim.val,xlim=xlim.val,type="n")
 abline(h=ymaj,v=xmaj,lty=3,col="grey")
-with(pub,lines(Date.Submitted,date.dif,col="grey"))
+#with(pub,lines(Date.Submitted,date.dif,col="grey"))
+with(pub,segments(Date.Submitted,-10,Date.Submitted,date.dif,col=ifelse(final.decision=="accept","lightgreen","indianred2"),lwd=2))
 with(subset(pub,final.decision=="accept"),points(Date.Submitted,date.dif,pch=21,bg="lightgreen",cex=1.25))
 with(subset(pub,final.decision=="reject"),points(Date.Submitted,date.dif,pch=21,bg="indianred2",cex=1.25))
 abline(v=date.fun(c("2010-05-01","2018-05-01")),lty=2)
