@@ -202,7 +202,7 @@ Mar. 2007 - Feb. 2008
 
 ::: concise
 - Analyze drinking water, waste water and environmental samples according approved protocols.
--  Writing technical reports and grants, data entry and field sampling. 
+- Writing technical reports and grants, data entry and field sampling. 
 - Maintain everyday laboratory operation. 
 - Interact with current and potential clients.
 :::
@@ -293,7 +293,7 @@ Benedictine College
 
 2005
 
-### Discovery Scholar
+<!-- ### Discovery Scholar
 
 Benedictine College
 
@@ -308,7 +308,7 @@ Benedictine College
 `N/A`
 
 2001
-
+--->
 
 Synergistic Activities {data-icon=users}
 --------------------------------------------------------------------------------
@@ -337,7 +337,7 @@ Present - 2016
 
 `N/A`
 
-2017- 2018
+2017
 
 ###	Florida Coastal Everglades Long Term Ecological Research
 
@@ -345,7 +345,7 @@ Student Organization, Off-Campus Representative.
 
 `N/A`
 
-2017 - 2018 
+2017 
 
 ### Greater Everglades Ecosystem Restoration Conference, Mercury and Sulfur Special Session co-organizer
 
@@ -418,6 +418,8 @@ Water Quality Subteam
 
 `N/A`
 
+<br>
+
 ### Everglades Combined Operation Plan 
 
 Water Quality and Adaptive Management Subteams
@@ -453,7 +455,7 @@ Aug. 2018
 
 May 2019
 
-### Content contributor to ["#MacrophyteMonday”](https://twitter.com/search?l=&q=%23MacrophyteMonday%20%20%20from%3Aswampthingpaul&src=typd) and [“#WetlandWednesday”](https://twitter.com/search?q=%23WetlandWednesday%20%20from%3Aswampthingpaul&src=typd).
+<!-- ### Content contributor to ["#MacrophyteMonday”](https://twitter.com/search?l=&q=%23MacrophyteMonday%20%20%20from%3Aswampthingpaul&src=typd) and [“#WetlandWednesday”](https://twitter.com/search?q=%23WetlandWednesday%20%20from%3Aswampthingpaul&src=typd).
 
 Twitter
 
@@ -468,11 +470,19 @@ Twitter
 `N/A`
 
 `N/A`
-
+ --->
 <!--example from http://julienmoeys.info/CV/ --->
+
 
 Informatics and Programming {data-icon=laptop}
 --------------------------------------------------------------------------------
+
+### Informatics and Programming Portfolio
+[swampthingecology.org/WorkExamples.html](https://swampthingecology.org/WorkExamples.html).
+
+`N/A`
+
+`N/A`
 
 ### Creator and maintainer of the R package AnalystHelper
 
@@ -492,19 +502,19 @@ A complete list of publications can be found on my webpage ([link](https://swamp
 
 ## *In Preparation*
 
-### Book Review: Spatial Ecology and Conservation Modeling, Applications with R, R. Fletcher and M. Fortin. Springer, 2019. 
+### Riverine stoichiometry is not defined at its mouth: Variation and controls on Si stoichometry in a large floodplain river 
 
-Austral Ecology
-
-`N/A`
+Frontiers 
 
 `N/A`
 
-**Julian, P.**
+`N/A`
+
+Carey, J, K.J. Jankowski, **P. Julian**, L. Sethna and P. Thomas.
 
 ### A tale of two storms: effects of sea level rise and pre-existing conditions on biogeochemical response to tropical storms.
 
-Frontiers in Marine Science Marine Biogeochemistry. 
+`N/A`
 
 `N/A`
 
@@ -534,11 +544,6 @@ Aquatic Processes
 
 **Julian, P.**, et al.  
 
-<br>
-<br>
-<br>
-<br>
-
 ### Translating stream spiraling concepts to wetland nutrient uptake and transport mechanisms in a subtropical treatment wetland.
 
 Environmental Monitoring and Assessment.
@@ -548,6 +553,11 @@ Environmental Monitoring and Assessment.
 `N/A`
 
 **Julian, P.**, S. Gerber and A.J. Reisinger.
+
+<br>
+<br>
+<br>
+<br>
 
 ### Reduced soil nutrient enrichment and Typha domingensis expansion due to restoration efforts. A temporal analysis of Taylor Slough in Everglades National Park.
 
@@ -561,13 +571,23 @@ August, K.A., L.T. Simpson, **P. Julian** and T.Z Osborne.
 
 ## Peer-Reviewed (Last Five-Years)
 
-### Evaluation of nutrient stoichiometric relationships amongst ecosystem compartments of a subtropical treatment wetland. Do we have "Redfield Wetlands"?
+### Book Review: Spatial Ecology and Conservation Modeling, Applications with R, R. Fletcher and M. Fortin. Springer, 2019. 
 
-Ecological Processes. *(In Press)*
+Austral Ecology [Link](https://onlinelibrary.wiley.com/doi/abs/10.1111/aec.12791)
 
 `N/A`
 
 2019
+
+**Julian, P.**
+
+### Evaluation of nutrient stoichiometric relationships amongst ecosystem compartments of a subtropical treatment wetland. Do we have "Redfield Wetlands"?
+
+Ecological Processes. 8 [Link](https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-019-0172-x)
+
+`N/A`
+
+`N/A`
 
 **Julian, P.**, et al. 
 
@@ -621,9 +641,6 @@ Wetlands Ecology and Management. 25(2):191-209
 
 **Julian, P.**
 
-<br>
-<br>
-
 ### Iron and pyritization in wetland soils of the Florida Coastal Everglades. 
 
 Estuaries and Coasts. 40(3): 191-209
@@ -634,6 +651,9 @@ Estuaries and Coasts. 40(3): 191-209
 
 **Julian, P.**, R. Chambers and T. Russell.
 
+<br>
+<br>
+<br>
 
 ### Mercury stoichiometric relationships in a subtropical peatland. 
 
@@ -932,6 +952,9 @@ New Orleans, Louisiana
 
 Ward, N., T. Dye, **P. Julian** and T.Z. Osborne.
 
+<br>
+<br>
+
 
 ### Stoichiometric relationships amongst ecosystem compartments of a treatment wetland. 
 Southeastern Ecology and Evolution Conference
@@ -1022,6 +1045,8 @@ Coral Spring, Florida
 
 Villapando, O., R. Bhomia, J. King and **P. Julian**.
 
+<br>
+<br>
 <br>
 <br>
 
@@ -1163,16 +1188,6 @@ Atchison, Kansas
 
 ## Poster (Last five-years)
 
-### Landscape Biogeochemistry: How hurricanes influence biogeochemistry across the Florida Coastal Everglades.
-
-Florida Coastal Everglades Long Term Ecological Research Annual Scientist Meeting
-
-Miami, Florida
-
-2019
-
-**Julian, P.**, E.E. Gaiser, J.S. Kominoski, E. Castaneda, T.G. Troxler, S. Davis, C. Osburn.
-
 ### Is the Everglades Ecosystem a stoichiometric deviant? An investigation of ecological stoichiometry along the aquatic continuum of the Everglades ecosystem.
 
 Florida Coastal Everglades Long Term Ecological Research Annual Scientist Meeting
@@ -1233,9 +1248,6 @@ Coral Spring, Florida
 
 **Julian, P.**, M. Powers, R. Bhomia, A. Wright and J. Dombrowski.
 
-<br>
-<br>
-
 ### Spatial Distribution of Soil Biogeochemical Properties in Stormwater Treatment Area 3/4 Cells 3A and 3B.
 
 Greater Everglades Ecosystem Restoration
@@ -1255,6 +1267,9 @@ Orlando, Florida
 2016
 
 Gu, B., N. Niemeyer and **P. Julian**. 
+
+<br>
+<br>
 
 ### Total Phosphorus and Total Nitrogen trends in Upper Taylor Slough, Everglades National Park, Florida.
 

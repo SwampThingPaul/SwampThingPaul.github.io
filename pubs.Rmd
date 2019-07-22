@@ -25,6 +25,9 @@ knitr::include_graphics("images/scholarnetwork2.jpg")
 
 __2019__
 
+* Julian, P. Book Review: Spatial Ecology and Conservation Modeling, Applications with R, R. Fletcher and M. Fortin. Springer, 2019. Austral Ecology [Link](https://onlinelibrary.wiley.com/doi/abs/10.1111/aec.12791){target="_blank"}.
+
+
 * Julian, P., S. Gerber, R.K. Bhomia, J. King, T.Z. Osborne, A.L. Wright, M. Powers and J. Dombrowski. Evaluation of nutrient stoichiometric relationships among ecosystem compartments of a subtropical treatment wetland. Do we have “Redfield wetlands”? [Ecological Processes. 8:20](https://link.springer.com/article/10.1186/s13717-019-0172-x){target="_blank"}.
 
 __2018__
