@@ -1,0 +1,226 @@
+---
+  title: "CREW Rainfall Informatic"
+
+---
+
+For more information on Corkscrew Regional Ecosystem Watershed visit the [CREW Webpage](https://crewtrust.org/){target="_blank"}.
+
+
+```{r setup, include=FALSE,echo=FALSE,warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## 
+## CREW Rainfall and Stage data analysis
+##
+##
+## Code was compiled by Paul Julian
+## contact info: pjulian@ufl.edu
+
+#Clears Everything...start fresh.
+
+
+#Libraries
+library(AnalystHelper);#devtools::install_github("SwampThingPaul/AnalystHelper")
+library(plyr)
+library(reshape)
+
+library(tmap)
+library(rgdal)
+
+
+
+#Paths
+wd="D:/_Volunteer/CREW/Hydrology"
+
+paths=paste0(wd,c("/Exports/","/Plots/","/Data/"))
+#Folder.Maker(paths);#One and done. Creates folders in working directory.
+export.path=paths[1]
+plot.path=paths[2]
+data.path=paths[3]
+
+gen.gis="D:/_GISData/"
+
+##Helper functions
+utm17=CRS("+proj=utm +zone=17 +datum=WGS84 +units=m")
+
+```
+
+<!---
+  ```{r GISData,include=FALSE,echo=FALSE,warning=FALSE, message=FALSE}
+# GIS Data ----------------------------------------------------------------
+wmd.monitoring=spTransform(readOGR(paste0(gen.gis,"SFWMD_Monitoring_20180829"),"Environmental_Monitoring_Stations"),utm17)
+
+rainfall.sites=subset(wmd.monitoring,STATION%in%c("CORK.HQ_R","CORK.HQ_E","CRKSWPS_R")&ACTIVITY_S=="Rain")
+
+##
+tmap_mode("view")
+
+```
+
+
+```{r Map, echo=FALSE,warning=FALSE, message=FALSE,out.width="100%"}
+tm_basemap(leaflet::providers$Esri.WorldImagery,alpha=0.9)+
+  tm_shape(rainfall.sites,name="Rainfall Sites")+tm_dots(col="dodgerblue1",alpha=0.5)
+
+```
+
+<center> Rainfall monitoring locations used to track rainfall conditions for Corkscrew Regional Ecosystem Watershed. Monitoring locations are part of the South Florida Water Management District.  </center>
+  --->
+  
+```{r data, include=FALSE,echo=FALSE,warning=FALSE, message=FALSE}
+# Rainfall Data -----------------------------------------------------------
+cur.wy=WY(as.Date(as.character(Sys.Date())))
+dates=as.Date(c("1978-05-01",as.character(Sys.Date())))
+dbkeys=data.frame(SITE=c("CORK.HQ_R","CORK.HQ_E","CRKSWPS_R"),DBKEY=c("05916","16597","63883"))
+
+rf.dat=data.frame()
+for(i in 1:nrow(dbkeys)){
+  tmp=DBHYDRO_daily(dates[1],dates[2],dbkeys$DBKEY[i])
+  tmp$DBKEY=as.character(dbkeys$DBKEY[i])
+  rf.dat=rbind(tmp,rf.dat)
+  print(i)
+}
+rf.dat$Date.EST=date.fun(rf.dat$Date)
+rf.dat.da=ddply(rf.dat,c("Date.EST"),summarise,mean.rf.in=mean(Data.Value,na.rm=T))
+
+rf.dat.da$week.num=format(rf.dat.da$Date.EST,"%V")
+rf.dat.da$WY=WY(rf.dat.da$Date.EST)
+rf.dat.da$CY=format(rf.dat.da$Date.EST,"%Y")
+rf.dat.da$month=format(rf.dat.da$Date.EST,"%m")
+rf.dat.da$Hydro.DOY=hydro.day(rf.dat.da$Date.EST)
+rf.dat.da$cum.rf=with(rf.dat.da,ave(mean.rf.in,WY,FUN=function(x) cumsum(x)))
+
+rf.dat.wk=ddply(rf.dat.da,c("CY","WY","week.num"),summarise,min.date=min(Date.EST),TRF=sum(mean.rf.in,na.rm=T))
+rf.dat.wk.POR=ddply(subset(rf.dat.wk,WY!=cur.wy),"week.num",summarise,meanTRF=mean(TRF,na.rm=T))
+
+rf.dat.wk.POR1=rf.dat.wk.POR
+rf.dat.wk.POR1$date.val=with(rf.dat.wk.POR1,date.fun(as.Date(paste(cur.wy-2,as.character(as.numeric(week.num)-1),1,sep="-"),"%Y-%U-%u")))
+rf.dat.wk.POR2=rf.dat.wk.POR
+rf.dat.wk.POR2$date.val=with(rf.dat.wk.POR2,date.fun(as.Date(paste(cur.wy-1,as.character(as.numeric(week.num)-1),1,sep="-"),"%Y-%U-%u")))
+rf.dat.wk.POR3=rf.dat.wk.POR
+rf.dat.wk.POR3$date.val=with(rf.dat.wk.POR3,date.fun(as.Date(paste(cur.wy,as.character(as.numeric(week.num)-1),1,sep="-"),"%Y-%U-%u")))
+rf.dat.wk.POR.sum=rbind(rf.dat.wk.POR1,rf.dat.wk.POR2,rf.dat.wk.POR3)
+rf.dat.wk.POR.sum
+
+rf.dat.mon=ddply(rf.dat.da,c("CY","WY","month"),summarise,min.date=min(Date.EST),TRF=sum(mean.rf.in,na.rm=T))
+rf.dat.mon$mon.CY=with(rf.dat.mon,date.fun(paste(CY,month,1,sep="-")))
+rf.dat.mon$hydro.season=FL.Hydroseason(rf.dat.mon$mon.CY)
+
+rf.dat.mon.POR=ddply(subset(rf.dat.mon,WY!=cur.wy),"month",summarise,max.val=max(TRF,na.rm=T),q75=quantile(TRF,probs=0.75,na.rm=T),med.val=median(TRF,na.rm=T),q25=quantile(TRF,probs=0.25,na.rm=T),min.val=min(TRF,na.rm=T))
+rf.dat.mon.POR1=rf.dat.mon.POR
+rf.dat.mon.POR1$date.val=with(rf.dat.mon.POR1,date.fun(paste(cur.wy-2,month,1,sep="-")))
+rf.dat.mon.POR2=rf.dat.mon.POR
+rf.dat.mon.POR2$date.val=with(rf.dat.mon.POR2,date.fun(paste(cur.wy-1,month,1,sep="-")))
+rf.dat.mon.POR3=rf.dat.mon.POR
+rf.dat.mon.POR3$date.val=with(rf.dat.mon.POR3,date.fun(paste(cur.wy,month,1,sep="-")))
+rf.dat.mon.POR.sum=rbind(rf.dat.mon.POR1,rf.dat.mon.POR2,rf.dat.mon.POR3)
+
+rf.dat.WY=cast(rf.dat.mon,WY~hydro.season,value="TRF",sum)
+rf.dat.WY$TRF=rowSums(rf.dat.WY[,c("A_Wet","B_Dry")],na.rm=T)
+rf.dat.WY$LTMean=c(rep(NA,4),rollmean(rf.dat.WY$TRF,k=5))
+rf.dat.WY$LTMean=with(rf.dat.WY,ifelse(WY==cur.wy,NA,LTMean))
+
+
+##Cumulative Data
+cum.stats=ddply(subset(rf.dat.da,WY%in%seq(1979,cur.wy-1,1)),c("Hydro.DOY"),summarise,mean.val=mean(cum.rf,na.rm=T),sd.val=sd(cum.rf,na.rm=T),N.val=N(cum.rf))
+cum.stats$Tp.95=abs(qt(1-0.95,cum.stats$N.val-1))
+cum.stats$UCI.95=with(cum.stats,mean.val+sd.val*Tp.95/sqrt(N.val))
+cum.stats$LCI.95=with(cum.stats,mean.val-sd.val*Tp.95/sqrt(N.val))
+```
+
+
+```{r plot,echo=F,fig.width=6,fig.height=7,fig.align='center',fig.cap="Regional total rainfall summarized weekly (Top), monthly (Middle) and annually (Bottom) for the region of Corkscrew Regional Ecosystem Watershed. All data compared to the May 1978 to Current period of record."}
+#tiff(filename=paste0(plot.path,"CREW_Region_RF.tiff"),width=6.5,height=5.5,units="in",res=200,type="windows",compression=c("lzw"),bg="white")
+#png(filename=paste0(plot.path,"CREW_Region_RF.png"),width=6.5,height=5.5,units="in",res=200,type="windows",bg="white")
+par(family="serif",oma=c(2.5,2.25,1,0.75),mar=c(3,1.25,1.25,0.25))
+layout(matrix(c(1:6),3,2,byrow=T),widths=c(1,0.5))
+xlim.val=date.fun(c(paste0(cur.wy-2,"-05-01"),paste0(cur.wy,"-05-01")));xmaj=seq(xlim.val[1],xlim.val[2],"6 months");xmin=seq(xlim.val[1],xlim.val[2],"1 months")
+ylim.val=c(0,10);by.y=2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+
+plot(TRF~min.date,rf.dat.wk,ylim=ylim.val,xlim=xlim.val,axes=F,ylab=NA,xlab=NA,type="n",yaxs="i")
+#abline(h=ymin,v=xmin,lty=3,col="grey80")
+abline(h=ymaj,v=xmaj,lty=3,col="grey80")
+with(rf.dat.wk,shaded.range(min.date,rep(0,length(min.date)),TRF,"indianred1",lty=1))
+with(subset(rf.dat.wk,min.date==max(rf.dat.wk$min.date)),points(min.date,TRF,pch=21,bg="grey",lwd=0.1))
+#with(subset(rf.dat.wk,min.date==max(rf.dat.wk$min.date)),text(date.fun(min.date+ddays(10)),TRF,"We are here",srt=45,adj=0))
+with(rf.dat.wk.POR.sum,lines(date.val,meanTRF,lty=1,col="dodgerblue1"))
+axis_fun(1,line=-0.5,xmaj,xmin,format(xmaj,"%m-%Y"),1)
+axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+mtext(side=3,"Weekly Rainfall")
+mtext(side=2,line=2,"Inches of Rain")
+mtext(side=1,line=1.75,"Date (Month-Year)")
+
+plot(0:1,0:1,axes=F,type="n",ylab=NA,xlab=NA)
+legend.text=c(paste("WY1979 - WY",cur.wy-1,"\nWeekly Average"),"Weekly\nTotal","Current Week")
+legend(0.5,0.5,legend=legend.text,pch=c(NA,22,21),col=c("dodgerblue1","indianred1","black"),lwd=c(1.5,0.5,0.5),lty=c(1,NA,NA),pt.bg=c(NA,adjustcolor("indianred1",0.25),"grey"),pt.cex=1.5,ncol=1,cex=1,bty="n",y.intersp=1.75,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)#,text.col="white")
+
+ylim.val=c(0,25);by.y=5;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+plot(TRF~min.date,rf.dat.mon,ylim=ylim.val,xlim=xlim.val,axes=F,ylab=NA,xlab=NA,type="n",yaxs="i")
+#abline(h=ymin,v=xmin,lty=3,col="grey80")
+abline(h=ymaj,v=xmaj,lty=3,col="grey80")
+with(rf.dat.mon.POR.sum,shaded.range(date.val,q75,max.val,"grey80",lty=1))
+with(rf.dat.mon.POR.sum,shaded.range(date.val,min.val,q25,"grey80",lty=1))
+with(rf.dat.mon.POR.sum,shaded.range(date.val,q25,q75,"grey50",lty=1))
+with(rf.dat.mon.POR.sum,lines(date.val,med.val,lty=1,col="black",lwd=2))
+with(rf.dat.mon,segments(mon.CY,rep(0,length(mon.CY)),mon.CY,TRF,col=adjustcolor("dodgerblue1",0.5),lwd=3))
+with(rf.dat.mon,points(mon.CY,TRF,pch=21,bg="dodgerblue1",cex=1.75,lwd=0.1))
+with(subset(rf.dat.mon,min.date==max(rf.dat.mon$mon.CY)),points(mon.CY,TRF,pch=21,bg="grey",cex=1.75,lwd=0.1))
+axis_fun(1,line=-0.5,xmaj,xmin,format(xmaj,"%m-%Y"),1)
+axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+mtext(side=3,"Monthly Rainfall")
+mtext(side=2,line=2,"Inches of Rain")
+mtext(side=1,line=1.75,"Date (Month-Year)")
+
+plot(0:1,0:1,axes=F,type="n",ylab=NA,xlab=NA)
+legend.text=c(paste0("WY1979 - WY",cur.wy-1,"\nMonthly Statistic"),"Max","75th %tile","Median","25th %tile","Min","Monthly Total","Current Month")
+legend(0.5,0.5,legend=legend.text,pch=c(NA,22,22,NA,22,22,21,21),col=c(NA,"grey80","grey50","black","grey50","grey80","black","black"),lwd=c(NA,0.5,0.5,3,0.5,0.5,0.5,0.5),lty=c(NA,NA,NA,1,NA,NA,NA,NA),pt.bg=c(NA,adjustcolor(c("grey80","grey50"),0.25),"black",adjustcolor(c("grey50","grey80"),0.25),"dodgerblue1","grey"),pt.cex=1.5,ncol=1,cex=0.8,bty="n",y.intersp=0.8,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)#,text.col="white")
+
+ylim.val=c(0,90);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(1979,cur.wy);by.x=5;xmaj=seq(xlim.val[1],xlim.val[2],by.x)
+x=barplot(t(rf.dat.WY[,c(2,3)]),col=rev(c("indianred1","dodgerblue1")),border="white",space=0,yaxt="n",ylim=ylim.val)
+lines(x,rf.dat.WY$LTMean,lwd=2,lty=2)
+points(max(x),subset(rf.dat.WY,WY==cur.wy)$TRF,pch=21,bg="grey",lwd=0.1)
+axis_fun(1,line=-0.5,x[seq(1,length(x),5)],x[seq(1,length(x),1)],xmaj,1)
+axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+mtext(side=3,"Annual Rainfall")
+mtext(side=2,line=2,"Inches of Rain")
+mtext(side=1,line=3.5,"Water Year\n(May - Apirl)")
+
+plot(0:1,0:1,axes=F,type="n",ylab=NA,xlab=NA)
+legend.text=c("Wet Season","Dry Season","Moving 5-Yr Average","Current Year")
+legend(0.5,0.5,legend=legend.text,pch=c(22,22,NA,21),col=c("white","white","black","black"),lwd=c(0.5,0.5,2,0.5),lty=c(NA,NA,1,NA),pt.bg=c("dodgerblue1","indianred1",NA,"grey"),pt.cex=1.5,ncol=1,cex=1,bty="n",y.intersp=1,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)#,text.col="white")
+
+text(1,-0.1,adj=1,"Data Source: SFWMD\n(sites CORK.HQ_R,CORK.HQ_E,CRKSWPS_R)",xpd=NA,font=3,cex=0.7)
+
+
+```
+
+
+```{r plot2,echo=F,fig.width=6.5,fig.height=4,fig.align='center',fig.cap="Cumulative annual rainfall of the current water year relative to the period of record mean \u00B1 95% confidence interval."}
+
+par(family="serif",oma=c(1.5,2.25,1,0.75),mar=c(2.5,1.25,1.25,0.25))
+
+ylim.val=c(0,62);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(0,366);by.x=60;xmaj=seq(xlim.val[1],xlim.val[2],by.x);xmin=seq(xlim.val[1],xlim.val[2],by.x/2)
+
+plot(mean.val~Hydro.DOY,cum.stats,ylim=ylim.val,xlim=xlim.val,axes=F,ylab=NA,xlab=NA,type="n",yaxs="i",xaxs="i")
+#abline(h=ymin,v=xmin,lty=3,col="grey80")
+abline(h=ymaj,v=xmaj,lty=3,col="grey80")
+with(subset(cum.stats,Hydro.DOY%in%seq(1,365,1)),shaded.range(Hydro.DOY,LCI.95,UCI.95,"red",lty=1,col.adj=0.1))
+with(subset(cum.stats,Hydro.DOY%in%seq(1,365,1)),lines(Hydro.DOY,mean.val,col="red"))
+with(subset(rf.dat.da,WY==cur.wy),lines(Hydro.DOY,cum.rf,col="blue",lwd=2))
+axis_fun(1,line=-0.5,xmaj,xmin,xmaj,1)
+axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+mtext(side=2,line=2,"Inches of Rain")
+mtext(side=1,line=1.75,"Day of Water Year")
+
+legend.text=c(paste0("POR Cum. Mean (WY1979 - WY",cur.wy-1,")"),"95% Confidence Interval",paste0("Cumulative rainfall (WY",cur.wy,")"))
+legend("topleft",legend=legend.text,pch=c(NA,22,NA),col=c("red","red","blue"),lwd=c(1,0.75,1),lty=c(1,NA,1),pt.bg=c(NA,adjustcolor("red",0.1),NA),pt.cex=1.5,ncol=1,cex=0.8,bty="n",y.intersp=1,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)#,text.col="white")
+
+```
+
+
+***
+`r paste("Updated",as.POSIXct(Sys.time(),"%Y-%m-%d",tz=""))`
+
+***
