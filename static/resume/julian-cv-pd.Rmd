@@ -6,6 +6,7 @@ output:
   pagedown::html_resume:
   # set it to true for a self-contained HTML page but it'll take longer to render
   self_contained: true
+urlcolor: blue
 ---
 
 ```{css,echo=FALSE}
@@ -533,6 +534,16 @@ Aquatic Processes
 `N/A`
 
 **Julian, P.**, et al.  
+
+### Getting the science right for the betterment of the ecosystem, a commentary on Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study.
+
+Marine Biology, *Submitted*
+
+`N/A`
+
+`N/A`
+
+**Julian, P.**
 <!--
 ### Translating stream spiraling concepts to wetland nutrient uptake and transport mechanisms in a subtropical treatment wetland.
 
@@ -687,10 +698,6 @@ Bulletin of Environmental Contamination and Toxicology. 95(2):188-193
 2015
 
 **Julian, P.**
-
-<br>
-<br>
-<br>
 
 ### Mercury accumulation in Largemouth Bass (*Micropterus salmoides* Lacépède) within marsh ecosystems of the Florida Everglades, USA. 
 
@@ -878,6 +885,10 @@ Coral Springs, Florida
 
 **Julian, P.**, K. August, L. Simpson, T.Z. Osborne, D. Surratt. 
 
+<br>
+<br>
+<br>
+
 ### Don't wave the river red gums goodbye. The role of environmental flows in restoring river water quality and riparian zones along the Wimmera River. 
 
 Society of Wetland Scientist Annual Meeting 
@@ -888,8 +899,6 @@ Denver, Colorado
 
 **Julian, P.** and G. Fletcher. 
 
-<br>
-<br>
 
 ### Let’s take a ride downstream. Translating nutrient spiraling concepts to wetland ecosystems.
 
@@ -970,6 +979,9 @@ Tampa, Florida
 
 **Julian, P.**, R. Chambers, J. Kominoski, T. Troxler, A. Wright, and T.Z. Osborne. 
 
+<br>
+<br>
+
 ### Aquatic Productivity in Subtropical Marsh along a soil nutrient gradient – An assessment of the Everglades Stormwater Treatment Areas.
 
 Society of Soil Scientist of America Annual Meeting
@@ -980,8 +992,6 @@ Tampa, Florida
 
 **Julian, P.**, R. Bhomia, A. Wright, and T.Z. Osborne. 
 
-<br>
-<br>
 
 ### Spatial Distribution of Soil Biogeochemical Properties in Stormwater Treatment Area 3/4 Cells 3A and 3B.
 
@@ -1063,6 +1073,10 @@ Fort Lauderdale, Florida
 
 Osborne, T.Z., L.T. Simpson, T.B. Schafer, M. Camacho, **P. Julian II**, N.D. Ward, and L. Laplaca.
 
+<br>
+<br>
+<br>
+
 ### Carbon biogeochemical processes along a Mangrove-Salt Marsh ecotone.
 
 Mangrove & Macrobenthos Meeting 4
@@ -1073,8 +1087,6 @@ Saint Augustine, Florida
 
 Osborne, T.Z., L.T. Simpson, T.B. Schafer, M. Camacho, **P. Julian II**, N.D. Ward, and L. Laplaca.
 
-<br>
-<br>
 
 ### Interpreting effects of water management on soil nutrient cycling in an oligotrophic subtropical wetland. 
 
@@ -1190,6 +1202,8 @@ Miami, Florida
 
 **Julian, P.**, J.S. Kominoski, E.E. Gaiser and A Wymore. 
 
+<br>
+
 ### Effects of Hurricane Irma on dissolved organic carbon fluxes along a salinity gradient.
 
 12<sup>th</sup> International Symposium on Biogeochemistry of Wetlands
@@ -1200,8 +1214,6 @@ Coral Springs, Florida
 
 Schafer, T.B., N. Ward, **P. Julian**, K.R. Reddy and T.Z. Osborne. 
 
-<br>
-<br>
 
 ### Soil nutrient enrichment post hydrologic management: A temporal analysis of Taylor slough.
 
