@@ -28,6 +28,7 @@ Aside
 ================================================================================
 
 ```{r, out.width="70%",fig.align="center",echo=FALSE}
+# CV developed using pagedown template https://github.com/rstudio/pagedown
 knitr::include_graphics("SwampHeadShot.jpg")
 ```
 
