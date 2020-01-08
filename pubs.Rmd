@@ -23,6 +23,11 @@ knitr::include_graphics("images/scholarnetwork.jpg")
 
 ## Peer Reviewed Literature
 
+__2020__
+
+* __Julian, P.__ _In Press._ Getting the science right to protect and restore our environment. A critique of Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study. Marine Biology.
+  - Original [Lapointe et al](https://link.springer.com/article/10.1007%2Fs00227-019-3538-9){target="_blank"} paper.
+
 __2019__
 
 * Carey, J., K. Jankowski, , __P. Julian__, L. Sethna, P.K. Thomas and J.J. Rohweder. Exploring silica stoichiometry on a large floodplain riverscape. [Frontiers in Ecology and Evolution 7:346](https://www.frontiersin.org/articles/10.3389/fevo.2019.00346/abstract){target="_blank"}.
