@@ -25,7 +25,7 @@ knitr::include_graphics("images/scholarnetwork.jpg")
 
 __2020__
 
-* __Julian, P.__ _In Press._ Getting the science right to protect and restore our environment. A critique of Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study. Marine Biology.
+* __Julian, P.__ _Accepted._ Getting the science right to protect and restore our environment. A critique of Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study. Marine Biology.
   - Original [Lapointe et al](https://link.springer.com/article/10.1007%2Fs00227-019-3538-9){target="_blank"} paper.
 
 __2019__
