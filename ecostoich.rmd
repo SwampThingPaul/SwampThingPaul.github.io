@@ -33,4 +33,9 @@ A tenant of ecological stoichiometry is that the abundance of carbon (C), nitrog
 
 * Julian, P., A. Wymore and J.S. Kominoski. (2018) Ecological stoichiometry through the lens of long-term data: Using stoichiometry to understand dynamic ecological systems. Long Term Ecological Research All-Scientist Meeting workshop. Asilomar - Conference Center, Pacific Grove, CA USA. ([workshop repository](https://github.com/SwampThingPaul/LTER_EcoStoich){target="_blank"})
 
+* Julian, P., S. Gerber, R.K. Bhomia, J. King, T.Z. Osborne, A.L. Wright, M. Powers and J. Dombrowski. Evaluation of nutrient stoichiometric relationships among ecosystem compartments of a subtropical treatment wetland. Do we have “Redfield wetlands”? [Ecological Processes. 8:20](https://link.springer.com/article/10.1186/s13717-019-0172-x){target="_blank"}.
+
+* Carey, J., K. Jankowski, , __P. Julian__, L. Sethna, P.K. Thomas and J.J. Rohweder. Exploring silica stoichiometry on a large floodplain riverscape. [Frontiers in Ecology and Evolution 7:346](https://www.frontiersin.org/articles/10.3389/fevo.2019.00346/abstract){target="_blank"}.
+
+
 ***
