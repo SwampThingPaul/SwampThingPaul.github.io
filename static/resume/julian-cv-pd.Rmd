@@ -44,12 +44,9 @@ Contact Info {#contact}
 Skills {#skills}
 --------------------------------------------------------------------------------
 
-- Experienced in statistical analysis of environmental data including chemical, hydrologic and ecologcial data. 
+- Experienced in statistical analysis of environmental data including chemical, hydrologic and ecologcial data on the landscape scale. 
 
-
-**Computing Skills**
-
-- **Expertise**: ArcGIS, R/RStudio, Markdown, Git/Github, LaTex, MS Access
+- **Expertise**: Nutrient Bioegeochemistry, Natural Systems Ecology, ArcGIS, R/RStudio, Markdown, Git/Github, LaTex, MS Access
 
 - **Familiarity**: QGIS, Python, HTML, Inkscape
 
@@ -78,6 +75,7 @@ Gainesville, Florida
 2018
 
 **Dissertation:** Biogeochemical controls of water column productivity and nutrient cycling in semitropical wetlands – A case study from the Everglades Stormwater Treatment Areas.
+
 
 ### Florida Gulf Coast University
 
@@ -118,6 +116,8 @@ Present - Aug. 2011
 - Technical review of submittals consistent with the Clean Water Act.
 - Support federal and state restoration planning efforts.
 :::
+
+\endfirstpage
 
 ### Graduate Research Assistant
 
@@ -486,13 +486,21 @@ Informatics and Programming {data-icon=laptop}
 
 `N/A`
 
-### Creator and maintainer of the R package AnalystHelper
+### Creator and maintainer of the R package `AnalystHelper`
 
-[AnalystHelper](https://github.com/SwampThingPaul/AnalystHelper) (on GitHub)
+[`AnalystHelper`](https://github.com/SwampThingPaul/AnalystHelper) (on GitHub)
 
 `N/A`
 
 2019
+
+### Creator and maintainer of the R package `EPGMr`
+
+[`EPGMr`](https://github.com/SwampThingPaul/EPGMr) (on GitHub)
+
+`N/A`
+
+2020
 
 
 Publications {data-icon=file-alt}
@@ -500,74 +508,62 @@ Publications {data-icon=file-alt}
 
 ::: aside
 A complete list of publications can be found on my webpage ([link](https://swampthingecology.org/pubs.html)).
+
+```{r ,echo=F, warning=F}
+
+library(scholar)
+
+id="YxkXP6YAAAAJ"
+
+l=get_profile(id)
+
+ct=get_citation_history(id)
+```
+
+__Google Scholar Citations =__ `r paste(l$total_cites)`
+
+__H-Index =__ `r paste(l$h_index)`
+
+__i10-Index =__ `r paste(l$i10_index)`
+
+```{r ,warning=F,message=F,,echo=FALSE,fig.width=3,fig.height=1.75,fig.align='center'}
+library(AnalystHelper)
+par(family="serif",mar=c(1,1.5,0.1,0.1),oma=c(2,1,0.5,0.5),bg=NA);
+ylim.val=c(0,40);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(2012,2020);by.x=3;xmaj=seq(xlim.val[1],xlim.val[2],length.out=2);xmin=seq(xlim.val[1],xlim.val[2],by.x/by.x)
+
+x=barplot(ct$cites,ylim=ylim.val,axes=F,ylab=NA,space=0,lwd=0.5)
+axis_fun(1,line=-0.5,x[seq(1,length(x),length.out=2)],x,xmaj,cex=0.8)
+axis_fun(2,ymaj,ymin,ymaj,cex=0.8)
+box(lwd=1)
+mtext(side=1,line=1.25,"Year",cex=0.8)
+mtext(side=2,line=1.5,"Citations",cex=0.8)
+
+```
 :::
 
-## *In Preparation*
-<!--
-### A tale of two storms: effects of sea level rise and pre-existing conditions on biogeochemical response to tropical storms.
 
-`N/A`
-
-`N/A`
-
-`N/A`
-
-**Julian, P.**, et al.  
-
-
-### Thousand bandages for a thousand cuts. Perspective of water management for the Murray-Darling River.
-
-Environmental Management. 
-
-`N/A`
-
-`N/A`
-
-**Julian, P.**
--->
+## Peer-Reviewed (Last Five-Years)
 
 ### Nutrient homeostasis and mechanisms related to nutrient retention by wetland macrophytes in a subtropical wetland.
 
-Aquatic Processes
+Oecologia, *Submitted*
  
 `N/A`
 
-`N/A`
+2020
 
 **Julian, P.**, et al.  
 
 ### Getting the science right for the betterment of the ecosystem, a commentary on Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study.
 
-Marine Biology, *Submitted*
+Marine Biology, *Accepted*
 
 `N/A`
 
 `N/A`
 
 **Julian, P.**
-<!--
-### Translating stream spiraling concepts to wetland nutrient uptake and transport mechanisms in a subtropical treatment wetland.
-
-Environmental Monitoring and Assessment.
-
-`N/A`
-
-`N/A`
-
-**Julian, P.**, S. Gerber and A.J. Reisinger.
-
-### Reduced soil nutrient enrichment and Typha domingensis expansion due to restoration efforts. A temporal analysis of Taylor Slough in Everglades National Park.
-
-Journal of Environmental Management
-
-`N/A`
-
-`N/A`
-
-August, K.A., L.T. Simpson, **P. Julian** and T.Z Osborne.
--->
-
-## Peer-Reviewed (Last Five-Years)
 
 ### Exploring silica stoichiometry on a large floodplain riverscape
 

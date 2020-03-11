@@ -25,6 +25,8 @@ knitr::include_graphics("images/scholarnetwork.jpg")
 
 __2020__
 
+* Kominoski JS, Gaiser EE, Casta$\tilde{n}$eda-Moya E, Davis SE, __Julian P__, et al (_Accepted_) Disturbance legacies increase and synchronize nutrient concentrations and bacterial productivity in coastal ecosystems. Ecology.
+
 * __Julian, P.__ _Accepted._ Getting the science right to protect and restore our environment. A critique of Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study. Marine Biology.
   - Original [Lapointe et al](https://link.springer.com/article/10.1007%2Fs00227-019-3538-9){target="_blank"} paper.
 
@@ -101,6 +103,7 @@ __2017__
 * Julian, P., et al. Numeric Interpretation of Narrative Standards for the L-28 Interceptor Canal and Big Cypress National Preserve. Technical Support Document: Western Everglades Planning Project. Florida Department of Environmental Protection, Tallahassee, FL. 
 * Julian, P., G.G. Payne, and S.K. Xue. Chapter 3A: Water Quality in the Everglades Protection Areas. In 2017 South Florida Environmental Report. South Florida Water Management District, West Palm Beach, FL.
 * Julian, P., B. Gu, and K. Weaver (Eds). Chapter 3B: Mercury and Sulfur Environmental Assessment for the Everglades. In 2017 South Florida Environmental Report. South Florida Water Management District, West Palm Beach, FL.
+* Julian, P., R.K. Bhomia Transect Study: Surface Water Quality Monitoring and Analysis. In: Reddy KR (ed) Evaluation of Soil Biogeochemical Properties Influcing Phosphorus Flux in the Everglades Stormwater Treatment Areas (STAs): 2016-17 Annual Report. University of Florida, Gainesville, FL, pp 317–444
 
 __2016__
 

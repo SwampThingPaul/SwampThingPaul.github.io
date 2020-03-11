@@ -9,11 +9,11 @@ I have extensive experience in programming and statistical analysis in [R](https
   
   - Blog contributions (in R-Markrkdown) related to all things science including geospatial analysis at [https://swampthingecology.org/blog/](https://swampthingecology.org/blog/){target="_blank"}
   
-  - [R package](https://cran.r-project.org/doc/manuals/R-exts.html){target="_blank"} devleopment including my first package, ["AnalystHelper"](https://github.com/SwampThingPaul/AnalystHelper){target="_blank"}.
+  - [R package](https://cran.r-project.org/doc/manuals/R-exts.html){target="_blank"} devleopment including my first package, ["AnalystHelper"](https://github.com/SwampThingPaul/AnalystHelper){target="_blank"} and ["EPGMr"](https://github.com/SwampThingPaul/EPGMr){target="_blank"}.
   
   - Statistical analysis with R featured in several peer-reviewed and technical manuscripted (see [Publications](https://swampthingecology.org/pubs.html){target="_blank"} page).
   
-  - Automatic report generation using R-Markdown:
+  - Automated report generation using R-Markdown:
     1. [South Florida Estuary Salinity Report](http://publicfiles.dep.state.fl.us/owp/SalinityReports/SalinityUpdate.html){target="_blank"}
        -  This report is generated daily to support the flow of information related to Lake Okeechobee, the Caloosahatchee River and St. Lucie estuaries.
     2. [Caloosahatchee River Estuary Water Quality](https://swampthingpaul.github.io/static/examples/CRE_WQ.html){target="_blank"}
