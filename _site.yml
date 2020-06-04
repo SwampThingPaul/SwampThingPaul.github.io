@@ -4,8 +4,8 @@ navbar:
   title: Paul Julian II, PhD
   type: inverse
   left:
-    - text: Home
-      href: index.html
+#    - text: Home
+#      href: index.html
     - text: Research
       icon: fa-list-ul 
       #href: research.html
@@ -22,6 +22,14 @@ navbar:
       - text: Authorship Guidelines
         icon: fa-file
         href: authorship.html
+    - text: R-Packages
+      icon: fa-cube
+      menus:
+      - text: EPGMr
+        #icon: fa-r-project
+        href: http://swampthingecology.org/EPGMr/
+      - text: AnalystHelper
+        href: http://swampthingecology.org/AnalystHelper/
     - text: About
       icon: fa-list-ul 
       #href: about.html
@@ -31,7 +39,7 @@ navbar:
         href: about.html
       - text: CV
         icon: fa-file-pdf-o
-        href: https://swampthingpaul.github.io/static/resume/julian-cv-pd.html #cv.html
+        href: https://swampthingpaul.github.io/static/resume/pjulian_resume.pdf #cv.html
       - text: CV of Failures
         icon: fa-exclamation-triangle
         href: reject.html

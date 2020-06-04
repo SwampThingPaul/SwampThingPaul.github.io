@@ -1,5 +1,5 @@
 ---
-title: 
+title: Home
 output:
   html_document:
     includes:
@@ -70,6 +70,13 @@ __[Carl Safina](http://carlsafina.org/){target="_blank"}__, _[Eye of the Albatro
 
 <center><div><img src="images/wca3b_marsh.jpg" width="70%" align="center"></div></center>
 
+<br>
+**Statement of Welcome:**
+*Anyone who is motivated by their passion for science, who values diversity of perspective, and who believes that critical thinking and dialogue promote the wise stewardship of our planet is welcome at Swampthing Ecology. We value your unique experiences, respect your beliefs, and want to share scientific exploration with you. We expect anyone working with us to do the same.*
+
+<sub>Based on welcome statement by [https://www.jeffhavig.com/]( Dr Havig MAD EGG Lab){target="_blank"}</sub>
+
+<!-- based on https://www.jeffhavig.com/ welcome statement which is based on Dept of Geoscience Boise State University welcome statement. --->
 
 ****
 

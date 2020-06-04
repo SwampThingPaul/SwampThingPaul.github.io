@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title>index.utf8.md</title>
+<title>Home</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -95,7 +95,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -244,6 +243,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -255,18 +255,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -295,10 +283,7 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Home</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-list-ul"></span>
      
@@ -339,6 +324,23 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cube"></span>
+     
+    R-Packages
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="http://swampthingecology.org/EPGMr/">EPGMr</a>
+    </li>
+    <li>
+      <a href="http://swampthingecology.org/AnalystHelper/">AnalystHelper</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-list-ul"></span>
      
     About
@@ -354,7 +356,7 @@ $(document).ready(function () {
       </a>
     </li>
     <li>
-      <a href="https://swampthingpaul.github.io/static/resume/julian-cv-pd.html">
+      <a href="https://swampthingpaul.github.io/static/resume/pjulian_resume.pdf">
         <span class="fa fa-file-pdf-o"></span>
          
         CV
@@ -411,6 +413,7 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Home</h1>
 
 </div>
 
@@ -457,6 +460,9 @@ data-tweet-limit="2" > Tweets by SwampThingPaul </a>
 <img src="images/wca3b_marsh.jpg" width="70%" align="center">
 </div>
 </center>
+<p><br> <strong>Statement of Welcome:</strong> <em>Anyone who is motivated by their passion for science, who values diversity of perspective, and who believes that critical thinking and dialogue promote the wise stewardship of our planet is welcome at Swampthing Ecology. We value your unique experiences, respect your beliefs, and want to share scientific exploration with you. We expect anyone working with us to do the same.</em></p>
+<p><sub>Based on welcome statement by <a href="Dr%20Havig%20MAD%20EGG%20Lab" target="_blank">https://www.jeffhavig.com/</a></sub></p>
+<!-- based on https://www.jeffhavig.com/ welcome statement which is based on Dept of Geoscience Boise State University welcome statement. --->
 <hr />
 <p>Webpage devloped using <a href="https://github.com/privefl/rmarkdown-website-template" target="_blank">rmarkdown website template</a> developed by <a href="https://github.com/privefl" target="_blank">privefl</a></p>
 </div>
@@ -478,6 +484,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

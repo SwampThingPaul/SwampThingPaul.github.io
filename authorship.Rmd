@@ -165,7 +165,7 @@ The dissemination of research to the broader scientific community is not only pa
 Everyone is busy, therefore some degree of time-management is needed when composing an manuscript. Therefore it is recommended that tentative deadlines/time-periods are discussed early and often. If necessary these deadline can be revised as needed due to changing priorties within reason but make sure these changes are communicated amongst all authors. Once a draft manuscript is produced and ready for co-author input provide a reasonable review deadline (couple of weeks). *Typically*, if co-authors are unresponsive its not they don't find the manuscript important. It is possible that it has been shuffled down the dreded *"to do"* list or they just forgot. This has happended to all of us at some point. Therefore a simple reminder would be helpful to re-engague the co-authors. Below is a flow chart from Cooke et al. (2014) with a suggested example of sequence of events to work with tardy or non-responsive co-authors. 
 
 ```{r, out.width="70%",fig.align="center",echo=FALSE,fig.cap="Flow-diagram with a possile sequence of events for working with tardy or non-responsive co-authors when preparing a manuscript for submission to a journal. From Cooke et al. (2014)."}
-knitr::include_graphics("../images/Cooke et al_Fig1.jpg")
+knitr::include_graphics("./images/Cooke et al_Fig1.jpg")
 ```
 
 As suggested above, if co-authors are completely unresponsive it is the lead authors progrative, with input from co-authors to remove unresponsice co-authors. The Committee on Publication Ethics ([COPE](https://publicationethics.org/authorship)), has additional guidance information regarding authorship and ethics. 
