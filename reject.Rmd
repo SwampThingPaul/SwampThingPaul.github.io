@@ -30,7 +30,7 @@ library(AnalystHelper)
 library(openxlsx)
 library(plyr)
 
-pub=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=4)
+pub=read.xlsx("C:/Julian_LaCie/UF/RejectionTracker.xlsx",sheet=4)
 pub$Date.Submitted=date.fun(convertToDate(pub$Date.Submitted))
 pub$Date.decision=date.fun(convertToDate(pub$Date.decision))
 pub$date.dif=with(pub,difftime(Date.decision,Date.Submitted,units="weeks"))
@@ -70,12 +70,12 @@ I have been lucky in the past ~ `r round(as.numeric(difftime(date.fun(Sys.Date()
 
 ```{r,echo=F}
 
-jobs=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=1)
+jobs=read.xlsx("C:/Julian_LaCie/UF/RejectionTracker.xlsx",sheet=1)
 jobs$Date=convertToDate(jobs$Date)
 jobs$yr=format(jobs$Date,"%Y")
 
 jobs.sum=ddply(jobs,"yr",summarise,N.total=length(Type),N.Inter=sum(Interviewed=="Y",na.rm=T),N.offer=sum(Offer=="Y",na.rm=T),N.dec=sum(Declined=="Y",na.rm=T))
-
+jobs.sum$per.inter=with(jobs.sum,N.Inter/N.total)*100
 
 ```
 
@@ -84,7 +84,7 @@ jobs.sum=ddply(jobs,"yr",summarise,N.total=length(Type),N.Inter=sum(Interviewed=
 par(family="serif",mar=c(2,2,1,1),oma=c(1.5,2,0.5,1));
 
 ylim.val=c(0,13);by.y=2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
-xlim.val=c(2015,2019,1);xlab=seq(xlim.val[1],xlim.val[2],1)
+xlim.val=c(2015,2020,1);xlab=seq(xlim.val[1],xlim.val[2],1)
 #x=barplot(t(jobs.sum[,2:4]),beside=T,ylim=ylim.val,yaxt="n",col=grey.colors(3))
 x=barplot(t(jobs.sum[,2:3]),beside=T,ylim=ylim.val,yaxt="n",col=grey.colors(2))
 #axis_fun(1,x[2,]+(x[3,]-x[2,])/2,x[2,]+(x[3,]-x[2,])/2,seq(2015,2019,1))
