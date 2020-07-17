@@ -29,8 +29,8 @@ Follow me on twitter for recent development on manuscripts, ongoing studies, col
 <a class="twitter-timeline" 
 href="https://twitter.com/SwampThingPaul?ref_src=twsrc%5Etfw"
 data-width="500" 
-data-height="400"
-data-tweet-limit="2" >
+data-height="700"
+data-tweet-limit="4" >
 Tweets by SwampThingPaul
 </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
