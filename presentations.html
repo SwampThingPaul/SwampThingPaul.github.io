@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -84,7 +84,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -233,6 +232,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -244,18 +244,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -284,10 +272,7 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Home</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-list-ul"></span>
      
@@ -328,6 +313,26 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cube"></span>
+     
+    R-Packages
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="http://swampthingecology.org/EPGMr/">EPGMr</a>
+    </li>
+    <li>
+      <a href="http://swampthingecology.org/AnalystHelper/">AnalystHelper</a>
+    </li>
+    <li>
+      <a href="http://swampthingecology.org/LimnoPalettes/">LimnoPalettes</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-list-ul"></span>
      
     About
@@ -343,7 +348,7 @@ $(document).ready(function () {
       </a>
     </li>
     <li>
-      <a href="https://swampthingpaul.github.io/static/resume/julian-cv-pd.html">
+      <a href="https://swampthingpaul.github.io/static/resume/pjulian_resume.pdf">
         <span class="fa fa-file-pdf-o"></span>
          
         CV
@@ -420,10 +425,10 @@ $(document).ready(function () {
 <li><p><strong>Julian, P.</strong>, R Bhomia, S. Gerber, and A.L. Wright. 2017. Stoichiometric relationships amongst ecosystem compartments of a treatment wetland. Southeastern Ecology and Evolution Conference. Ft Myers, FL.</p></li>
 <li><p><strong>Julian, P.</strong>, R. Chambers, J. Kominoski, T. Troxler, A. Wright, and T.Z. Osborne. 2017. Pyrite formation in the Coastal Everglades: Can a fool’s gold indicate sea-level rise? SSSA Annual Meeting. Tampa, FL.</p></li>
 <li><p><strong>Julian, P.</strong>, R. Bhomia, A. Wright, and T.Z. Osborne. 2017. Aquatic Productivity in Subtropical Marsh along a soil nutrient gradient – An assessment of the Everglades Stormwater Treatment Areas. SSSA Annual Meeting. Tampa, FL.</p></li>
-<li><p>Osborne, T.Z., R. Bhomia, **P. Julian// and K.R. Reddy. 2017. Spatial Distribution of Soil Biogeochemical Properties in Stormwater Treatment Area 3/4 Cells 3A and 3B. SSSA Annual Meeting. Tampa, FL.</p></li>
+<li><p>Osborne, T.Z., R. Bhomia, <strong>P. Julian</strong> and K.R. Reddy. 2017. Spatial Distribution of Soil Biogeochemical Properties in Stormwater Treatment Area 3/4 Cells 3A and 3B. SSSA Annual Meeting. Tampa, FL.</p></li>
 <li><p><strong>Julian, P.</strong>, R. Bhomia, A. Wright and T.Z. Osborne. 2017. Aquatic Productivity in Subtropical Marsh – Observations from the Everglades Stormwater Treatment Areas. 2017 Society of Wetland Scientist Annual Meeting, San Juan, Puerto Rico.</p></li>
 <li><p><strong>Julian, P.</strong>, B. Gu and A. Freitag. 2017. Limiting Factors in Mercury Methylation Hotspot Development: The Tangled Web. Greater Everglades Ecosystem Restoration, Coral Spring, FL.</p></li>
-<li><p><strong>Julian, P.</strong>, K. Larios and P. Julian 2017. Data Integration and Synthesis Framework for Understanding the Phosphorus Cycling and Reduction Mechanisms in STA Flow-ways. Greater Everglades Ecosystem Restoration, Coral Spring, FL.</p></li>
+<li><p>Gerber, S, K. Larios and <strong>P. Julian</strong> 2017. Data Integration and Synthesis Framework for Understanding the Phosphorus Cycling and Reduction Mechanisms in STA Flow-ways. Greater Everglades Ecosystem Restoration, Coral Spring, FL.</p></li>
 <li><p>Gu, B and <strong>P. Julian</strong>. 2017. High Biotic Mercury in South Florida Wetlands: Fish Trophic Position and Wading Bird Redistribution. Greater Everglades Ecosystem Restoration, Coral Spring, FL.</p></li>
 <li><p>Villapando, O., R. Bhomia, J. King and <strong>P. Julian</strong>. 2017. Water Quality Along inflow to Outflow Gradient of the Everglades Stormwater Treatment Areas. Greater Everglades Ecosystem Restoration, Coral Spring, FL.</p></li>
 <li><p><strong>Julian, P.</strong>, B. Gu, K. Weaver and A. Wright. 2016. Status and Trends of Landscape-Scale Mercury in South Florida and the Everglades. 7th SETAC World Congress/SETAC North America 37th Annual Meeting. Orlando, FL.</p></li>
@@ -458,6 +463,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

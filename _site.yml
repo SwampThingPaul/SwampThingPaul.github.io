@@ -30,6 +30,8 @@ navbar:
         href: http://swampthingecology.org/EPGMr/
       - text: AnalystHelper
         href: http://swampthingecology.org/AnalystHelper/
+      - text: LimnoPalettes
+        href: http://swampthingecology.org/LimnoPalettes/
     - text: About
       icon: fa-list-ul 
       #href: about.html

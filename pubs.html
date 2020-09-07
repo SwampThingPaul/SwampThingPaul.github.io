@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -85,7 +85,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -234,6 +233,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -245,18 +245,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -285,10 +273,7 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Home</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-list-ul"></span>
      
@@ -329,6 +314,26 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cube"></span>
+     
+    R-Packages
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="http://swampthingecology.org/EPGMr/">EPGMr</a>
+    </li>
+    <li>
+      <a href="http://swampthingecology.org/AnalystHelper/">AnalystHelper</a>
+    </li>
+    <li>
+      <a href="http://swampthingecology.org/LimnoPalettes/">LimnoPalettes</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-list-ul"></span>
      
     About
@@ -344,7 +349,7 @@ $(document).ready(function () {
       </a>
     </li>
     <li>
-      <a href="https://swampthingpaul.github.io/static/resume/julian-cv-pd.html">
+      <a href="https://swampthingpaul.github.io/static/resume/pjulian_resume.pdf">
         <span class="fa fa-file-pdf-o"></span>
          
         CV
@@ -421,7 +426,8 @@ Google Scholar Network Analysis using the <a href="https://github.com/jkeirstead
 <h2>Peer Reviewed Literature</h2>
 <p><strong>2020</strong></p>
 <ul>
-<li><strong>Julian, P.</strong> <em>Accepted.</em> Getting the science right to protect and restore our environment. A critique of Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study. Marine Biology.
+<li><p>Kominoski JS, Gaiser EE, Casta<span class="math inline">\(\tilde{n}\)</span>eda-Moya E, Davis SE, <strong>Julian P</strong>, et al (<em>Accepted</em>) Disturbance legacies increase and synchronize nutrient concentrations and bacterial productivity in coastal ecosystems. Ecology.</p></li>
+<li><p><strong>Julian, P.</strong> <em>Accepted.</em> Getting the science right to protect and restore our environment. A critique of Lapointe et al (2019) Nitrogen enrichment, altered stoichiometry, and coral reef decline at Looe Key, Florida Keys, USA: a 3-decade study. Marine Biology.</p>
 <ul>
 <li>Original <a href="https://link.springer.com/article/10.1007%2Fs00227-019-3538-9" target="_blank">Lapointe et al</a> paper.</li>
 </ul></li>
@@ -498,6 +504,7 @@ Google Scholar Network Analysis using the <a href="https://github.com/jkeirstead
 <li>Julian, P., et al. Numeric Interpretation of Narrative Standards for the L-28 Interceptor Canal and Big Cypress National Preserve. Technical Support Document: Western Everglades Planning Project. Florida Department of Environmental Protection, Tallahassee, FL.</li>
 <li>Julian, P., G.G. Payne, and S.K. Xue. Chapter 3A: Water Quality in the Everglades Protection Areas. In 2017 South Florida Environmental Report. South Florida Water Management District, West Palm Beach, FL.</li>
 <li>Julian, P., B. Gu, and K. Weaver (Eds). Chapter 3B: Mercury and Sulfur Environmental Assessment for the Everglades. In 2017 South Florida Environmental Report. South Florida Water Management District, West Palm Beach, FL.</li>
+<li>Julian, P., R.K. Bhomia Transect Study: Surface Water Quality Monitoring and Analysis. In: Reddy KR (ed) Evaluation of Soil Biogeochemical Properties Influcing Phosphorus Flux in the Everglades Stormwater Treatment Areas (STAs): 2016-17 Annual Report. University of Florida, Gainesville, FL, pp 317–444</li>
 </ul>
 <p><strong>2016</strong></p>
 <ul>
@@ -561,6 +568,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
