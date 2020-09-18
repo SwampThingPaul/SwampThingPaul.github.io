@@ -18,7 +18,7 @@ navbar:
         href: presentations.html
       - text: Research Topics
         icon: fa-flask
-        href: ./research/research.html
+        href: research.html
       - text: Authorship Guidelines
         icon: fa-file
         href: authorship.html
