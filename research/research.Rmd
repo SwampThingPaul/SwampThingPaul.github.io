@@ -21,13 +21,13 @@ In the future, I intend to continue develop my research program to address issue
 
 **Specific areas of previous and ongoing work:**
 
-- [Ecological Stoichiometry](https://swampthingecology.org/ecostoich.html)
+- [Ecological Stoichiometry](https://swampthingecology.org/research/ecostoich.html)
 
-- [Ecosystem Metabolism](https://swampthingecology.org/ecometab.html)
+- [Ecosystem Metabolism](https://swampthingecology.org/research/ecometab.html)
 
-- [Iron-Sulfur Interactions](https://swampthingecology.org/Fe_S.html)
+- [Iron-Sulfur Interactions](https://swampthingecology.org/research/Fe_S.html)
 
-- [Stormwater Treatment Area](https://swampthingecology.org/EverSTA.html)
+- [Stormwater Treatment Area](https://swampthingecology.org/research/EverSTA.html)
 
 - Disturbance ecology
 

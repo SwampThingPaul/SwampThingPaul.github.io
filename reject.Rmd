@@ -105,7 +105,7 @@ mtext(side=2,line=2,"Count")
 Professional development workshops, working groups and/or short courses sometimes accompany funding for travel expenses. Therefore, you are evaluated based on productivity, career, etc. much like a job application.
 
 ```{r,echo=F}
-work=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=2)
+work=read.xlsx("C:/Julian_LaCie/UF/RejectionTracker.xlsx",sheet=2)
 work$Date=convertToDate(work$Date)
 work$yr=format(work$Date,"%Y")
 
@@ -135,7 +135,7 @@ mtext(side=2,line=2,"Count")
 The next big category is funding including grants, scholarships, fellowships, etc.  
 
 ```{r,echo=F}
-fund=read.xlsx("D:/UF/RejectionTracker.xlsx",sheet=3)
+fund=read.xlsx("C:/Julian_LaCie/UF/RejectionTracker.xlsx",sheet=3)
 fund$Date=convertToDate(fund$Date)
 fund$yr=format(fund$Date,"%Y")
 
