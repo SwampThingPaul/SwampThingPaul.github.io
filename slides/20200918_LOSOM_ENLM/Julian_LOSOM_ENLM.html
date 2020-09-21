@@ -37,13 +37,18 @@ class: left, middle
 
 #### .fancy[DRAFT - Estuary Nutrient Loading Model]
 
-&lt;!--.large[&lt;font color="white"&gt;Paul Julian, PhD | September 17,2020&lt;/font&gt;]--&gt;
+&lt;!--.large[&lt;font color="white"&gt;Paul Julian, PhD | September 21,2020&lt;/font&gt;]--&gt;
 
 FDEP - Office of Water Policy and Ecosystem Restoration
 
 September 18, 2020
 
 &lt;!-- this ends up being the title slide since seal = FALSE--&gt;
+
+???
+- Top down statistical modeling, where we used observed water quality and discharge data to fit a model. 
+- Does not account for C-43 reservior but if we assume that the reservior is just (temp) storing basin water and no WQ treatment is occuring then the models can still be applied. 
+- Does not account for *potential* nutrient reductions assoicated with the current Basin Action Management Plan(s). 
 
 ---
 name: map
@@ -62,7 +67,7 @@ class: left
 
 --
 
-- __Period of Record:__ May 1980 – April 2019 (WY1981 – 2019)
+- __Period of Record:__ May 1981 – April 2019 (WY1982 – 2019)
   - Based on available data.
   - Years with major hurricanes were excluded. 
 
@@ -212,7 +217,7 @@ Actual versus predicted TP loads at S-79 based on predictive model. Actual and p
 Train:Test
   - R&lt;sup&gt;2&lt;/sup&gt;: 0.79
   - RMSE: 65.71
-  - Mean Absolute Present Error: 21 %
+  - Mean Absolute Percent Error: 21 %
   - Min-Max Accuracy: 82 %
 
 ]
@@ -239,7 +244,7 @@ k-fold (k=10)
 _Cross-validation error (average k errors)_
   - R&lt;sup&gt;2&lt;/sup&gt;: 0.79
   - RMSE: 61.0
-  - Mean Absolute Present Error: 24 %
+  - Mean Absolute Percent Error: 24 %
   - Min-Max Accuracy: 82 %
 ]
 
@@ -333,7 +338,7 @@ Actual versus predicted TP loads at S-79 based on predictive model. Actual and p
 Train:Test
   - R&lt;sup&gt;2&lt;/sup&gt;: 0.93
   - RMSE: 4.11x10&lt;sup&gt;5&lt;/sup&gt;
-  - Mean Absolute Present Error: 10 %
+  - Mean Absolute Percent Error: 10 %
   - Min-Max Accuracy: 92 %
 
 ]
@@ -360,7 +365,7 @@ k-fold (k=10)
 _Cross-validation error (average k errors)_
   - R&lt;sup&gt;2&lt;/sup&gt;: 0.94
   - RMSE: 3.57x10&lt;sup&gt;5&lt;/sup&gt;
-  - Mean Absolute Present Error: 11 %
+  - Mean Absolute Percent Error: 11 %
   - Min-Max Accuracy: 90 %
 ]
 
