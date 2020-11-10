@@ -12,6 +12,10 @@
   font-size: 160%;
 }
 
+.small { 
+  font-size: 70%;
+}
+
 .salt {
   color: var(--color-salt);
   font-size: 200%; 
