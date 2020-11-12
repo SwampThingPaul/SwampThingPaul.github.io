@@ -7,6 +7,10 @@ All presentations are available upon request, some are available here.
 
 Multiple technical presentations not listed here have been presented at meetings including technical, environmental policy, restoration project planning and general public audiences.
 
+- **Julian, P.** 2020. Water Resource Modeling Examples. [`r icon::fa("file-pdf")`](https://swampthingecology.org/slides/modeling/Julian_WaterResourceModeling.html){target="_blank"}
+
+- **Julian, P.** 2020. Multivariate Statistics Tips and Tricks: Intro to PCA. *Newcastle University; Modeling, Evidence and Policy Research Group Seminar.* [`r icon::fa("file-pdf")`](https://swampthingecology.org/slides/PCAWorkshop/Julian_MEP_PCA){target="_blank"}
+
 - **Julian, P.**, K. August, L. Simpson, T.Z. Osborne, D. Surratt. 2019. Hydrologic restoration of a shallow oligotrophic marl wetland. What is the soil telling us? Greater Everglades Ecosystem Restoration Conference. Coral Springs, FL. [`r icon::fa("file-pdf")`](https://SwampThingPaul.github.io/files/pres/20190424_Julianetal_UTS.pdf){target="_blank"} `r icon::fa("youtube")`
 
 - **Julian, P.** 2019. Everglades Restoration and Water Quality. Coccoloba Chapter of the Florida Native Plant Society. Guest Speaker.  [`r icon::fa("file-pdf")`](https://SwampThingPaul.github.io/files/pres/20190321_Everglades.pdf){target="_blank"} [`r icon::fa("youtube")`](https://youtu.be/4YLTccWeVjE){target="_blank"} 

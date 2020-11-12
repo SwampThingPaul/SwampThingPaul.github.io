@@ -1,0 +1,24 @@
+---
+title: "Technical Work"
+paged-footnotes: true
+---
+
+Western Everglades Restoration Project (WERP)
+
+- Water Quality Subteam
+
+
+Combined Operation Plan (COP)
+
+- Water Quality Subteam
+
+
+Lake Okeechobee System Operating Manual (LOSOM)
+
+- Water Quality Subteam
+  
+  - Estuary Nutrient Loading Model 
+  
+    - [Presentation 1](https://swampthingecology.org/slides/LOSOMWQ/Julian_LOSOM_ENLM){target="_blank"}
+
+    - [Presentation 2](https://swampthingecology.org/slides/LOSOMWQ/Julian_LOSOM_CRE_ENLM_ad1){target="_blank"}
