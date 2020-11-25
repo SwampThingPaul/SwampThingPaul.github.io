@@ -41,7 +41,7 @@ class: left, middle
 
 FDEP - Office of Water Policy and Ecosystem Restoration
 
-November 24, 2020
+November 25, 2020
 
 &lt;!-- this ends up being the title slide since seal = FALSE--&gt;
 
@@ -104,22 +104,73 @@ Also:
 
 &lt;!-- https://stats.stackexchange.com/questions/110999/r-confused-on-residual-terminology --&gt;
 
+Absolute and Relative measures of error were used to compare models. 
 
+- Absolute error - Root Mean Square Error (RMSE) or Residual Residual Standard error (RSE or `\(\sigma\)`)
+
+- Relative error - coefficient of determination ( `\(R^{2}\)`)
+
+.pull-left[
+
+.small[
 Root Mean Square Error (RMSE) 
 
 `\begin{align*}
 RMSE = \sqrt{ \frac{\sum_{i=1}^{n}( X_{i} - \hat{X_{i}} )^{2} }{n} }
 \end{align*}`
 
-Where:
 
+Residual Standard error (RSE)
+
+`\begin{align*}
+RSE = \sqrt{ \frac{\sum_{i=1}^{n}( X_{i} - \hat{X_{i}} )^{2} }{df} }
+\end{align*}`
+
+.small[
 `\(X_{i}\)`: Oberseved value
 
 `\(\hat{X_{i}}\)`: Predicted value
 
 `\(n\)`: Number of observations 
 
-*RMSE value closer to zero represent model prediction closer to observed.*
+`\(df\)`: Model residual degrees of freedom
+]
+
+* Values closer to zero represent model prediction closer to observed.
+]
+]
+
+.pull-right[
+
+.small[
+`\(R^{2}\)`
+
+`\begin{align*}
+R^{2} = 1- { \frac{RSS}{TSS} }
+\end{align*}`
+
+Adjusted `\(R^{2}\)` ( `\(R^{2}_{adj.}\)` )
+
+`\begin{align*}
+R^{2}_{adj.} = 1- \left[{ \frac{(1-R^{2})(n-1)}{n-K-1} }\right]
+\end{align*}`
+
+.small[
+
+`\(RSS\)`: residual sum of squares
+
+`\(TSS\)`: total sum of squares
+
+`\(n\)`: number of observations
+
+`\(K\)`: number of variables
+
+]
+
+* Represents the proportion of the variance explained by the model.
+
+]
+]
 
 &lt;!--
 Root Mean Square Difference (RMSD)
@@ -143,8 +194,8 @@ RSME different from Residual Standard error (sigma)
 
 `sqrt( sum(residuals(fit)^2) / fit$df.residual ) `
 
-hid Root Mean Square Difference 
 
+R2 assumes that every single variable explains the variation in the dependent variable. The adjusted R2 tells you the percentage of variation explained by only the independent variables that actually affect the dependent variable.
 
 ---
 
