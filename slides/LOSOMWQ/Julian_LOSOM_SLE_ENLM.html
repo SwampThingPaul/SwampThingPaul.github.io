@@ -36,11 +36,11 @@ class: left, middle
 
 #### .fancy[DRAFT - St Lucie Estuary Nutrient Loading Model]
 
-&lt;!--.large[&lt;font color="white"&gt;Paul Julian, PhD | December 28,2020&lt;/font&gt;]--&gt;
+&lt;!--.large[&lt;font color="white"&gt;Paul Julian, PhD | December 29,2020&lt;/font&gt;]--&gt;
 
 FDEP - Office of Water Policy and Ecosystem Restoration
 
-December 28, 2020
+December 29, 2020
 
 &lt;!-- this ends up being the title slide since seal = FALSE--&gt;
 
@@ -683,6 +683,44 @@ name: TN_diag
 .footnote[
 .small[[TN Model](#S80TN_3) plots]
 ]
+
+---
+name: eff coef
+
+#### Model Efficiency Coefficient
+
+**Nash-Sutcliffe**
+
+`\begin{align*}
+NS = 1- \frac{\sum_{t=1}^{n} (X_{s,t} - X_{o,t})^2}{\sum_{t=1}^{n} (X_{o,t} - \mu_{o})^2}
+\end{align*}`
+
+.small[
+
+`\(n\)` : total number of time-steps &lt;br&gt;
+`\(X_{s,t}\)` : simulated value at timestep `\(t\)` &lt;br&gt;
+`\(X_{o,t}\)` : observed value at timestep `\(t\)` &lt;br&gt;
+`\(\mu_{o}\)` : mean of observed values &lt;br&gt;
+]
+
+The ratio of error variance of the modeled versus observed timeseries
+
+**Kling-Gupta**
+
+`\begin{align*}
+KG = 1- \sqrt{(r_{pearson}-1)^{2} + \left(\frac{\sigma_{s}}{\sigma_{o}}-1 \right)^{2} + \left(\frac{\mu_{s}}{\mu_{o}}-1 \right)^2}
+\end{align*}`
+
+.small[
+
+`\(r_{pearson}\)` : Pearson correlation coefficient &lt;br&gt;
+`\(\mu_{s}\)` : mean of simulated values &lt;br&gt;
+`\(\sigma_{o}\)` : standard deviation of observed values &lt;br&gt;
+`\(\sigma_{s}\)` : standard deviation of simulated values &lt;br&gt;
+
+]
+
+Decomposition of NS representing the degree of correlation, bias and variablity of simulated and observed values.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
