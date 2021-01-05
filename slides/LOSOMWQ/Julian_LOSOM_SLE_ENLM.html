@@ -36,11 +36,11 @@ class: left, middle
 
 #### .fancy[DRAFT - St Lucie Estuary Nutrient Loading Model]
 
-&lt;!--.large[&lt;font color="white"&gt;Paul Julian, PhD | December 29,2020&lt;/font&gt;]--&gt;
+&lt;!--.large[&lt;font color="white"&gt;Paul Julian, PhD | January 05,2021&lt;/font&gt;]--&gt;
 
 FDEP - Office of Water Policy and Ecosystem Restoration
 
-December 29, 2020
+January 05, 2021
 
 &lt;!-- this ends up being the title slide since seal = FALSE--&gt;
 
@@ -252,6 +252,12 @@ Train:Test
   - Min-Max Accuracy: 87 %
   - Nash-Sutcliffe Coefficient: 0.90
   - Kling-Gupta Coefficient: 0.86
+
+.footnote[
+.small[[Nash-Sutcliffe/Kling-Gupta explainations](#EffCoef)]
+
+]
+
 ]
 
 ???
@@ -577,6 +583,28 @@ class: left
 ]
 
 ---
+name: RSMeval
+class:left
+
+#### RSM Evalution
+
+- Compare loading conditions of selected alternatives to some base conditions (i.e. ECB, LORS08, etc).
+
+- Both models assume that C43 and C44 Reservoirs are providing temporary storage of existing/available water. 
+
+- Both models do not incorporate potential water quality treatment features
+    - CRE: C43 Water Quality Feasibility Study project.
+    - SLE: C44 Reservoir and STA.
+    
+- To evalute potential WQ improvements loading could be evaluated post processing in a Monte-Carlo like evaluation assuming a degree of treatment (i.e. % reduction, `\(X\)` metric tons, etc.). 
+
+&lt;!--  
+`\begin{align*}
+f_{treatment}(WY_{i}) = ENLM TP_{WY=i} \times treatment_{N(\mu ,\sigma^2)}
+\end{align*}`
+--&gt; 
+
+---
 name: last slide
 class: left
 
@@ -685,16 +713,19 @@ name: TN_diag
 ]
 
 ---
-name: eff coef
+name: EffCoef
 
 #### Model Efficiency Coefficient
 
 **Nash-Sutcliffe**
+.pull-left[
 
 `\begin{align*}
 NS = 1- \frac{\sum_{t=1}^{n} (X_{s,t} - X_{o,t})^2}{\sum_{t=1}^{n} (X_{o,t} - \mu_{o})^2}
 \end{align*}`
 
+]
+.pull-right[
 .small[
 
 `\(n\)` : total number of time-steps &lt;br&gt;
@@ -704,6 +735,7 @@ NS = 1- \frac{\sum_{t=1}^{n} (X_{s,t} - X_{o,t})^2}{\sum_{t=1}^{n} (X_{o,t} - \m
 ]
 
 The ratio of error variance of the modeled versus observed timeseries
+]
 
 **Kling-Gupta**
 
@@ -711,16 +743,21 @@ The ratio of error variance of the modeled versus observed timeseries
 KG = 1- \sqrt{(r_{pearson}-1)^{2} + \left(\frac{\sigma_{s}}{\sigma_{o}}-1 \right)^{2} + \left(\frac{\mu_{s}}{\mu_{o}}-1 \right)^2}
 \end{align*}`
 
+.pull-left[
 .small[
-
 `\(r_{pearson}\)` : Pearson correlation coefficient &lt;br&gt;
 `\(\mu_{s}\)` : mean of simulated values &lt;br&gt;
 `\(\sigma_{o}\)` : standard deviation of observed values &lt;br&gt;
 `\(\sigma_{s}\)` : standard deviation of simulated values &lt;br&gt;
-
+]
+]
+.pull-right[
+Decomposition of NS representing the degree of correlation, bias and variablity of simulated and observed values. 
 ]
 
-Decomposition of NS representing the degree of correlation, bias and variablity of simulated and observed values.
+.footnote[
+.small[[Return](#S80TP_6)]
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
