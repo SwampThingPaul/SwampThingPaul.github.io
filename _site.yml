@@ -27,11 +27,13 @@ navbar:
       menus:
       - text: EPGMr
         #icon: fa-r-project
-        href: http://swampthingecology.org/EPGMr/
+        href: https://swampthingecology.org/EPGMr/
       - text: AnalystHelper
-        href: http://swampthingecology.org/AnalystHelper/
+        href: https://swampthingecology.org/AnalystHelper/
       - text: LimnoPalettes
-        href: http://swampthingecology.org/LimnoPalettes/
+        href: https://swampthingecology.org/LimnoPalettes/
+      - text: NADA2
+        href: https://swampthingecology.org/NADA2/
     - text: About
       icon: fa-list-ul 
       #href: about.html
