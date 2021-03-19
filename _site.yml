@@ -34,6 +34,8 @@ navbar:
         href: https://swampthingecology.org/LimnoPalettes/
       - text: NADA2
         href: https://swampthingecology.org/NADA2/
+      - text: LORECOVER
+        href: https://swampthingecology.org/LORECOVER/
     - text: About
       icon: fa-list-ul 
       #href: about.html
