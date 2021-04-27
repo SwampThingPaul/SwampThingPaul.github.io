@@ -1,5 +1,6 @@
 ---
 title: "Authorship Agreement"
+output: html_document
 ---
 
 # Guidelines for Authorship<sup>1</sup>
