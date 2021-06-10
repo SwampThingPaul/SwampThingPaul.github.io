@@ -36,6 +36,8 @@ navbar:
         href: https://swampthingecology.org/NADA2/
       - text: LORECOVER
         href: https://swampthingecology.org/LORECOVER/
+      - text: CalSalMod
+        href: https://swampthingecology.org/CalSalMod/
     - text: About
       icon: fa-list-ul 
       #href: about.html
