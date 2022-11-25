@@ -20,30 +20,13 @@ _#rstats_ _#python_ _#geospatial_ _#GIS_ _#soil_ _#ecology_ _#climatechange_ _#b
 
 ****
 
-<div class = "row">
-<div class = "col-md-6">
-## Social Media
-
-Follow me on twitter for recent development on manuscripts, ongoing studies, colleagues work or opportunities (and some ranting). 
-
-<a class="twitter-timeline" 
-href="https://twitter.com/SwampThingPaul?ref_src=twsrc%5Etfw"
-data-width="500" 
-data-height="700"
-data-tweet-limit="4" >
-Tweets by SwampThingPaul
-</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-</div>
-
-<div class = "col-md-6">
 ## Words of inspiration
 
 _“My temple is the swamp …When I would recreate myself, I seek the darkest wood, the thickest and most impenetrable and to the citizen, most dismal, swamp. I enter a swamp as a sacred place, a sanctum sanctorum… I seemed to have reached a new world, so wild a place …far away from human society. What’s the need of visiting far-off mountains and bogs, if a half-hour’s walk will carry me into such wildness and novelty.”_
 
 __[Henry David Thoreau](https://www.walden.org/thoreau/){taret="_blank"}__, _Walden and Other Writings_
 
-<center><img src="images/waldenpond.jpg" width="80%" align="middle"></center>
+<center><img src="images/waldenpond.jpg" width="70%" align="middle"></center>
 
 <br>
 <br>
@@ -51,7 +34,7 @@ _“Whatever you want to do in this world, it is achievable. The most important 
 
 __[Steve Irwin](https://www.australiazoo.com.au/about-us/the-irwins/steve/){target="_blank"}__, _[Crikey! What an Adventure](https://www.imdb.com/title/tt2402314/){target="_blank"}_
 
-<center><img src="images/IrwinCroc.jpg" width="50%" align="middle"></center>
+<center><img src="images/IrwinCroc.jpg" width="40%" align="middle"></center>
 
 <br>
 <br>
@@ -59,7 +42,7 @@ _"...One thing you quickly sense about the people here: they include more than a
 
 __[Carl Safina](http://carlsafina.org/){target="_blank"}__, _[Eye of the Albatross](http://carlsafina.org/book/eye-of-the-albatross/){target="_blank"}_ 
 
-<center><img src="images/Safina_alba.jpg" width="50%" align="middle"></center>
+<center><img src="images/Safina_alba.jpg" width="40%" align="middle"></center>
 
 <br>
 <br>
@@ -67,10 +50,8 @@ _"I remember a hundred lovely lakes, and recall the fragrant breath of pine and 
 
 __Hamlin Garland "Hitting the Trail" - 1899__
 
-<center><img src="images/FlatheadLake.JPG" width="75%" align="middle"></center>
+<center><img src="images/FlatheadLake.JPG" width="60%" align="middle"></center>
 
-</div>
-</div>
 
 ****
 
