@@ -55,16 +55,14 @@ navbar:
       icon: fa-rss-square
       href: https://SwampThingPaul.github.io/blog/  
   right:
-    - icon: fa-envelope-o
+    - icon: fa-envelope
       href: mailto:pauljulianphd@gmail.com                 
-    - icon: fa-mastodon
-      href: https://fosstodon.org/@SwampThingPaul#
-    - icon: fa-github-alt
+    - icon: fa-github
       href: https://github.com/SwampThingPaul
-#     - icon: fa-youtube
-#      href: https://www.youtube.com/channel/UCykDhSIQwiO_7ESoLV72mMw
-#    - icon: fa-twitter-square
-#      href: https://twitter.com/swampthingpaul
+    - icon: fa-linkedin
+      href: https://www.linkedin.com/in/paul-julian
+    - icon: fa-mastodon
+      href: https://fosstodon.org/@SwampThingPaul
 output:
   html_document:
     theme: readable
