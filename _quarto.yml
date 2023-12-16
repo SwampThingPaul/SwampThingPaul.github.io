@@ -1,12 +1,10 @@
 ## adapted from NASA-Openscapes.github.io
-
-
 project:
   type: website
 
 website:
   title: "Paul Julian II, PhD"
-  site-url: SwampThingPaul.github.io # https://swampthingecology.org/
+  site-url: https://swampthingecology.org/
   favicon: images/SWE_logo_small.png  
   
   page-footer: 
