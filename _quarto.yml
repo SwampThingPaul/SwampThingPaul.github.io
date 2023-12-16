@@ -6,7 +6,7 @@ project:
 
 website:
   title: "Paul Julian II, PhD"
-  site-url: https://swampthingecology.org/
+  site-url: SwampThingPaul.github.io # https://swampthingecology.org/
   favicon: images/SWE_logo_small.png  
   
   page-footer: 
