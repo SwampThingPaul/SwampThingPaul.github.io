@@ -1,0 +1,70 @@
+name: Paul Julian II, PhD                                
+output_dir: "."
+navbar:
+  title: Paul Julian II, PhD
+  type: inverse
+  left:
+#    - text: Home
+#      href: index.html
+    - text: Research
+      icon: fa-list-ul 
+      #href: research.html
+      menus:
+      - text: Publications
+        icon: fa-file
+        href: pubs.html
+      - text: Presentations
+        icon: fas fa-chalkboard-teacher
+        href: presentations.html
+      - text: Research Topics
+        icon: fa-flask
+        href: research.html
+      - text: Authorship Guidelines
+        icon: fa-file
+        href: authorship.html
+    - text: R-Packages
+      menus:
+      - text: EPGMr
+        #icon: fa-r-project
+        href: https://swampthingecology.org/EPGMr/
+      - text: AnalystHelper
+        href: https://swampthingecology.org/AnalystHelper/
+      - text: LimnoPalettes
+        href: https://swampthingecology.org/LimnoPalettes/
+      - text: NADA2
+        href: https://swampthingecology.org/NADA2/
+      - text: LORECOVER
+        href: https://swampthingecology.org/LORECOVER/
+      - text: CalSalMod
+        href: https://swampthingecology.org/CalSalMod/
+    - text: About
+      icon: fa-list-ul 
+      #href: about.html
+      menus:
+      - text: About
+        icon: fa-user-o 
+        href: about.html
+      - text: CV
+        icon: fa-file-pdf-o
+        href: https://swampthingpaul.github.io/static/resume/pjulian_resume.pdf #cv.html
+      - text: CV of Failures
+        icon: fa-exclamation-triangle
+        href: reject.html
+    - text: Blog
+      icon: fa-rss-square
+      href: https://SwampThingPaul.github.io/blog/  
+  right:
+    - icon: fa-envelope
+      href: mailto:pauljulianphd@gmail.com                 
+    - icon: fa-github
+      href: https://github.com/SwampThingPaul
+    - icon: fa-linkedin
+      href: https://www.linkedin.com/in/paul-julian
+    - icon: fa-mastodon
+      href: https://fosstodon.org/@SwampThingPaul
+output:
+  html_document:
+    theme: readable
+    highlight: textmate
+    lib_dir: site_libs
+    self_contained: no

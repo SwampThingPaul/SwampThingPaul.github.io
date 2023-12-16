@@ -1,0 +1,81 @@
+<center><a><img src="images/CREW_marsh_lansdcape.JPG" alt="CREWMarsh" width="700px"/></a></center>
+
+<center>
+<h1>Welcome to the swamp</h1>
+</center>
+
+I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying the transformation of nutrients and other compounds along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.
+
+**A couple of words/phrases to describe me:** Wetland Biogeochemist, Ecologist, Data-scientist, Soil-scientist, Naturalist, Swamp Walker, Lover of all things R.
+
+This website will host some general information about myself, my research interests and publications.
+
+*#rstats* *#python* *#geospatial* *#GIS* *#soil* *#ecology* *#climatechange* *#biogeochemistry* *#wetland* *#aquatic*
+
+****
+
+:::: {.columns}
+
+::: {.column width="70%"}
+### Selected Publications
+- **Julian** et al (2024) Dark waters: Evaluating seagrass community response to optical water quality and freshwater discharges in a highly managed subtropical estuary. Regional Studies in Marine Science 69:103302.
+- **Julian** et al (2023) Changes in the spatial distribution of total phosphorus in sediment and water column of a shallow subtropical lake. Lake and Reservoir Management 39:213–230.
+- **Julian** et al (2022) Understanding the ups and downs, application of hydrologic restoration measures for a large Subtropical Lake. Lake and Reservoir Management 38:304–317.
+- Smith MC, **Julian P**, DeAngelis D, Zhang B (2023) Ecological benefits of integrative weed management of Melaleuca quinquenervia in Big Cypress National Preserve. BioControl. 
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="25%"}
+
+### R Packages
+[EPGMr](https://swampthingecology.org/EPGMr/) <!-- | Everglades Phosphorus Gradient Model in R | --> <br>
+[LimnoPalettes](https://swampthingecology.org/LimnoPalettes/) <!-- | Limnologically themed color palettes |--><br>
+[NADA2](https://swampthingecology.org/NADA2/) <!-- | Analysis of censored data |--><br>
+[AnalystHelper](https://swampthingecology.org/AnalystHelper/) <!-- | Analyst Helper |--> <br>
+[LORECOVER](https://swampthingecology.org/LORECOVER/) <!-- | Lake Okeechobee RECOVER evaluation tool |--><br>
+[CalSalMod](https://swampthingecology.org/CalSalMod/) <!-- | Caloosahatchee River Estaury Salinity Model |-->
+:::
+
+::::
+
+****
+
+<center><a><img src="images/siankhan_mexico.JPG" alt="SianKhan" width="700px"/></a></center>
+
+<h1>Words of inspiration</h1>
+
+_“My temple is the swamp …When I would recreate myself, I seek the darkest wood, the thickest and most impenetrable and to the citizen, most dismal, swamp. I enter a swamp as a sacred place, a sanctum sanctorum… I seemed to have reached a new world, so wild a place …far away from human society. What’s the need of visiting far-off mountains and bogs, if a half-hour’s walk will carry me into such wildness and novelty.”_
+
+__[Henry David Thoreau](https://www.walden.org/thoreau/){taret="_blank"}__, _Walden and Other Writings_
+
+_“Whatever you want to do in this world, it is achievable. The most important thing that I’ve found, that perhaps you could use, is be passionate and enthusiastic in the direction that you choose in life, and you’ll be a winner.”_
+
+__[Steve Irwin](https://www.australiazoo.com.au/about-us/the-irwins/steve/){target="_blank"}__, _[Crikey! What an Adventure](https://www.imdb.com/title/tt2402314/){target="_blank"}_
+
+_"...One thing you quickly sense about the people here: they include more than average proportion of idealists and self-motivated seekers. But they're all pretty down-to-earth. The work demands a lot of physical and mental effort. Slackers don't make it this far."_
+
+__[Carl Safina](http://carlsafina.org/){target="_blank"}__, _[Eye of the Albatross](http://carlsafina.org/book/eye-of-the-albatross/){target="_blank"}_ 
+
+_"I remember a hundred lovely lakes, and recall the fragrant breath of pine and fir and cedar and poplar trees. The trail has strung upon it, as upon a thread of silk, opalescent dawns and saffron sunsets. It has given me blessed release from care and worry and the troubled thinking of our modern day. It has been a return to the primitive and the peaceful. Whenever the pressure of our complex city life thins my blood and benumbs my brain, I seek relief in the trail; and when I hear the coyote wailing to the yellow dawn, my cares fall from me - I am happy."_
+
+__Hamlin Garland "Hitting the Trail" - 1899__
+
+---
+
+<center><a><img src="images/highlands_hammock_fancy.jpg" alt="Highlands Hammock Canopy" width="500px"/></a></center>
+
+
+<h1>Statement of Welcome</h1>
+*Anyone who is motivated by their passion for science, who values diversity of perspective, and who believes that critical thinking and dialogue promote the wise stewardship of our planet is welcome at Swampthing Ecology. We value your unique experiences, respect your beliefs, and want to share scientific exploration with you. We expect anyone working with us to do the same.*
+
+<sub>Based on welcome statement by [Dr Havig MAD EGG Lab](https://www.jeffhavig.com/){target="_blank"}</sub>
+
+<!-- based on https://www.jeffhavig.com/ welcome statement which is based on Dept of Geoscience Boise State University welcome statement. --->
+
+[Authorship Guidelines](https://swampthingecology.org/Authorship/){target="_blank"}
+
+<center><a><img src="images/faka_lillies.JPG" alt="Highlands Hammock Canopy" width="500px"/></a></center>
+

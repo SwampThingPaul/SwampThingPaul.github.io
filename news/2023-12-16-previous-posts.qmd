@@ -1,0 +1,14 @@
+---
+title: "Previous Blog Posts and Migration"
+author:
+  - name: Paul Julian
+date: 2023-12-16
+categories: [blog, migration]
+image: /images/SWE_logo_small.png
+---
+
+## Migrating previous posts
+
+As I migrate posts from 2021-2022, please find them here on the prior blog page
+
+**https://swampthingecology.org/blog/**

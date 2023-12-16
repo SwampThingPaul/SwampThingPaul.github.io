@@ -1,5 +1,5 @@
-My professional [website](https://swampthingpaul.github.io)/[blog](https://swampthingpaul.github.io/blog/)
+# swampthingpaul.github.io
 
-Any questions feel free to [contact me](mailto:pjulian@ufl.edu).
+Landing page for my professional [website](https://swampthingpaul.github.io)
 
-***
+Any questions feel free to [contact me](mailto:pauljulianphd@gmail.com).

@@ -1,0 +1,45 @@
+## adapted from NASA-Openscapes.github.io
+
+
+project:
+  type: website
+
+website:
+  title: "Paul Julian II, PhD"
+  site-url: https://swampthingecology.org/
+  favicon: images/SWE_logo_small.png  
+  
+  page-footer: 
+    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)"
+    left: "&copy; CC-By Paul Julian II"
+ 
+  navbar:
+    logo: images/SWE_logo_small.png
+    href: https://swampthingecology.org/
+    right:
+    # - text: "Home"
+    #   href: index.html
+    - text: "About"
+      href: about.qmd
+    # - text: "R-Packages"
+    #   href: RPackages
+    - text: "Blog"
+      href: blog.qmd    
+    - icon: github
+      href: https://github.com/SwampThingPaul
+    - icon: linkedin
+      href: https://www.linkedin.com/in/paul-julian/
+    - icon: mastodon
+      href: https://fosstodon.org/@SwampThingPaul
+    - icon: envelope
+      href: mailto:pauljulianphd@gmail.com
+      
+format:
+  html:
+    theme: [sandstone, custom.scss]
+    css: styles.css
+    toc: true
+    toc-title: Contents
+    toc-location: left
+
+

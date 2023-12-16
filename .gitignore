@@ -6,3 +6,9 @@ rmarkdown-website-template.Rproj
 README.html
 
 /data/
+/.quarto/
+
+*_cache/
+_site/
+
+.DS_Store
