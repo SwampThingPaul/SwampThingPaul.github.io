@@ -21,6 +21,8 @@ website:
       href: about.qmd
     # - text: "R-Packages"
     #   href: RPackages
+    # - text: "Publications"
+    #   href: Publications.qmd 
     - text: "Blog"
       href: blog.qmd    
     - icon: github

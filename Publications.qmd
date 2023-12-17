@@ -1,0 +1,41 @@
+---
+title: "Publications"
+editor_options: 
+  chunk_output_type: console
+---
+
+## Publication Metrics
+
+Information extracted from Google Scholar Profile
+
+```{r ,echo=F, warning=F}
+
+library(scholar)
+
+id="MTXcoJYAAAAJ"
+
+l=get_profile(id)
+
+ct=get_citation_history(id)
+```
+
+`r paste0("Google Scholar Citations = ",l$total_cites)` <br> `r paste0("H-Index = ",l$h_index)` <br> `r paste0("i10-Index = ",l$i10_index)` <br>
+
+*Information and definitions of various [indices](https://en.wikipedia.org/wiki/Author-level_metrics)*
+
+## Books
+
+## Peer Review Literature
+
+```{r ,echo=F, warning=F}
+## https://ropensci.org/blog/2020/05/07/rmd-citations/
+library(RefManageR)
+peer = RefManageR::ReadBib("./Bib/20231216_peer.bib",check=FALSE)
+
+
+
+```
+
+`r (print(peer))`
+
+## Technical Literature

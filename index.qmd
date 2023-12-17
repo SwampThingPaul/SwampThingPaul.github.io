@@ -17,7 +17,21 @@ This website will host some general information about myself, my research intere
 :::: {.columns}
 
 ::: {.column width="70%"}
+
 ### Selected Publications
+```{r ,echo=F, warning=F}
+
+library(scholar)
+
+id="MTXcoJYAAAAJ"
+
+l=get_profile(id)
+
+ct=get_citation_history(id)
+```
+
+`r paste0("[Google Scholar](https://scholar.google.com/citations?user=MTXcoJYAAAAJ&hl=en) Citations = ",l$total_cites)` <br> `r paste0("H-Index = ",l$h_index)` <br> `r paste0("i10-Index = ",l$i10_index)` <br>
+
 - **Julian** et al (2024) Dark waters: Evaluating seagrass community response to optical water quality and freshwater discharges in a highly managed subtropical estuary. Regional Studies in Marine Science 69:103302.
 - **Julian** et al (2023) Changes in the spatial distribution of total phosphorus in sediment and water column of a shallow subtropical lake. Lake and Reservoir Management 39:213–230.
 - **Julian** et al (2022) Understanding the ups and downs, application of hydrologic restoration measures for a large Subtropical Lake. Lake and Reservoir Management 38:304–317.
