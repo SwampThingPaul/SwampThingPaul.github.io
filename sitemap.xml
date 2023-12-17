@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://swampthingecology.org/news/2023-12-16-previous-posts.html</loc>
-    <lastmod>2023-12-17T01:43:39.082Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/blog.html</loc>
-    <lastmod>2023-12-17T01:43:37.098Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/about.html</loc>
-    <lastmod>2023-12-17T01:43:33.192Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/Authorship.html</loc>
-    <lastmod>2023-12-17T01:43:35.933Z</lastmod>
+    <loc>https://swampthingecology.org/Publications.html</loc>
+    <lastmod>2023-12-17T03:10:50.084Z</lastmod>
   </url>
   <url>
     <loc>https://swampthingecology.org/index.html</loc>
-    <lastmod>2023-12-17T01:43:38.113Z</lastmod>
+    <lastmod>2023-12-17T03:10:42.762Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/Authorship.html</loc>
+    <lastmod>2023-12-17T03:10:38.144Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/about.html</loc>
+    <lastmod>2023-12-17T03:10:35.107Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/blog.html</loc>
+    <lastmod>2023-12-17T03:10:39.318Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/news/2023-12-16-previous-posts.html</loc>
+    <lastmod>2023-12-17T03:10:43.774Z</lastmod>
   </url>
 </urlset>
