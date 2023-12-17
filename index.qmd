@@ -4,7 +4,7 @@
 <h1>Welcome to the swamp</h1>
 </center>
 
-I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying the transformation of nutrients and other compounds along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.
+I am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology at the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying the transformation of nutrients and other compounds along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.
 
 **A couple of words/phrases to describe me:** Wetland Biogeochemist, Ecologist, Data-scientist, Soil-scientist, Naturalist, Swamp Walker, Lover of all things R.
 
