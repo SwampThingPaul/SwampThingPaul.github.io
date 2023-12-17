@@ -1,17 +1,24 @@
 [
   {
-    "objectID": "RPackages.html",
-    "href": "RPackages.html",
-    "title": "\nR Packages\n",
+    "objectID": "news/2023-12-16-previous-posts.html",
+    "href": "news/2023-12-16-previous-posts.html",
+    "title": "Previous Blog Posts and Migration",
     "section": "",
-    "text": "R Packages\n\n\nEPGMr\n\nhttps://swampthingecology.org/EPGMr/\n\nAnalystHelper\n\nhttps://swampthingecology.org/AnalystHelper/\n\nLimnoPalettes\n\nhttps://swampthingecology.org/LimnoPalettes/\n\nNADA2\n\nhttps://swampthingecology.org/NADA2/\n\nLORECOVER\n\nhttps://swampthingecology.org/LORECOVER/\n\nCalSalMod\n\nhttps://swampthingecology.org/CalSalMod/"
+    "text": "As I migrate posts from 2021-2022, please find them here on the prior blog page\nhttps://swampthingecology.org/blog/"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "\nWelcome to the swamp\n",
+    "objectID": "news/2023-12-16-previous-posts.html#migrating-previous-posts",
+    "href": "news/2023-12-16-previous-posts.html#migrating-previous-posts",
+    "title": "Previous Blog Posts and Migration",
     "section": "",
-    "text": "Welcome to the swamp\n\n\nI am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying the transformation of nutrients and other compounds along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.\nA couple of words/phrases to describe me: Wetland Biogeochemist, Ecologist, Data-scientist, Soil-scientist, Naturalist, Swamp Walker, Lover of all things R.\nThis website will host some general information about myself, my research interests and publications.\n#rstats #python #geospatial #GIS #soil #ecology #climatechange #biogeochemistry #wetland #aquatic\n\n\n\n\nSelected Publications\n\nJulian et al (2024) Dark waters: Evaluating seagrass community response to optical water quality and freshwater discharges in a highly managed subtropical estuary. Regional Studies in Marine Science 69:103302.\nJulian et al (2023) Changes in the spatial distribution of total phosphorus in sediment and water column of a shallow subtropical lake. Lake and Reservoir Management 39:213–230.\nJulian et al (2022) Understanding the ups and downs, application of hydrologic restoration measures for a large Subtropical Lake. Lake and Reservoir Management 38:304–317.\nSmith MC, Julian P, DeAngelis D, Zhang B (2023) Ecological benefits of integrative weed management of Melaleuca quinquenervia in Big Cypress National Preserve. BioControl.\n\n\n\n\n\n\nR Packages\nEPGMr   LimnoPalettes  NADA2  AnalystHelper   LORECOVER  CalSalMod \n\n\n\n\n\n\n\n\nWords of inspiration\n\n“My temple is the swamp …When I would recreate myself, I seek the darkest wood, the thickest and most impenetrable and to the citizen, most dismal, swamp. I enter a swamp as a sacred place, a sanctum sanctorum… I seemed to have reached a new world, so wild a place …far away from human society. What’s the need of visiting far-off mountains and bogs, if a half-hour’s walk will carry me into such wildness and novelty.”\nHenry David Thoreau, Walden and Other Writings\n“Whatever you want to do in this world, it is achievable. The most important thing that I’ve found, that perhaps you could use, is be passionate and enthusiastic in the direction that you choose in life, and you’ll be a winner.”\nSteve Irwin, Crikey! What an Adventure\n“…One thing you quickly sense about the people here: they include more than average proportion of idealists and self-motivated seekers. But they’re all pretty down-to-earth. The work demands a lot of physical and mental effort. Slackers don’t make it this far.”\nCarl Safina, Eye of the Albatross\n“I remember a hundred lovely lakes, and recall the fragrant breath of pine and fir and cedar and poplar trees. The trail has strung upon it, as upon a thread of silk, opalescent dawns and saffron sunsets. It has given me blessed release from care and worry and the troubled thinking of our modern day. It has been a return to the primitive and the peaceful. Whenever the pressure of our complex city life thins my blood and benumbs my brain, I seek relief in the trail; and when I hear the coyote wailing to the yellow dawn, my cares fall from me - I am happy.”\nHamlin Garland “Hitting the Trail” - 1899\n\n\n\n\n\nStatement of Welcome\n\nAnyone who is motivated by their passion for science, who values diversity of perspective, and who believes that critical thinking and dialogue promote the wise stewardship of our planet is welcome at Swampthing Ecology. We value your unique experiences, respect your beliefs, and want to share scientific exploration with you. We expect anyone working with us to do the same.\nBased on welcome statement by Dr Havig MAD EGG Lab\n\nAuthorship Guidelines"
+    "text": "As I migrate posts from 2021-2022, please find them here on the prior blog page\nhttps://swampthingecology.org/blog/"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Previous Blog Posts and Migration\n\n\n\n\n\n\n\nblog\n\n\nmigration\n\n\n\n\n\n\n\n\n\n\n\nDec 16, 2023\n\n\nPaul Julian\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "Authorship.html",
@@ -63,24 +70,10 @@
     "text": "Cooke SJ, Donaldson MR, Clark TD (2014) Practical guidance for early career researchers dealing with tardy or unresponsive co-authors. Ideas in Ecology and Evolution. 1(7). Link.\nCooke SJ, Nguyen VM, Young N, et al (2021) Contemporary authorship guidelines fail to recognize diverse contributions in conservation science research. Ecological Solutions and Evidence 2:e12060. Link.\nSaltmarsh Habitat & Avian Research Program (2014) Guidelines for authorship. Saltmarsh Habitat & Avian Research Program. https://www.tidalmarshbirds.org/."
   },
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "Blog",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "\nWelcome to the swamp\n",
     "section": "",
-    "text": "Previous Blog Posts and Migration\n\n\n\n\n\n\n\nblog\n\n\nmigration\n\n\n\n\n\n\n\n\n\n\n\nDec 16, 2023\n\n\nPaul Julian\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "news/2023-12-16-previous-posts.html",
-    "href": "news/2023-12-16-previous-posts.html",
-    "title": "Previous Blog Posts and Migration",
-    "section": "",
-    "text": "As I migrate posts from 2021-2022, please find them here on the prior blog page\nhttps://swampthingecology.org/blog/"
-  },
-  {
-    "objectID": "news/2023-12-16-previous-posts.html#migrating-previous-posts",
-    "href": "news/2023-12-16-previous-posts.html#migrating-previous-posts",
-    "title": "Previous Blog Posts and Migration",
-    "section": "",
-    "text": "As I migrate posts from 2021-2022, please find them here on the prior blog page\nhttps://swampthingecology.org/blog/"
+    "text": "Welcome to the swamp\n\n\nI am an ecologist with a multi-disciplinary background focused on aquatic biogeochemistry and ecology on the landscape scale. Generally, I can be classified as an aquatic biogeochemist studying the transformation of nutrients and other compounds along the freshwater to marine aquatic continuum. I enjoy studying all aquatic ecosystems but wetlands hold a special place in my heart.\nA couple of words/phrases to describe me: Wetland Biogeochemist, Ecologist, Data-scientist, Soil-scientist, Naturalist, Swamp Walker, Lover of all things R.\nThis website will host some general information about myself, my research interests and publications.\n#rstats #python #geospatial #GIS #soil #ecology #climatechange #biogeochemistry #wetland #aquatic\n\n\n\n\nSelected Publications\n\nJulian et al (2024) Dark waters: Evaluating seagrass community response to optical water quality and freshwater discharges in a highly managed subtropical estuary. Regional Studies in Marine Science 69:103302.\nJulian et al (2023) Changes in the spatial distribution of total phosphorus in sediment and water column of a shallow subtropical lake. Lake and Reservoir Management 39:213–230.\nJulian et al (2022) Understanding the ups and downs, application of hydrologic restoration measures for a large Subtropical Lake. Lake and Reservoir Management 38:304–317.\nSmith MC, Julian P, DeAngelis D, Zhang B (2023) Ecological benefits of integrative weed management of Melaleuca quinquenervia in Big Cypress National Preserve. BioControl.\n\n\n\n\n\n\nR Packages\nEPGMr   LimnoPalettes  NADA2  AnalystHelper   LORECOVER  CalSalMod \n\n\n\n\n\n\n\n\nWords of inspiration\n\n“My temple is the swamp …When I would recreate myself, I seek the darkest wood, the thickest and most impenetrable and to the citizen, most dismal, swamp. I enter a swamp as a sacred place, a sanctum sanctorum… I seemed to have reached a new world, so wild a place …far away from human society. What’s the need of visiting far-off mountains and bogs, if a half-hour’s walk will carry me into such wildness and novelty.”\nHenry David Thoreau, Walden and Other Writings\n“Whatever you want to do in this world, it is achievable. The most important thing that I’ve found, that perhaps you could use, is be passionate and enthusiastic in the direction that you choose in life, and you’ll be a winner.”\nSteve Irwin, Crikey! What an Adventure\n“…One thing you quickly sense about the people here: they include more than average proportion of idealists and self-motivated seekers. But they’re all pretty down-to-earth. The work demands a lot of physical and mental effort. Slackers don’t make it this far.”\nCarl Safina, Eye of the Albatross\n“I remember a hundred lovely lakes, and recall the fragrant breath of pine and fir and cedar and poplar trees. The trail has strung upon it, as upon a thread of silk, opalescent dawns and saffron sunsets. It has given me blessed release from care and worry and the troubled thinking of our modern day. It has been a return to the primitive and the peaceful. Whenever the pressure of our complex city life thins my blood and benumbs my brain, I seek relief in the trail; and when I hear the coyote wailing to the yellow dawn, my cares fall from me - I am happy.”\nHamlin Garland “Hitting the Trail” - 1899\n\n\n\n\n\nStatement of Welcome\n\nAnyone who is motivated by their passion for science, who values diversity of perspective, and who believes that critical thinking and dialogue promote the wise stewardship of our planet is welcome at Swampthing Ecology. We value your unique experiences, respect your beliefs, and want to share scientific exploration with you. We expect anyone working with us to do the same.\nBased on welcome statement by Dr Havig MAD EGG Lab\n\nAuthorship Guidelines"
   }
 ]

@@ -9,8 +9,10 @@ README.html
 /.quarto/
 
 *_cache/
-# _site/
+/_site/
 
 /_oldWebpage/
 
 .DS_Store
+
+build_notes.txt

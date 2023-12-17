@@ -1,1 +1,1 @@
-Sitemap: SwampThingPaul.github.io/sitemap.xml
+Sitemap: https://swampthingecology.org/sitemap.xml
