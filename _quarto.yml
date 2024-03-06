@@ -5,7 +5,8 @@ project:
 website:
   title: "Paul Julian II, PhD"
   site-url: https://swampthingecology.org/
-  favicon: images/SWE_logo_small.png  
+  favicon: images/SWE_logo_small.png
+  google-analytics: "UA-131175448-1"
   
   page-footer: 
     right: "This page is built with ❤️ and [Quarto](https://quarto.org/)"
