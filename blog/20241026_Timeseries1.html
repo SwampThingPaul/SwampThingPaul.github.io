@@ -9,7 +9,7 @@
 <meta name="author" content="Paul Julian">
 <meta name="dcterms.date" content="2024-10-26">
 
-<title>Paul Julian II, PhD - Time series Analysis and Decomposition</title>
+<title>Paul Julian II, PhD - Time series Analysis (Part I), the basics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -196,7 +196,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Time series Analysis and Decomposition</h1>
+<h1 class="title">Time series Analysis (Part I), the basics</h1>
   <div class="quarto-categories">
     <div class="quarto-category">blog</div>
     <div class="quarto-category">time series</div>
@@ -459,7 +459,7 @@ Frequency = 1
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="20241026_TimeseriesDecomp_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="20241026_Timeseries1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Quick plots of example data</figcaption>
 </figure>
 </div>
@@ -500,7 +500,7 @@ sample estimates:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="20241026_TimeseriesDecomp_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="20241026_Timeseries1_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 <figcaption class="figure-caption">Quick plots of example data</figcaption>
 </figure>
 </div>
@@ -563,7 +563,7 @@ sample estimates:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="20241026_TimeseriesDecomp_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="528"></p>
+<p><img src="20241026_Timeseries1_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="528"></p>
 <figcaption class="figure-caption">Quick plots of aggregated data from dat1.</figcaption>
 </figure>
 </div>
@@ -658,7 +658,7 @@ tau
 <span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y<span class="sc">~</span>x,<span class="at">las=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="20241026_TimeseriesDecomp_files/figure-html/theilsen-1.png" class="img-fluid" width="480"></p>
+<p><img src="20241026_Timeseries1_files/figure-html/theilsen-1.png" class="img-fluid" width="480"></p>
 </div>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>zyp.sen <span class="ot">&lt;-</span>  <span class="fu">zyp.sen</span>(y<span class="sc">~</span>x); <span class="co"># zyp package</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>mblm.sen <span class="ot">&lt;-</span>  <span class="fu">mblm</span>(y<span class="sc">~</span>x,<span class="at">repeated =</span> F); <span class="co"># mblm package</span></span>
