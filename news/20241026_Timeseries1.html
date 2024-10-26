@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Paul Julian">
+<meta name="dcterms.date" content="2024-10-26">
+
+<title>Paul Julian II, PhD - Time series Analysis (Part I), the basics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/SWE_logo_small.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-131175448-1', 'auto');
+
+ga('send', {
+  hitType: 'pageview',
+  'anonymizeIp': true,
+});
+</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/SWE_logo_small.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Paul Julian II, PhD</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/SwampThingPaul" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/paul-julian/" rel="" target=""><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:pauljulianphd@gmail.com" rel="" target=""><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#time-series-data" id="toc-time-series-data" class="nav-link active" data-scroll-target="#time-series-data">Time series data</a>
+  <ul class="collapse">
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
+  <li><a href="#formatting" id="toc-formatting" class="nav-link" data-scroll-target="#formatting">Formatting</a></li>
+  </ul></li>
+  <li><a href="#analyses" id="toc-analyses" class="nav-link" data-scroll-target="#analyses">Analyses</a>
+  <ul class="collapse">
+  <li><a href="#synthetic-data" id="toc-synthetic-data" class="nav-link" data-scroll-target="#synthetic-data">Synthetic Data</a></li>
+  <li><a href="#basic-trend-analysis" id="toc-basic-trend-analysis" class="nav-link" data-scroll-target="#basic-trend-analysis">Basic Trend Analysis</a></li>
+  </ul></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">Whats next?</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Time series Analysis (Part I), the basics</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">blog</div>
+    <div class="quarto-category">time series</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Paul Julian </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 26, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This blog post effectively breaks my blog writing dry streak. The last offical blog post (not stats related) was on my old blog platform (<a href="https://swampthingecology.org/blog/" target="_blank">link</a>) 1170 days ago! This post was motivated by a recent LinkedIn post by <a href="https://www.linkedin.com/in/joachim-schork/" target="_blank">Joachim Schork</a> about breaking down time series (see below and <a href="https://www.linkedin.com/posts/joachim-schork_timeseries-statistics-datascience-activity-7255183785372086273-fezZ" target="_blank">here</a>) and the comments from the larger community. Its also motivated by a recent spur of time series decomposition analyses I’ve seen of late during meetings and discussions with colleagues.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assests/20241026_TimeseriesDecomp/JoachimSchork_LinkedInPost.JPG" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="time-series-data" class="level1">
+<h1>Time series data</h1>
+<section id="definition" class="level2">
+<h2 class="anchored" data-anchor-id="definition">Definition</h2>
+<p>First, what is time series data? If you look in the dictionary it will say something along the lines of a series if values/measurements/observations obtained at successive times, often (but not always) with equal intervals between them. Simply put its data collected over time. In my corner of science that could mean daily water levels, weekly total phosphorus concentrations, annual seagrass coverage, etc. Once collected these data can analyzed in a variety of ways depending on the motivation of why and where its being collected. Again, in my realm of the science, something we are interested in is the change in conditions overtime for a variety of reasons including (but not limited to) climate change, landscape scale changes (i.e.&nbsp;land-use alterations, dam removal, stream diversion, etc.), restoration activities, forecast modeling, etc. In this case, a time series analysis is needed to see how things are changing overtime.</p>
+</section>
+<section id="formatting" class="level2">
+<h2 class="anchored" data-anchor-id="formatting">Formatting</h2>
+<p>When handling time series data in <code>R</code> you can either handle the data as a <code>data.frame</code> (or <code>tibble</code> if you are a tidyverse person … I personally am not, no judgement) or a <code>ts</code> object.</p>
+<p>Generate some example value</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5</span>)<span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><strong><code>data.frame</code></strong></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><strong><code>ts</code></strong></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">Yr =</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2016</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">value =</span> values</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>           )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Yr value
+1 2012  0.29
+2 2013  0.79
+3 2014  0.41
+4 2015  0.88
+5 2016  0.94</code></pre>
+</div>
+</div>
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts</span>(values, <span class="at">start =</span> <span class="dv">2012</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time Series:
+Start = 2012 
+End = 2016 
+Frequency = 1 
+[1] 0.29 0.79 0.41 0.88 0.94</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p>There are pros and cons of formatting the data either way. Most time series analysis functions can handle both in someway but most like it to be a <code>ts</code> object. The way the <code>ts</code> function works is it essentially converts the data into a special data matrix and added a header with some information. Depending on the information you include in the <code>ts</code> function it makes some assumptions, for instance with <code>frequency = 12</code> it assumes its monthly data or <code>frequency = 365</code> assumes daily.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">24</span>)<span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)<span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts</span>(<span class="at">frequency =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec
+1 -1.69  1.24 -0.11 -0.12  0.18  1.28 -1.73  1.69  0.50  2.53  0.55  0.24
+2 -1.05  1.29  0.83 -0.06 -0.78 -0.73 -0.22 -0.33 -1.09 -0.09  1.07 -0.15</code></pre>
+</div>
+</div>
+<p>See <code>?ts</code> for more details on specifics. A very big drawback when using <code>ts</code> is if you are working with daily data with a leap year or years with leap years mixed in <code>ts</code> doesn’t know how to handle that extra day since the input is a vector or string of data. There might be a way to coerce it but I’ve yet to figure it out. Which is why I prefer to work in the <code>data.frame</code> world whenever possible.</p>
+</section>
+</section>
+<section id="analyses" class="level1">
+<h1>Analyses</h1>
+<p>Most time series data exhibit some pattern, think about rainfall, climate cycle (ENSO), greenness of leaves, how many miles you drive/walk, etc. Analytically, these patterns can be split into components that make up the overall time series. Usually when talking about time series data terms like “trend” and “seasonality” come up. Obviously these terms have very specific meanings.</p>
+<p>Generally “trend” is defined as some change in the data over time. The most basic statistical analysis for time series data is the Kendall trend test. This test evaluates a time series to determine if the data is monotonically changing (increasing up or down) overtime based on the Kendall 𝜏 coefficient. Statistical significance and the rate of change are also things to evaluate. More on that later. While the Kendall test is looking at monotonic linear trends, not all trends have to be “linear”. I have another blog post planned (I hope) for that, stay tuned!</p>
+<p>Seasonal or seasonality is another important component for most time series analyses but not all. For instance if you have annual or decadal data, you won’t we looking at seasonality as those time steps aggregate across those periods. Seasonality is assumed to be fixed and at a known frequency.</p>
+<p>Another term or component is cyclic or random. This is when the data show some fluctuations that don’t occur at a fixed frequency but occurs throughout the data set.</p>
+<section id="synthetic-data" class="level2">
+<h2 class="anchored" data-anchor-id="synthetic-data">Synthetic Data</h2>
+<p>As an example this post rather than grabbing some random dataset as an example I wanted to use something that we have some know on before digging into the specifics. This includes some of the components discussed above. To achieve this I put together some basic functions to simulate some data. The first function <code>simulate_timeseries</code> is relatively basic and <code>simulate_timeseries_vol</code> is a little more complex that includes some volatility and randomness factors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>simulate_timeseries <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1000</span>,            <span class="co"># Number of observations</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">trend_slope =</span> <span class="fl">0.01</span>,    <span class="co"># Slope of linear trend</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">seasonal_amp =</span> <span class="dv">2</span>,      <span class="co"># Amplitude of seasonal component</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">seasonal_period =</span> <span class="dv">12</span>,  <span class="co"># Period length</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">noise_mean =</span> <span class="dv">1</span>,        <span class="co"># mean of noise</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">noise_sd =</span> <span class="fl">0.5</span>) {      <span class="co"># Standard deviation of noise</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate time points</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create components</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Linear trend</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> trend_slope <span class="sc">*</span> t</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Seasonal component using sine wave</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  seasonal <span class="ot">&lt;-</span> seasonal_amp <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> seasonal_period)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Random noise (stationary component)</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> noise_mean, <span class="at">sd =</span> noise_sd)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine components</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> trend <span class="sc">+</span> seasonal <span class="sc">+</span> noise</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to time series object</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  ts_result <span class="ot">&lt;-</span> <span class="fu">ts</span>(ts_data, <span class="at">frequency =</span> seasonal_period)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return both the time series and its components for analysis</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">timeseries =</span> <span class="fu">data.frame</span>(<span class="at">time =</span> t, <span class="at">value =</span> <span class="fu">as.numeric</span>(ts_result)),</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">components =</span> <span class="fu">list</span>(</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">trend =</span> trend,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">seasonal =</span> seasonal,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>simulate_timeseries_vol <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1000</span>,              <span class="co"># Number of observations</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">trend_slope =</span> <span class="fl">0.01</span>,    <span class="co"># Slope of linear trend</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seasonal_amp =</span> <span class="dv">2</span>,      <span class="co"># seasonal component</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seasonal_period =</span> <span class="dv">12</span>,  <span class="co"># Period length</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">init_vol =</span> <span class="fl">0.5</span>,        <span class="co"># Initial volatility</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">vol_persistence =</span> <span class="fl">0.95</span>,<span class="co"># Persistence in volatility</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">rw_sd =</span> <span class="fl">0.1</span>) {         <span class="co"># Random walk innovation SD</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate time points</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Create non-linear trend (combining linear trend with random walk)</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  linear_trend <span class="ot">&lt;-</span> trend_slope <span class="sc">*</span> t</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  random_walk <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n, <span class="dv">0</span>, rw_sd))</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> linear_trend <span class="sc">+</span> random_walk</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Create time-varying seasonal component</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Amplitude changes over time following a random walk</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  varying_amplitude <span class="ot">&lt;-</span> seasonal_amp <span class="sc">+</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n, <span class="dv">0</span>, rw_sd<span class="sc">/</span><span class="dv">5</span>))</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  seasonal <span class="ot">&lt;-</span> varying_amplitude <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> seasonal_period)</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Generate time-varying volatility (GARCH-like process)</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize volatility vector</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  volatility <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  volatility[<span class="dv">1</span>] <span class="ot">&lt;-</span> init_vol</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate volatility process</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Volatility follows AR(1) process with innovations</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    volatility[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fl">0.01</span> <span class="sc">+</span> </span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>                            vol_persistence <span class="sc">*</span> volatility[i<span class="dv">-1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> </span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>                            (<span class="dv">1</span> <span class="sc">-</span> vol_persistence) <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. Generate heteroskedastic noise</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">*</span> volatility</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Add structural breaks</span></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add random level shifts</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  n_breaks <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">1</span>, <span class="fu">round</span>(n<span class="sc">/</span><span class="dv">200</span>))  <span class="co"># Approximately one break every 200 observations</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>  break_points <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">2</span><span class="sc">:</span>n, n_breaks))</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>  level_shifts <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n_breaks, <span class="dv">0</span>, <span class="dv">2</span>))  <span class="co"># Random shift magnitudes</span></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  breaks <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  current_break <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(current_break <span class="sc">&lt;=</span> <span class="fu">length</span>(break_points) <span class="sc">&amp;&amp;</span> i <span class="sc">&gt;=</span> break_points[current_break]) {</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>      breaks[i<span class="sc">:</span>n] <span class="ot">&lt;-</span> level_shifts[current_break]</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>      current_break <span class="ot">&lt;-</span> current_break <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine all components</span></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> trend <span class="sc">+</span> seasonal <span class="sc">+</span> noise <span class="sc">+</span> breaks</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to time series object</span></span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>  ts_result <span class="ot">&lt;-</span> <span class="fu">ts</span>(ts_data, <span class="at">frequency =</span> seasonal_period)</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return both the time series and its components</span></span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">timeseries =</span> <span class="fu">data.frame</span>(<span class="at">time =</span> t, <span class="at">value =</span> <span class="fu">as.numeric</span>(ts_result)),</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">components =</span> <span class="fu">list</span>(</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>      <span class="at">trend =</span> trend,</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>      <span class="at">seasonal =</span> seasonal,</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise,</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> breaks,</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>      <span class="at">volatility =</span> volatility</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here are some example simulated datasets. Lets assume this data is monthly for a 15 year period of record.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 15 years of monthly data</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.025</span>,   <span class="co"># Upward trend</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">3</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="do">## add some years and months</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>dat1<span class="sc">$</span>timeseries  <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(dat1<span class="sc">$</span>timeseries,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">expand.grid</span>(<span class="at">Mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">Yr =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">2004</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries_vol</span>(</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 4 years of daily data</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.05</span>,   <span class="co"># Upward trend</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Base seasonal amplitude</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">10</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_vol =</span> <span class="fl">0.5</span>,      <span class="co"># Initial volatility</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">vol_persistence =</span> <span class="fl">0.65</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">rw_sd =</span> <span class="fl">0.3</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="do">## add some years and months</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>dat2<span class="sc">$</span>timeseries  <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(dat2<span class="sc">$</span>timeseries,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">expand.grid</span>(<span class="at">Mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">Yr =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">2004</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>dat3 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 15 years of monthly data</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.001</span>,  <span class="co"># no trend</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">3</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>dat4 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 15 years of monthly data</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="sc">-</span><span class="fl">0.05</span>,  <span class="co"># downward trend</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">15</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is a quick plot of the data …</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241026_Timeseries1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Quick plots of example data</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="basic-trend-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="basic-trend-analysis">Basic Trend Analysis</h2>
+<p>A simple trend test would look like this … For simplicity sake we are going to use <code>time</code> as its numeric but hypothetically decimal date (see <code>lubridate::decimal_date</code> package for more info) is also an option.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(dat1<span class="sc">$</span>timeseries<span class="sc">$</span>time,dat1<span class="sc">$</span>timeseries<span class="sc">$</span>value,<span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  dat1$timeseries$time and dat1$timeseries$value
+z = 8.7492, p-value &lt; 2.2e-16
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+     tau 
+0.438982 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(dat2<span class="sc">$</span>timeseries<span class="sc">$</span>time,dat2<span class="sc">$</span>timeseries<span class="sc">$</span>value,<span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  dat2$timeseries$time and dat2$timeseries$value
+z = 11.996, p-value &lt; 2.2e-16
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+      tau 
+0.6018622 </code></pre>
+</div>
+</div>
+<p>Based on the plots you would have guessed that the datasets had an increasing trend. But here is what no-trend (<code>dat3</code>) and negative trend (<code>dat4</code>) looks like.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241026_Timeseries1_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Quick plots of example data</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(dat3<span class="sc">$</span>timeseries<span class="sc">$</span>time,dat3<span class="sc">$</span>timeseries<span class="sc">$</span>value,<span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  dat3$timeseries$time and dat3$timeseries$value
+z = -0.24248, p-value = 0.8084
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+        tau 
+-0.01216636 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(dat4<span class="sc">$</span>timeseries<span class="sc">$</span>time,dat4<span class="sc">$</span>timeseries<span class="sc">$</span>value,<span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  dat4$timeseries$time and dat4$timeseries$value
+z = -13.708, p-value &lt; 2.2e-16
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+       tau 
+-0.6877716 </code></pre>
+</div>
+</div>
+<p>Sometimes we are more interested in long term trends … be careful when using “long” and “short” these are usually very context specific and care should be taken to delineate/define as much as possible. For sake of brevity lets look at an annual trend analysis.</p>
+<p>First, the data needs to be aggregated:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dat1_yr <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(value<span class="sc">~</span>Yr,dat1<span class="sc">$</span>timeseries,mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can also look at the annual variability or standard deviation using <code>aggregate</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(value<span class="sc">~</span>Yr,dat1<span class="sc">$</span>timeseries,sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Yr    value
+1  1990 1.631108
+2  1991 1.674150
+3  1992 1.277267
+4  1993 1.359000
+5  1994 1.481055
+6  1995 1.197387
+7  1996 1.442100
+8  1997 1.458378
+9  1998 1.646581
+10 1999 1.457668
+11 2000 1.455360
+12 2001 1.447669
+13 2002 1.428132
+14 2003 1.460503
+15 2004 1.533227</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241026_Timeseries1_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="528"></p>
+<figcaption class="figure-caption">Quick plots of aggregated data from dat1.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Or do something more elaborate to calculate all sorts of statistics. My preference (again not tidyverse) is functionality in the <code>plyr</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ddply</span>(dat1<span class="sc">$</span>timeseries,<span class="fu">c</span>(<span class="st">"Yr"</span>),summarise,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean.val =</span> <span class="fu">mean</span>(value),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd.val =</span> <span class="fu">sd</span>(value),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">var.val =</span> <span class="fu">var</span>(value),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">N.val =</span> <span class="fu">length</span>(value), <span class="co">#or AnalystHelper::N.obs(value)</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">SE =</span> AnalystHelper<span class="sc">::</span><span class="fu">SE</span>(value),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">med.val =</span> <span class="fu">median</span>(value),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min.val =</span> <span class="fu">min</span>(value),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">max.val =</span> <span class="fu">max</span>(value))<span class="sc">|&gt;</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)<span class="co"># added to consolidate the table down</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Yr mean.val sd.val var.val N.val   SE med.val min.val max.val
+1  1990     3.26   1.63    2.66    12 0.47    3.61    0.84    5.85
+2  1991     3.36   1.67    2.80    12 0.48    3.03    0.99    6.03
+3  1992     3.85   1.28    1.63    12 0.37    4.20    1.92    6.09
+4  1993     4.02   1.36    1.85    12 0.39    3.96    1.86    5.82
+5  1994     4.48   1.48    2.19    12 0.43    4.82    1.65    6.40
+6  1995     4.60   1.20    1.43    12 0.35    4.42    2.99    6.41
+7  1996     4.96   1.44    2.08    12 0.42    4.88    3.03    7.14
+8  1997     5.44   1.46    2.13    12 0.42    5.46    3.30    7.72
+9  1998     5.48   1.65    2.71    12 0.48    5.27    3.15    7.95
+10 1999     5.75   1.46    2.12    12 0.42    5.66    3.90    7.94
+11 2000     6.20   1.46    2.12    12 0.42    6.26    3.74    8.05
+12 2001     6.29   1.45    2.10    12 0.42    6.56    4.05    8.70
+13 2002     6.70   1.43    2.04    12 0.41    6.46    4.61    8.78
+14 2003     7.18   1.46    2.13    12 0.42    6.97    4.92    9.46
+15 2004     7.42   1.53    2.35    12 0.44    7.79    5.12    9.17</code></pre>
+</div>
+</div>
+<p>Once the data is aggregated we can use the simple Kendall test to look at the overall annual trend in the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(dat1_yr<span class="sc">$</span>Yr,dat1_yr<span class="sc">$</span>value,<span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  dat1_yr$Yr and dat1_yr$value
+T = 105, p-value = 1.529e-12
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+tau 
+  1 </code></pre>
+</div>
+</div>
+<p>Looks like a perfect increasing trend! The Kendall 𝜏 is a type of correlation coefficient so the values should range between -1 and 1. Based on the 𝜌-value, (assuming an 𝛼-value of 0.05) this is a statistically significant trend. (Lets not get into the 𝜌-value discussion!)</p>
+<p>We can also look at the rate of change. The most common is the Theil-Sen slope estimator. There are several different packages out there that can estimate Theil-Sen slope but the most basic one that I’ve come across is the median based linear model or <code>mblm</code> package. We can discuss the basics of Theil-Sen and mblm in a later post but after some digging and search what I’ve determined is that Theil-Sen method and median-based linear model are closely related. Generally, the Theil-Sen method is a non-parametric method that calculates the median of slopes of all lines through the data and the intercept is often the median of the residuals after fitting the slope. Meanwhile, the median-based linear model is a regression model that uses medians as a criterion for fitting a model and minimizes the sum of absolute residuals. In most cases, the Theil-Sen slope and the slope determined by the median-based linear model are the same with minuscule differences. Most trend routines use median-based linear models or quantile regressions as a basis to perform Theil-Sen estimation.</p>
+<p>If you run the side-by-side of <code>mblm</code>, <code>zyp</code> and a separate Theil-Sen estimator pulled from the litature (found <a href="https://library.virginia.edu/data/articles/theil-sen-regression-programming-and-understanding-an-outlier-resistant-alternative-to-least-squares" target="_#blank">here</a>) you’ll undoubtly come to similar, if not the same values. Don’t believe me lets give it a try.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(zyp)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mblm)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># From University of Virigina function (from literature)</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>theil_sen <span class="ot">&lt;-</span> <span class="cf">function</span>(x,y){</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  max_n_slopes <span class="ot">&lt;-</span> (n <span class="sc">*</span> (n <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  slopes <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">'list'</span>, <span class="at">length =</span> max_n_slopes) <span class="co"># list of NULL elements</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  add_at <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate point-to-point slopes if x_i != x_j</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    slopes_i <span class="ot">&lt;-</span> <span class="fu">lapply</span>((i <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n, <span class="cf">function</span>(j) </span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (x[j] <span class="sc">!=</span> x[i]) { (y[j] <span class="sc">-</span> y[i]) <span class="sc">/</span> (x[j] <span class="sc">-</span> x[i]) })</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    slopes[add_at<span class="sc">:</span>(add_at <span class="sc">+</span> <span class="fu">length</span>(slopes_i) <span class="sc">-</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> slopes_i</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    add_at <span class="ot">&lt;-</span> add_at <span class="sc">+</span> <span class="fu">length</span>(slopes_i)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate Theil-Sen slope</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  slopes <span class="ot">&lt;-</span> <span class="fu">unlist</span>(slopes) <span class="co"># drop NULL elements</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  theil_sen_slope <span class="ot">&lt;-</span> <span class="fu">median</span>(slopes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate Theil-Sen intercept</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  intercepts <span class="ot">&lt;-</span> y <span class="sc">-</span> (theil_sen_slope <span class="sc">*</span> x)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  theil_sen_intercept <span class="ot">&lt;-</span> <span class="fu">median</span>(intercepts, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">'Theil-Sen intercept'</span> <span class="ot">=</span> theil_sen_intercept, </span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Theil-Sen slope'</span> <span class="ot">=</span> theil_sen_slope)</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate linear data</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Add some outliers</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>y[<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">70</span>, <span class="dv">90</span>)] <span class="ot">&lt;-</span> y[<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">70</span>, <span class="dv">90</span>)] <span class="sc">+</span> <span class="dv">50</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y<span class="sc">~</span>x,<span class="at">las=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="20241026_Timeseries1_files/figure-html/theilsen-1.png" class="img-fluid" width="480"></p>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>zyp.sen <span class="ot">&lt;-</span>  <span class="fu">zyp.sen</span>(y<span class="sc">~</span>x); <span class="co"># zyp package</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>mblm.sen <span class="ot">&lt;-</span>  <span class="fu">mblm</span>(y<span class="sc">~</span>x,<span class="at">repeated =</span> F); <span class="co"># mblm package</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>UV.sen <span class="ot">&lt;-</span>  <span class="fu">theil_sen</span>(x,y); <span class="co"># University of Virigina function (from literature)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  Pack intercept   Slope
+1  zyp   0.40106 2.01976
+2 mblm   0.40106 2.01976
+3   UV   0.40106 2.01976</code></pre>
+</div>
+</div>
+<p>There you have it, all three methods produce the same estimates.</p>
+<p>Back to our aggregated dataset, the code is pretty straight forward but there are a couple of things to be aware. Currently, the <code>mblm</code> function can’t handle datasets with <code>NAs</code>, so you might have to clean up the data a little (i.e.&nbsp;<code>na.omit()</code> can be your friend). Also double check that both variables are numeric.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mblm)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>dat1.theilsen <span class="ot">&lt;-</span> <span class="fu">mblm</span>(value<span class="sc">~</span>Yr,dat1_yr,<span class="at">repeated=</span>F)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>dat1.theilsen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+mblm(formula = value ~ Yr, dataframe = dat1_yr, repeated = F)
+
+Coefficients:
+(Intercept)           Yr  
+  -587.9833       0.2971  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extrapolate example</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(dat1.theilsen,<span class="fu">data.frame</span>(<span class="at">Yr=</span><span class="dv">2005</span><span class="sc">:</span><span class="dv">2014</span>),<span class="at">interval =</span><span class="st">"confidence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         fit       lwr       upr
+1   7.629230  7.500516  7.757944
+2   7.926294  7.784963  8.067624
+3   8.223357  8.069143  8.377572
+4   8.520421  8.353116  8.687725
+5   8.817484  8.636929  8.998040
+6   9.114548  8.920614  9.308482
+7   9.411611  9.204195  9.619028
+8   9.708675  9.487692  9.929658
+9  10.005739  9.771119 10.240358
+10 10.302802 10.054488 10.551116</code></pre>
+</div>
+</div>
+<p>The Theil-Sen estimator for the annually aggregated data is 0.297 units per year. This is the rate of annual change. If this was something like sea-level rise, rainfall rate, population growth, etc. you can do a very basic analysis and ask at this rate what would the values be in 10 years (extrapolating … 10.3 units) or in the case of sea-level rise whats the rise per decade (2.97 units per decade)?</p>
+</section>
+</section>
+<section id="whats-next" class="level1">
+<h1>Whats next?</h1>
+<p>To avoid making this blog post a novel, I’m going to cut this post short. We went over the basics of time series, what they are/how they are defined, what it looks like in the <code>R</code> environment, generating some synthetic time series for examples and a quick overall trend test. This post kicks off a series of posts that will delve into other aspects of time series analyses such as trend analysis data requirements, seasonal trend analyses, stationary, periodicity, time series decomposition and an alternative to time series decomposition.</p>
+<!-- Recommended Resource: https://otexts.com/fpp2/ -->
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Session Info
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>- Session info ---------------------------------------------------------------
+ setting  value
+ version  R version 4.1.0 (2021-05-18)
+ os       Windows 10 x64 (build 19045)
+ system   x86_64, mingw32
+ ui       RTerm
+ language (EN)
+ collate  English_United States.1252
+ ctype    English_United States.1252
+ tz       America/New_York
+ date     2024-10-26
+ pandoc   2.19.2
+ quarto   1.3.450
+
+- Packages -------------------------------------------------------------------
+ package       * version date (UTC) lib source
+ AnalystHelper * 0.1.5   2024-09-25 []  local
+ Kendall       * 2.2.1   2022-03-20 []  CRAN (R 4.1.3)
+ mblm          * 0.12.1  2019-01-26 []  CRAN (R 4.1.1)
+ plyr          * 1.8.8   2022-11-11 []  CRAN (R 4.1.3)
+ sessioninfo   * 1.2.2   2021-12-06 []  CRAN (R 4.1.3)
+ zyp           * 0.11    2023-01-26 []  CRAN (R 4.1.3)
+
+
+------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">© CC-By Paul Julian II</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>
