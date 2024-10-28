@@ -241,11 +241,11 @@ ga('send', {
 <h1>Time series data</h1>
 <section id="definition" class="level2">
 <h2 class="anchored" data-anchor-id="definition">Definition</h2>
-<p>First, what is time series data? If you look in the dictionary it will say something along the lines of a series if values/measurements/observations obtained at successive times, often (but not always) with equal intervals between them. Simply put its data collected over time. In my corner of science that could mean daily water levels, weekly total phosphorus concentrations, annual seagrass coverage, etc. Once collected these data can analyzed in a variety of ways depending on the motivation of why and where its being collected. Again, in my realm of the science, something we are interested in is the change in conditions overtime for a variety of reasons including (but not limited to) climate change, landscape scale changes (i.e.&nbsp;land-use alterations, dam removal, stream diversion, etc.), restoration activities, forecast modeling, etc. In this case, a time series analysis is needed to see how things are changing overtime.</p>
+<p>First, what is time series data? If you look in the dictionary it will say something along the lines of a series of values/measurements/observations obtained at successive times, often (but not always) with equal intervals between them. Simply put its data collected over time. In my corner of science that could mean daily water levels, weekly total phosphorus concentrations, annual seagrass coverage, etc. Once collected these data can analyzed in a variety of ways depending on the motivation of why and where its being collected. Again, in my realm of the science, something we are interested in is the change in conditions overtime for a variety of reasons including (but not limited to) climate change, landscape scale changes (i.e.&nbsp;land-use alterations, dam removal, stream diversion, etc.), restoration activities, forecast modeling, etc. In this case, a time series analysis is needed to see how things are changing overtime.</p>
 </section>
 <section id="formatting" class="level2">
 <h2 class="anchored" data-anchor-id="formatting">Formatting</h2>
-<p>When handling time series data in <code>R</code> you can either handle the data as a <code>data.frame</code> (or <code>tibble</code> if you are a tidyverse person … I personally am not, no judgement) or a <code>ts</code> object.</p>
+<p>When handling time series data in <code>R</code> you can either handle the data as a <code>data.frame</code> (or <code>tibble</code> if you are a <a href="https://www.tidyverse.org/" target="_blank">tidyverse</a> person … I personally am not, no judgement) or a <code>ts</code> object.</p>
 <p>Generate some example value</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
@@ -287,7 +287,7 @@ Frequency = 1
 </div>
 </div>
 </div>
-<p>There are pros and cons of formatting the data either way. Most time series analysis functions can handle both in someway but most like it to be a <code>ts</code> object. The way the <code>ts</code> function works is it essentially converts the data into a special data matrix and added a header with some information. Depending on the information you include in the <code>ts</code> function it makes some assumptions, for instance with <code>frequency = 12</code> it assumes its monthly data or <code>frequency = 365</code> assumes daily.</p>
+<p>There are pros and cons of formatting the data either way. Most time series analysis functions can handle both in someway but most like it to be a <code>ts</code> object. The way the <code>ts</code> function works is it essentially converts the data into a special kind of data matrix (in <code>R</code> its called class or object) with an added header containing some information about the time series (like the example above). Depending on the information you include in the <code>ts</code> function it makes some assumptions, for instance with <code>frequency = 12</code> it assumes its monthly data or <code>frequency = 365</code> assumes daily.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">24</span>)<span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">2</span>)<span class="sc">|&gt;</span></span>
@@ -298,118 +298,123 @@ Frequency = 1
 2 -1.05  1.29  0.83 -0.06 -0.78 -0.73 -0.22 -0.33 -1.09 -0.09  1.07 -0.15</code></pre>
 </div>
 </div>
-<p>See <code>?ts</code> for more details on specifics. A very big drawback when using <code>ts</code> is if you are working with daily data with a leap year or years with leap years mixed in <code>ts</code> doesn’t know how to handle that extra day since the input is a vector or string of data. There might be a way to coerce it but I’ve yet to figure it out. Which is why I prefer to work in the <code>data.frame</code> world whenever possible.</p>
+<p>See <code>?ts</code> for more details on specifics. A very big drawback when using <code>ts</code> is if you are working with daily data with a leap year or years with leap years mixed in <code>ts</code> doesn’t know how to handle that extra day since the input is a vector or list of data. There might be a way to coerce it but I’ve yet to figure it out. Which is why I prefer to work in the <code>data.frame</code> world whenever possible.</p>
 </section>
 </section>
 <section id="analyses" class="level1">
 <h1>Analyses</h1>
-<p>Most time series data exhibit some pattern, think about rainfall, climate cycle (ENSO), greenness of leaves, how many miles you drive/walk, etc. Analytically, these patterns can be split into components that make up the overall time series. Usually when talking about time series data terms like “trend” and “seasonality” come up. Obviously these terms have very specific meanings.</p>
-<p>Generally “trend” is defined as some change in the data over time. The most basic statistical analysis for time series data is the Kendall trend test. This test evaluates a time series to determine if the data is monotonically changing (increasing up or down) overtime based on the Kendall 𝜏 coefficient. Statistical significance and the rate of change are also things to evaluate. More on that later. While the Kendall test is looking at monotonic linear trends, not all trends have to be “linear”. I have another blog post planned (I hope) for that, stay tuned!</p>
-<p>Seasonal or seasonality is another important component for most time series analyses but not all. For instance if you have annual or decadal data, you won’t we looking at seasonality as those time steps aggregate across those periods. Seasonality is assumed to be fixed and at a known frequency.</p>
+<p>Most time series data exhibit some pattern, think about rainfall, climate cycle (ENSO), greenness of leaves, how many miles you drive/walk per unit time (i.e.&nbsp;week, month, etc.), etc. Analytically, these patterns can be split into components that make up the overall time series. Usually when talking about time series data terms like “trend” and “seasonality” come up. Obviously these terms have very specific meanings.</p>
+<p>Generally “trend” is defined as some change in the data over time. The most basic statistical analysis for time series data is the Kendall trend test. This test evaluates a time series to determine if the data is monotonically changing (increasing up or down) overtime based on the Kendall-𝜏 coefficient. Statistical significance and the rate of change are also things to evaluate. More on that later. While the Kendall test is looking at monotonic linear trends, not all trends have to be “linear”. I have another blog post planned (I hope) for that, stay tuned!</p>
+<p>Seasonal or seasonality is another important component for most time series analyses but not all. For instance if you have annual or decadal data, you won’t be looking at seasonality as those time steps aggregate across those periods. Seasonality, as in when the seasons occur is assumed to be fixed and at a known frequency (i.e.&nbsp;spring, summer, etc.).</p>
 <p>Another term or component is cyclic or random. This is when the data show some fluctuations that don’t occur at a fixed frequency but occurs throughout the data set.</p>
 <section id="synthetic-data" class="level2">
 <h2 class="anchored" data-anchor-id="synthetic-data">Synthetic Data</h2>
-<p>As an example this post rather than grabbing some random dataset as an example I wanted to use something that we have some know on before digging into the specifics. This includes some of the components discussed above. To achieve this I put together some basic functions to simulate some data. The first function <code>simulate_timeseries</code> is relatively basic and <code>simulate_timeseries_vol</code> is a little more complex that includes some volatility and randomness factors.</p>
+<p>As an example this post (and the following series) rather than grabbing some random datasets as an example I wanted to use something that we have some knowledge on before digging into the specifics. This includes some of the components discussed above. To achieve this I put together some basic functions to simulate some data. The first function <code>simulate_timeseries</code> is relatively basic and <code>simulate_timeseries_vol</code> is a little more complex that includes some volatility and randomness factors.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>simulate_timeseries <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1000</span>,            <span class="co"># Number of observations</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">trend_slope =</span> <span class="fl">0.01</span>,    <span class="co"># Slope of linear trend</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">seasonal_amp =</span> <span class="dv">2</span>,      <span class="co"># Amplitude of seasonal component</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">seasonal_period =</span> <span class="dv">12</span>,  <span class="co"># Period length</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">noise_mean =</span> <span class="dv">1</span>,        <span class="co"># mean of noise</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">noise_sd =</span> <span class="fl">0.5</span>) {      <span class="co"># Standard deviation of noise</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate time points</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create components</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Linear trend</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> trend_slope <span class="sc">*</span> t</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Seasonal component using sine wave</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  seasonal <span class="ot">&lt;-</span> seasonal_amp <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> seasonal_period)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Random noise (stationary component)</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> noise_mean, <span class="at">sd =</span> noise_sd)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine components</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> trend <span class="sc">+</span> seasonal <span class="sc">+</span> noise</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to time series object</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  ts_result <span class="ot">&lt;-</span> <span class="fu">ts</span>(ts_data, <span class="at">frequency =</span> seasonal_period)</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return both the time series and its components for analysis</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">timeseries =</span> <span class="fu">data.frame</span>(<span class="at">time =</span> t, <span class="at">value =</span> <span class="fu">as.numeric</span>(ts_result)),</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">components =</span> <span class="fu">list</span>(</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">trend =</span> trend,</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">seasonal =</span> seasonal,</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>simulate_timeseries_vol <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1000</span>,              <span class="co"># Number of observations</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">trend_slope =</span> <span class="fl">0.01</span>,    <span class="co"># Slope of linear trend</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seasonal_amp =</span> <span class="dv">2</span>,      <span class="co"># seasonal component</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seasonal_period =</span> <span class="dv">12</span>,  <span class="co"># Period length</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">init_vol =</span> <span class="fl">0.5</span>,        <span class="co"># Initial volatility</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">vol_persistence =</span> <span class="fl">0.95</span>,<span class="co"># Persistence in volatility</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">rw_sd =</span> <span class="fl">0.1</span>) {         <span class="co"># Random walk innovation SD</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate time points</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Create non-linear trend (combining linear trend with random walk)</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  linear_trend <span class="ot">&lt;-</span> trend_slope <span class="sc">*</span> t</span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  random_walk <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n, <span class="dv">0</span>, rw_sd))</span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> linear_trend <span class="sc">+</span> random_walk</span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Create time-varying seasonal component</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Amplitude changes over time following a random walk</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  varying_amplitude <span class="ot">&lt;-</span> seasonal_amp <span class="sc">+</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n, <span class="dv">0</span>, rw_sd<span class="sc">/</span><span class="dv">5</span>))</span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  seasonal <span class="ot">&lt;-</span> varying_amplitude <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> seasonal_period)</span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Generate time-varying volatility (GARCH-like process)</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize volatility vector</span></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  volatility <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  volatility[<span class="dv">1</span>] <span class="ot">&lt;-</span> init_vol</span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate volatility process</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Volatility follows AR(1) process with innovations</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    volatility[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fl">0.01</span> <span class="sc">+</span> </span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>                            vol_persistence <span class="sc">*</span> volatility[i<span class="dv">-1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> </span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>                            (<span class="dv">1</span> <span class="sc">-</span> vol_persistence) <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. Generate heteroskedastic noise</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">*</span> volatility</span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Add structural breaks</span></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add random level shifts</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  n_breaks <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">1</span>, <span class="fu">round</span>(n<span class="sc">/</span><span class="dv">200</span>))  <span class="co"># Approximately one break every 200 observations</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>  break_points <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">2</span><span class="sc">:</span>n, n_breaks))</span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>  level_shifts <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n_breaks, <span class="dv">0</span>, <span class="dv">2</span>))  <span class="co"># Random shift magnitudes</span></span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  breaks <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  current_break <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(current_break <span class="sc">&lt;=</span> <span class="fu">length</span>(break_points) <span class="sc">&amp;&amp;</span> i <span class="sc">&gt;=</span> break_points[current_break]) {</span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>      breaks[i<span class="sc">:</span>n] <span class="ot">&lt;-</span> level_shifts[current_break]</span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>      current_break <span class="ot">&lt;-</span> current_break <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine all components</span></span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> trend <span class="sc">+</span> seasonal <span class="sc">+</span> noise <span class="sc">+</span> breaks</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to time series object</span></span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>  ts_result <span class="ot">&lt;-</span> <span class="fu">ts</span>(ts_data, <span class="at">frequency =</span> seasonal_period)</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return both the time series and its components</span></span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">timeseries =</span> <span class="fu">data.frame</span>(<span class="at">time =</span> t, <span class="at">value =</span> <span class="fu">as.numeric</span>(ts_result)),</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">components =</span> <span class="fu">list</span>(</span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>      <span class="at">trend =</span> trend,</span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>      <span class="at">seasonal =</span> seasonal,</span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise,</span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> breaks,</span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>      <span class="at">volatility =</span> volatility</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">noise_sd =</span> <span class="fl">0.5</span>,        <span class="co"># Standard deviation of noise  </span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                                <span class="at">seed.val =</span> <span class="dv">123</span>         <span class="co"># value to set.seed(...)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>){         </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(seed.val)<span class="sc">==</span>F){<span class="fu">set.seed</span>(seed.val)} <span class="co"># for reproducibility</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate time points</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create components</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Linear trend</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> trend_slope <span class="sc">*</span> t</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Seasonal component using sine wave</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  seasonal <span class="ot">&lt;-</span> seasonal_amp <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> seasonal_period)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Random noise (stationary component)</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> noise_mean, <span class="at">sd =</span> noise_sd)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine components</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> trend <span class="sc">+</span> seasonal <span class="sc">+</span> noise</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to time series object</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  ts_result <span class="ot">&lt;-</span> <span class="fu">ts</span>(ts_data, <span class="at">frequency =</span> seasonal_period)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return both the time series and its components for analysis</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">timeseries =</span> <span class="fu">data.frame</span>(<span class="at">time =</span> t, <span class="at">value =</span> <span class="fu">as.numeric</span>(ts_result)),</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">components =</span> <span class="fu">list</span>(</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">trend =</span> trend,</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">seasonal =</span> seasonal,</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>simulate_timeseries_vol <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1000</span>,              <span class="co"># Number of observations</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">trend_slope =</span> <span class="fl">0.01</span>,    <span class="co"># Slope of linear trend</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seasonal_amp =</span> <span class="dv">2</span>,      <span class="co"># seasonal component</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seasonal_period =</span> <span class="dv">12</span>,  <span class="co"># Period length</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">init_vol =</span> <span class="fl">0.5</span>,        <span class="co"># Initial volatility</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">vol_persistence =</span> <span class="fl">0.95</span>,<span class="co"># Persistence in volatility</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">rw_sd =</span> <span class="fl">0.1</span>,           <span class="co"># Random walk innovation SD</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">seed.val =</span> <span class="dv">123</span>         <span class="co"># value to set.seed(...)  </span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>){         </span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(seed.val)<span class="sc">==</span>F){<span class="fu">set.seed</span>(seed.val)} <span class="co"># for reproducibility</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate time points</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Create non-linear trend (combining linear trend with random walk)</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  linear_trend <span class="ot">&lt;-</span> trend_slope <span class="sc">*</span> t</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  random_walk <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n, <span class="dv">0</span>, rw_sd))</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> linear_trend <span class="sc">+</span> random_walk</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Create time-varying seasonal component</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Amplitude changes over time following a random walk</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  varying_amplitude <span class="ot">&lt;-</span> seasonal_amp <span class="sc">+</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n, <span class="dv">0</span>, rw_sd<span class="sc">/</span><span class="dv">5</span>))</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>  seasonal <span class="ot">&lt;-</span> varying_amplitude <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> seasonal_period)</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Generate time-varying volatility (GARCH-like process)</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize volatility vector</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>  volatility <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>  volatility[<span class="dv">1</span>] <span class="ot">&lt;-</span> init_vol</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate volatility process</span></span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Volatility follows AR(1) process with innovations</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>    volatility[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fl">0.01</span> <span class="sc">+</span> </span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>                            vol_persistence <span class="sc">*</span> volatility[i<span class="dv">-1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> </span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>                            (<span class="dv">1</span> <span class="sc">-</span> vol_persistence) <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.1</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. Generate heteroskedastic noise</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">*</span> volatility</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Add structural breaks</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add random level shifts</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>  n_breaks <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">1</span>, <span class="fu">round</span>(n<span class="sc">/</span><span class="dv">200</span>))  <span class="co"># Approximately one break every 200 observations</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>  break_points <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">2</span><span class="sc">:</span>n, n_breaks))</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>  level_shifts <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(n_breaks, <span class="dv">0</span>, <span class="dv">2</span>))  <span class="co"># Random shift magnitudes</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>  breaks <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>  current_break <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(current_break <span class="sc">&lt;=</span> <span class="fu">length</span>(break_points) <span class="sc">&amp;&amp;</span> i <span class="sc">&gt;=</span> break_points[current_break]) {</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>      breaks[i<span class="sc">:</span>n] <span class="ot">&lt;-</span> level_shifts[current_break]</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>      current_break <span class="ot">&lt;-</span> current_break <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine all components</span></span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>  ts_data <span class="ot">&lt;-</span> trend <span class="sc">+</span> seasonal <span class="sc">+</span> noise <span class="sc">+</span> breaks</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to time series object</span></span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>  ts_result <span class="ot">&lt;-</span> <span class="fu">ts</span>(ts_data, <span class="at">frequency =</span> seasonal_period)</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return both the time series and its components</span></span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">timeseries =</span> <span class="fu">data.frame</span>(<span class="at">time =</span> t, <span class="at">value =</span> <span class="fu">as.numeric</span>(ts_result)),</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">components =</span> <span class="fu">list</span>(</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>      <span class="at">trend =</span> trend,</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>      <span class="at">seasonal =</span> seasonal,</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise,</span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> breaks,</span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>      <span class="at">volatility =</span> volatility</span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here are some example simulated datasets. Lets assume this data is monthly for a 15 year period of record.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n.vals <span class="ot">&lt;-</span> <span class="dv">15</span><span class="sc">*</span><span class="dv">12</span> <span class="co"># 15 years 12 months per year </span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 15 years of monthly data</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.025</span>,   <span class="co"># Upward trend</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n.vals,           <span class="co"># About 15 years of monthly data</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.025</span>,  <span class="co"># Upward trend</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
@@ -420,39 +425,37 @@ Frequency = 1
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">expand.grid</span>(<span class="at">Mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">Yr =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">2004</span>)</span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries_vol</span>(</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 4 years of daily data</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.05</span>,   <span class="co"># Upward trend</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Base seasonal amplitude</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">10</span>, <span class="co"># Monthly seasonality</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_vol =</span> <span class="fl">0.5</span>,      <span class="co"># Initial volatility</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">vol_persistence =</span> <span class="fl">0.65</span>,</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">rw_sd =</span> <span class="fl">0.3</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="do">## add some years and months</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>dat2<span class="sc">$</span>timeseries  <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(dat2<span class="sc">$</span>timeseries,</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">expand.grid</span>(<span class="at">Mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">Yr =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">2004</span>)</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>dat3 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 15 years of monthly data</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.001</span>,  <span class="co"># no trend</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">3</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># For reproducibility</span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>dat4 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">180</span>,              <span class="co"># About 15 years of monthly data</span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="sc">-</span><span class="fl">0.05</span>,  <span class="co"># downward trend</span></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">15</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries_vol</span>(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n.vals,           <span class="co"># About 15 years of daily data</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.05</span>,   <span class="co"># Upward trend</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Base seasonal amplitude</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">10</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_vol =</span> <span class="fl">0.5</span>,      <span class="co"># Initial volatility</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">vol_persistence =</span> <span class="fl">0.65</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">rw_sd =</span> <span class="fl">0.3</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="do">## add some years and months</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>dat2<span class="sc">$</span>timeseries  <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(dat2<span class="sc">$</span>timeseries,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">expand.grid</span>(<span class="at">Mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">Yr =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">2004</span>)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>dat3 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n.vals,           <span class="co"># About 15 years of monthly data</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.001</span>,  <span class="co"># no trend</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">3</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>dat4 <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries</span>(</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n.vals,           <span class="co"># About 15 years of monthly data</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="sc">-</span><span class="fl">0.05</span>,  <span class="co"># downward trend</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Seasonal fluctuation of ±2</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_sd =</span> <span class="fl">0.5</span>,       <span class="co"># Moderate noise</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">noise_mean =</span> <span class="dv">15</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here is a quick plot of the data …</p>
 <div class="cell" data-layout-align="center">
@@ -468,7 +471,7 @@ Frequency = 1
 </section>
 <section id="basic-trend-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="basic-trend-analysis">Basic Trend Analysis</h2>
-<p>A simple trend test would look like this … For simplicity sake we are going to use <code>time</code> as its numeric but hypothetically decimal date (see <code>lubridate::decimal_date</code> package for more info) is also an option.</p>
+<p>A simple trend test would look like this … For simplicity sake we are going to use <code>time</code> as its numeric but hypothetically decimal date (see <code>lubridate::decimal_date</code> for more info) is also an option.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(dat1<span class="sc">$</span>timeseries<span class="sc">$</span>time,dat1<span class="sc">$</span>timeseries<span class="sc">$</span>value,<span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -616,7 +619,7 @@ tau
   1 </code></pre>
 </div>
 </div>
-<p>Looks like a perfect increasing trend! The Kendall 𝜏 is a type of correlation coefficient so the values should range between -1 and 1. Based on the 𝜌-value, (assuming an 𝛼-value of 0.05) this is a statistically significant trend. (Lets not get into the 𝜌-value discussion!)</p>
+<p>Looks like a perfect increasing trend! The Kendall-𝜏 is a type of correlation coefficient so the values should range between -1 and 1. Based on the 𝜌-value, (assuming an 𝛼-value of 0.05) this is a statistically significant trend. (Lets not get into the 𝜌-value discussion!)</p>
 <p>We can also look at the rate of change. The most common is the Theil-Sen slope estimator. There are several different packages out there that can estimate Theil-Sen slope but the most basic one that I’ve come across is the median based linear model or <code>mblm</code> package. We can discuss the basics of Theil-Sen and mblm in a later post but after some digging and search what I’ve determined is that Theil-Sen method and median-based linear model are closely related. Generally, the Theil-Sen method is a non-parametric method that calculates the median of slopes of all lines through the data and the intercept is often the median of the residuals after fitting the slope. Meanwhile, the median-based linear model is a regression model that uses medians as a criterion for fitting a model and minimizes the sum of absolute residuals. In most cases, the Theil-Sen slope and the slope determined by the median-based linear model are the same with minuscule differences. Most trend routines use median-based linear models or quantile regressions as a basis to perform Theil-Sen estimation.</p>
 <p>If you run the side-by-side of <code>mblm</code>, <code>zyp</code> and a separate Theil-Sen estimator pulled from the litature (found <a href="https://library.virginia.edu/data/articles/theil-sen-regression-programming-and-understanding-an-outlier-resistant-alternative-to-least-squares" target="_#blank">here</a>) you’ll undoubtly come to similar, if not the same values. Don’t believe me lets give it a try.</p>
 <div class="cell">
@@ -673,7 +676,7 @@ tau
 </div>
 </div>
 <p>There you have it, all three methods produce the same estimates.</p>
-<p>Back to our aggregated dataset, the code is pretty straight forward but there are a couple of things to be aware. Currently, the <code>mblm</code> function can’t handle datasets with <code>NAs</code>, so you might have to clean up the data a little (i.e.&nbsp;<code>na.omit()</code> can be your friend). Also double check that both variables are numeric.</p>
+<p>Back to our aggregated dataset, the code is pretty straight forward but there are a couple of things to be aware. If you’ve fit linear models using <code>lm</code> its the same general format. However, currently the <code>mblm</code> function can’t handle datasets with <code>NAs</code> (unlike <code>lm</code>), so you might have to clean up the data a little (i.e.&nbsp;<code>na.omit()</code> can be your friend). Also double check that both variables are numeric.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mblm)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -736,7 +739,7 @@ Session Info
  collate  English_United States.1252
  ctype    English_United States.1252
  tz       America/New_York
- date     2024-10-26
+ date     2024-10-28
  pandoc   2.19.2
  quarto   1.3.450
 
