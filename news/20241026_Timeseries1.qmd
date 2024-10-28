@@ -1,0 +1,442 @@
+---
+title: "Time series Analysis (Part I), the basics"
+author:
+  - name: Paul Julian
+date: 2024-10-26
+categories: [blog, time series]
+# image: /images/...
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r,include=F}
+library(AnalystHelper)
+
+wd = "C:/Julian_LaCie/_GitHub/SwampThingPaul.github.io"
+paths = c("/assests/20241026_TimeseriesDecomp/")
+plot.path = paste0(wd,paths[1])
+# Folder.Maker(plot.path)
+
+```
+
+This blog post effectively breaks my blog writing dry streak. The last offical blog post (not stats related) was on my old blog platform ([link](https://swampthingecology.org/blog/){target="_blank"}) 1170 days ago! This post was motivated by a recent LinkedIn post by [Joachim Schork](https://www.linkedin.com/in/joachim-schork/){target="_blank"} about breaking down time series (see below and [here](https://www.linkedin.com/posts/joachim-schork_timeseries-statistics-datascience-activity-7255183785372086273-fezZ){target="_blank"}) and the comments from the larger community. Its also motivated by a recent spur of time series decomposition analyses I've seen of late during meetings and discussions with colleagues. 
+
+```{r, out.width="60%",echo=F,fig.align="center"}
+knitr::include_graphics(paste0(".",paths[1],"JoachimSchork_LinkedInPost.JPG"))
+```
+
+
+
+
+# Time series data
+
+## Definition
+
+First, what is time series data? If you look in the dictionary it will say something along the lines of a series of values/measurements/observations obtained at successive times, often (but not always) with equal intervals between them. Simply put its data collected over time. In my corner of science that could mean daily water levels, weekly total phosphorus concentrations, annual seagrass coverage, etc. Once collected these data can analyzed in a variety of ways depending on the motivation of why and where its being collected. Again, in my realm of the science, something we are interested in is the change in conditions overtime for a variety of reasons including (but not limited to) climate change, landscape scale changes (i.e. land-use alterations, dam removal, stream diversion, etc.), restoration activities, forecast modeling, etc. In this case, a time series analysis is needed to see how things are changing overtime.  
+
+## Formatting
+
+When handling time series data in `R` you can either handle the data as a `data.frame` (or `tibble` if you are a [tidyverse](https://www.tidyverse.org/){target="_blank"} person ... I personally am not, no judgement) or a `ts` object. 
+
+Generate some example value
+```{r}
+set.seed(123)
+values <- runif(5)|>
+  round(2)
+```
+
+::: {layout-ncol=2}
+
+**`data.frame`**
+
+**`ts`**
+```{r ts df}
+data.frame(Yr = 2012:2016, 
+           value = values
+           )
+```
+
+```{r ts ts}
+ts(values, start = 2012)
+```
+
+:::
+
+There are pros and cons of formatting the data either way. Most time series analysis functions can handle both in someway but most like it to be a `ts` object. The way the `ts` function works is it essentially converts the data into a special kind of data matrix (in `R` its called class or object) with an added header containing some information about the time series (like the example above). Depending on the information you include in the `ts` function it makes some assumptions, for instance with `frequency = 12` it assumes its monthly data or `frequency = 365` assumes daily. 
+
+```{r}
+rnorm(24)|>
+  round(2)|>
+  ts(frequency = 12)
+
+```
+
+See `?ts` for more details on specifics. A very big drawback when using `ts` is if you are working with daily data with a leap year or years with leap years mixed in `ts` doesn't know how to handle that extra day since the input is a vector or list of data. There might be a way to coerce it but I've yet to figure it out. Which is why I prefer to work in the `data.frame` world whenever possible.    
+
+# Analyses 
+
+Most time series data exhibit some pattern, think about rainfall, climate cycle (ENSO), greenness of leaves, how many miles you drive/walk per unit time (i.e. week, month, etc.), etc. Analytically, these patterns can be split into components that make up the overall time series. Usually when talking about time series data terms like "trend" and "seasonality" come up. Obviously these terms have very specific meanings.
+
+Generally "trend" is defined as some change in the data over time. The most basic statistical analysis for time series data is the Kendall trend test. This test evaluates a time series to determine if the data is monotonically changing (increasing up or down) overtime based on the Kendall-&#120591; coefficient. Statistical significance and the rate of change are also things to evaluate. More on that later. While the Kendall test is looking at monotonic linear trends, not all trends have to be "linear". I have another blog post planned (I hope) for that, stay tuned! 
+
+Seasonal or seasonality is another important component for most time series analyses but not all. For instance if you have annual or decadal data, you won't be looking at seasonality as those time steps aggregate across those periods. Seasonality, as in when the seasons occur is assumed to be fixed and at a known frequency (i.e. spring, summer, etc.). 
+
+Another term or component is cyclic or random. This is when the data show some fluctuations that don't occur at a fixed frequency but occurs throughout the data set. 
+
+## Synthetic Data
+
+As an example this post (and the following series) rather than grabbing some random datasets as an example I wanted to use something that we have some knowledge on before digging into the specifics. This includes some of the components discussed above. To achieve this I put together some basic functions to simulate some data. The first function `simulate_timeseries` is relatively basic and `simulate_timeseries_vol` is a little more complex that includes some volatility and randomness factors.
+
+```{r sim fun}
+simulate_timeseries <- function(n = 1000,            # Number of observations
+                                trend_slope = 0.01,    # Slope of linear trend
+                                seasonal_amp = 2,      # Amplitude of seasonal component
+                                seasonal_period = 12,  # Period length
+                                noise_mean = 1,        # mean of noise
+                                noise_sd = 0.5,        # Standard deviation of noise  
+                                seed.val = 123         # value to set.seed(...)
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # Create components
+  # 1. Linear trend
+  trend <- trend_slope * t
+  # 2. Seasonal component using sine wave
+  seasonal <- seasonal_amp * sin(2 * pi * t / seasonal_period)
+  # 3. Random noise (stationary component)
+  noise <- rnorm(n, mean = noise_mean, sd = noise_sd)
+  # Combine components
+  ts_data <- trend + seasonal + noise
+  
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components for analysis
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise
+    )
+  ))
+}
+
+simulate_timeseries_vol <- function(n = 1000,              # Number of observations
+                                    trend_slope = 0.01,    # Slope of linear trend
+                                    seasonal_amp = 2,      # seasonal component
+                                    seasonal_period = 12,  # Period length
+                                    init_vol = 0.5,        # Initial volatility
+                                    vol_persistence = 0.95,# Persistence in volatility
+                                    rw_sd = 0.1,           # Random walk innovation SD
+                                    seed.val = 123         # value to set.seed(...)  
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # 1. Create non-linear trend (combining linear trend with random walk)
+  linear_trend <- trend_slope * t
+  random_walk <- cumsum(rnorm(n, 0, rw_sd))
+  trend <- linear_trend + random_walk
+  # 2. Create time-varying seasonal component
+  # Amplitude changes over time following a random walk
+  varying_amplitude <- seasonal_amp + cumsum(rnorm(n, 0, rw_sd/5))
+  seasonal <- varying_amplitude * sin(2 * pi * t / seasonal_period)
+  # 3. Generate time-varying volatility (GARCH-like process)
+  # Initialize volatility vector
+  volatility <- numeric(n)
+  volatility[1] <- init_vol
+  # Generate volatility process
+  for(i in 2:n) {
+    # Volatility follows AR(1) process with innovations
+    volatility[i] <- sqrt(0.01 + 
+                            vol_persistence * volatility[i-1]^2 + 
+                            (1 - vol_persistence) * rnorm(1, 0, 0.1)^2)
+  }
+  # 4. Generate heteroskedastic noise
+  noise <- rnorm(n, 0, 1) * volatility
+  # 5. Add structural breaks
+  # Add random level shifts
+  n_breaks <- max(1, round(n/200))  # Approximately one break every 200 observations
+  break_points <- sort(sample(2:n, n_breaks))
+  level_shifts <- cumsum(rnorm(n_breaks, 0, 2))  # Random shift magnitudes
+  breaks <- numeric(n)
+  current_break <- 1
+  for(i in 1:n) {
+    if(current_break <= length(break_points) && i >= break_points[current_break]) {
+      breaks[i:n] <- level_shifts[current_break]
+      current_break <- current_break + 1
+    }
+  }
+  
+  # Combine all components
+  ts_data <- trend + seasonal + noise + breaks
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise,
+      breaks = breaks,
+      volatility = volatility
+    )
+  ))
+}
+
+```
+
+Here are some example simulated datasets. Lets assume this data is monthly for a 15 year period of record.
+
+```{r}
+n.vals <- 15*12 # 15 years 12 months per year 
+dat1 <- simulate_timeseries(
+  n = n.vals,           # About 15 years of monthly data
+  trend_slope = 0.025,  # Upward trend
+  seasonal_amp = 2,     # Seasonal fluctuation of ±2
+  seasonal_period = 12, # Monthly seasonality
+  noise_sd = 0.5,       # Moderate noise
+  noise_mean = 3
+)
+## add some years and months
+dat1$timeseries  <-  cbind(dat1$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004)
+)
+
+dat2 <- simulate_timeseries_vol(
+  n = n.vals,           # About 15 years of daily data
+  trend_slope = 0.05,   # Upward trend
+  seasonal_amp = 2,     # Base seasonal amplitude
+  seasonal_period = 10, # Monthly seasonality
+  init_vol = 0.5,      # Initial volatility
+  vol_persistence = 0.65,
+  rw_sd = 0.3
+)
+## add some years and months
+dat2$timeseries  <-  cbind(dat2$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004)
+)
+
+dat3 <- simulate_timeseries(
+  n = n.vals,           # About 15 years of monthly data
+  trend_slope = 0.001,  # no trend
+  seasonal_amp = 2,     # Seasonal fluctuation of ±2
+  seasonal_period = 12, # Monthly seasonality
+  noise_sd = 0.5,       # Moderate noise
+  noise_mean = 3
+)
+
+dat4 <- simulate_timeseries(
+  n = n.vals,           # About 15 years of monthly data
+  trend_slope = -0.05,  # downward trend
+  seasonal_amp = 2,     # Seasonal fluctuation of ±2
+  seasonal_period = 12, # Monthly seasonality
+  noise_sd = 0.5,       # Moderate noise
+  noise_mean = 15
+)
+```
+
+Here is a quick plot of the data ...
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="Quick plots of example data"}
+dat1$timeseries$date <-  with(dat1$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+dat2$timeseries$date <-  with(dat2$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+
+par(mfrow = c(1,2))
+plot(value~date,dat1$timeseries,type="l",col="indianred", lwd=2,las=1, main = "Simulated Time Series\n(dat1)", ylab = "Value",xlab ="Date")
+plot(value~date,dat2$timeseries,type="l",col="dodgerblue", lwd=2,las=1,main = "Simulated Time Series\n(dat2)", ylab = "Value",xlab ="Date")
+```
+
+## Basic Trend Analysis
+
+A simple trend test would look like this ... 
+For simplicity sake we are going to use `time` as its numeric but hypothetically decimal date (see `lubridate::decimal_date` for more info) is also an option. 
+
+```{r trend1}
+cor.test(dat1$timeseries$time,dat1$timeseries$value,method = "kendall")
+
+cor.test(dat2$timeseries$time,dat2$timeseries$value,method = "kendall")
+```
+
+Based on the plots you would have guessed that the datasets had an increasing trend. But here is what no-trend (`dat3`) and negative trend (`dat4`) looks like. 
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="Quick plots of example data"}
+dat3$timeseries <- cbind(dat3$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004))
+dat3$timeseries$date <- with(dat3$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+dat4$timeseries <- cbind(dat4$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004))
+dat4$timeseries$date <- with(dat4$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+
+par(mfrow = c(1,2))
+plot(value~date,dat3$timeseries,type="l",col="forestgreen", lwd=2,las=1, main = "Simulated Time Series\n(dat3)", ylab = "Value",xlab ="Date")
+plot(value~date,dat4$timeseries,type="l",col="purple", lwd=2,las=1,main = "Simulated Time Series\n(dat4)", ylab = "Value",xlab ="Date")
+```
+
+```{r trend2}
+cor.test(dat3$timeseries$time,dat3$timeseries$value,method = "kendall")
+
+cor.test(dat4$timeseries$time,dat4$timeseries$value,method = "kendall")
+```
+
+Sometimes we are more interested in long term trends ... be careful when using "long" and "short" these are usually very context specific and care should be taken to delineate/define as much as possible. For sake of brevity lets look at an annual trend analysis. 
+
+First, the data needs to be aggregated:
+
+```{r}
+dat1_yr <- aggregate(value~Yr,dat1$timeseries,mean)
+```
+
+You can also look at the annual variability or standard deviation using `aggregate`.
+
+```{r}
+aggregate(value~Yr,dat1$timeseries,sd)
+```
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=5.5,fig.height=5,fig.align='center',fig.cap="Quick plots of aggregated data from dat1."}
+sdvals = aggregate(value~Yr,dat1$timeseries,sd)
+plot(value~Yr,dat1_yr,type="l",col="dodgerblue1", lwd=2, 
+     main = "Annual Aggregated\nSimulated Time Series\n(dat1)", ylab = "Value",xlab ="Year",
+     ylim = c(0,10),las=1)
+points(value~Yr,dat1_yr,pch=19,cex=1)
+errorbars(dat1_yr$Yr,dat1_yr$value,sdvals$value,"black",length=0.01)
+```
+
+Or do something more elaborate to calculate all sorts of statistics. My preference (again not tidyverse) is functionality in the `plyr` package.
+
+```{r}
+library(plyr)
+ddply(dat1$timeseries,c("Yr"),summarise,
+      mean.val = mean(value),
+      sd.val = sd(value),
+      var.val = var(value),
+      N.val = length(value), #or AnalystHelper::N.obs(value)
+      SE = AnalystHelper::SE(value),
+      med.val = median(value),
+      min.val = min(value),
+      max.val = max(value))|>
+  round(2)# added to consolidate the table down
+
+```
+
+Once the data is aggregated we can use the simple Kendall test to look at the overall annual trend in the data. 
+
+```{r trend3}
+cor.test(dat1_yr$Yr,dat1_yr$value,method = "kendall")
+```
+
+Looks like a perfect increasing trend! The Kendall-&#120591; is a type of correlation coefficient so the values should range between -1 and 1. Based on the &#120588;-value, (assuming an &#120572;-value of 0.05) this is a statistically significant trend. (Lets not get into the &#120588;-value discussion!) 
+
+We can also look at the rate of change. The most common is the Theil-Sen slope estimator. There are several different packages out there that can estimate Theil-Sen slope but the most basic one that I've come across is the median based linear model or `mblm` package. We can discuss the basics of Theil-Sen and mblm in a later post but after some digging and search what I've determined is that Theil-Sen method and median-based linear model are closely related. Generally, the Theil-Sen method is a non-parametric method that calculates the median of slopes of all lines through the data and the intercept is often the median of the residuals after fitting the slope. Meanwhile, the median-based linear model is a regression model that uses medians as a criterion for fitting a model and minimizes the sum of absolute residuals. In most cases, the Theil-Sen slope and the slope determined by the median-based linear model are the same with minuscule differences. Most trend routines use median-based linear models or quantile regressions as a basis to perform Theil-Sen estimation. 
+
+If you run the side-by-side of `mblm`, `zyp` and a separate Theil-Sen estimator pulled from the litature (found [here](https://library.virginia.edu/data/articles/theil-sen-regression-programming-and-understanding-an-outlier-resistant-alternative-to-least-squares){target="_#blank"}) you'll undoubtly come to similar, if not the same values. Don't believe me lets give it a try. 
+
+```{r theilsen,warning=FALSE,message=FALSE,fig.width=5,fig.height=4}
+library(zyp)
+library(mblm)
+
+# From University of Virigina function (from literature)
+theil_sen <- function(x,y){
+  n <- length(x)
+  max_n_slopes <- (n * (n - 1)) / 2
+  slopes <- vector(mode = 'list', length = max_n_slopes) # list of NULL elements
+  add_at <- 1
+  # Calculate point-to-point slopes if x_i != x_j
+  for (i in 1:(n - 1)) {
+    slopes_i <- lapply((i + 1):n, function(j) 
+      if (x[j] != x[i]) { (y[j] - y[i]) / (x[j] - x[i]) })
+    slopes[add_at:(add_at + length(slopes_i) - 1)] <- slopes_i
+    add_at <- add_at + length(slopes_i)
+  }
+  # Calculate Theil-Sen slope
+  slopes <- unlist(slopes) # drop NULL elements
+  theil_sen_slope <- median(slopes, na.rm = TRUE)
+  # Calculate Theil-Sen intercept
+  intercepts <- y - (theil_sen_slope * x)
+  theil_sen_intercept <- median(intercepts, na.rm = TRUE)
+  # Return
+  c('Theil-Sen intercept' = theil_sen_intercept, 
+    'Theil-Sen slope' = theil_sen_slope)
+}
+
+
+set.seed(123)
+
+# Generate linear data
+x <- 1:100
+y <- 2*x + rnorm(100, 0, 10)
+# Add some outliers
+y[c(10, 30, 50, 70, 90)] <- y[c(10, 30, 50, 70, 90)] + 50
+
+plot(y~x,las=1)
+
+zyp.sen <-  zyp.sen(y~x); # zyp package
+mblm.sen <-  mblm(y~x,repeated = F); # mblm package
+UV.sen <-  theil_sen(x,y); # University of Virigina function (from literature)
+```
+
+```{r, echo = F}
+rslt <- data.frame(Pack = c("zyp","mblm","UV"),
+                 intercept = c(coefficients(zyp.sen)[1],
+                               coefficients(zyp.sen)[1],
+                               UV.sen[1]),
+                 Slope = c(coefficients(zyp.sen)[2],
+                           coefficients(zyp.sen)[2],
+                           UV.sen[2]))
+rslt$intercept=round(rslt$intercept,5)
+rslt$Slope = round(rslt$Slope,5)
+rslt
+```
+
+There you have it, all three methods produce the same estimates. 
+
+Back to our aggregated dataset, the code is pretty straight forward but there are a couple of things to be aware. If you've fit linear models using `lm` its the same general format. However, currently the `mblm` function can't handle datasets with `NAs` (unlike `lm`), so you might have to clean up the data a little (i.e. `na.omit()` can be your friend). Also double check that both variables are numeric. 
+
+```{r}
+library(mblm)
+
+dat1.theilsen <- mblm(value~Yr,dat1_yr,repeated=F)
+
+dat1.theilsen
+
+# extrapolate example
+predict(dat1.theilsen,data.frame(Yr=2005:2014),interval ="confidence")
+```
+
+The Theil-Sen estimator for the annually aggregated data is `r coefficients(dat1.theilsen)[2]|>as.numeric()|>round(3)` units per year. This is the rate of annual change. If this was something like sea-level rise, rainfall rate, population growth, etc. you can do a very basic analysis and ask at this rate what would the values be in 10 years (extrapolating ... `r predict(dat1.theilsen,data.frame(Yr=2014),interval ="confidence")[,1]|>round(2)` units) or in the case of sea-level rise whats the rise per decade (`r coefficients(dat1.theilsen)[2]|>as.numeric()|>round(3)*10` units per decade)?    
+
+
+# Whats next?
+
+To avoid making this blog post a novel, I'm going to cut this post short. We went over the basics of time series, what they are/how they are defined, what it looks like in the `R` environment, generating some synthetic time series for examples and a quick overall trend test. This post kicks off a series of posts that will delve into other aspects of time series analyses such as trend analysis data requirements, seasonal trend analyses, stationary, periodicity, time series decomposition and an alternative to time series decomposition.  
+
+
+<!-- Recommended Resource: https://otexts.com/fpp2/ -->
+
+:::{.callout-tip collapse="true"}
+# Session Info
+```{r, echo = FALSE,warning=FALSE,message=FALSE}
+library(sessioninfo)
+# save the session info as an object
+pkg_sesh <- session_info(pkgs = "attached",info=c("platform","package"))
+
+# Remove package library path
+pkg_sesh$packages$library = NULL
+
+# get the quarto version
+quarto_version <- system("quarto --version", intern = TRUE)
+
+# inject the quarto info
+pkg_sesh$platform$quarto <- system("quarto --version", intern = TRUE)
+
+# modify pandoc info
+pkg_sesh$platform$pandoc = trimws(sapply(strsplit(pkg_sesh$platform$pandoc,"@"),"[",1))
+
+# print it out
+pkg_sesh
+
+```
+
+:::

@@ -26,14 +26,17 @@ website:
     #   href: Publications.qmd 
     - text: "Blog"
       href: blog.qmd    
+    # right:
     - icon: github
       href: https://github.com/SwampThingPaul
     - icon: linkedin
       href: https://www.linkedin.com/in/paul-julian/
-    - icon: mastodon
-      href: https://fosstodon.org/@SwampThingPaul
+    # - icon: mastodon
+    #   href: https://fosstodon.org/@SwampThingPaul
     - icon: envelope
       href: mailto:pauljulianphd@gmail.com
+ #    - icon: '{{< ai google-scholar >}}'
+ #      href: https://scholar.google.com/citations?user=MTXcoJYAAAAJ&hl=en
       
 format:
   html:
