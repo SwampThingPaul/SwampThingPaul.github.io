@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Paul Julian">
+<meta name="dcterms.date" content="2024-11-03">
+
+<title>Paul Julian II, PhD - Time series Analysis (Part II), How Much Data?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/SWE_logo_small.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-131175448-1', 'auto');
+
+ga('send', {
+  hitType: 'pageview',
+  'anonymizeIp': true,
+});
+</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/SWE_logo_small.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Paul Julian II, PhD</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/SwampThingPaul" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/paul-julian/" rel="" target=""><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:pauljulianphd@gmail.com" rel="" target=""><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#statistical-power" id="toc-statistical-power" class="nav-link active" data-scroll-target="#statistical-power">Statistical Power</a>
+  <ul class="collapse">
+  <li><a href="#minimum-number-of-samples" id="toc-minimum-number-of-samples" class="nav-link" data-scroll-target="#minimum-number-of-samples">Minimum number of samples</a></li>
+  <li><a href="#how-to-do-a-power-analysis" id="toc-how-to-do-a-power-analysis" class="nav-link" data-scroll-target="#how-to-do-a-power-analysis">How to do a power analysis</a>
+  <ul class="collapse">
+  <li><a href="#pwr" id="toc-pwr" class="nav-link" data-scroll-target="#pwr"><code>pwr</code></a></li>
+  <li><a href="#basic-simulation" id="toc-basic-simulation" class="nav-link" data-scroll-target="#basic-simulation">Basic Simulation</a></li>
+  <li><a href="#simulation-based-power-analysis" id="toc-simulation-based-power-analysis" class="nav-link" data-scroll-target="#simulation-based-power-analysis">Simulation Based Power Analysis</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">Whats next?</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Time series Analysis (Part II), How Much Data?</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">blog</div>
+    <div class="quarto-category">time series</div>
+    <div class="quarto-category">power</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Paul Julian </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 3, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In my last <a href="https://swampthingecology.org/news/20241026_Timeseries1.html" target="_blank">post</a> I gave a relatively high level overview of time series and some basic analyses. Next we are going to talk about how much data is needed to perform some of these basic tests. Not necessarily the ins and outs (i.e.&nbsp;assumptions) of the statistical test(s) but how much data is needed to (1) run the test and (2) get a meaningful result. Most of this will be a discussion (with exercises) on statistical power. We will be also bring back our <a href="https://swampthingecology.org/news/20241026_Timeseries1.html#synthetic-data" target="_blank">synthetic data functions</a> introduced in the last post to provide some context. Most of the discussion will be centered around the Kendall family of trend tests.</p>
+<section id="statistical-power" class="level1">
+<h1>Statistical Power</h1>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assests/20241103_Timeseries2/he-man-he-mana.gif" class="img-fluid figure-img" style="width:40.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>… most of you probably knew that was coming.</p>
+<p>What is statistical power? … No, its not the lesser known cousin of the Sword of Power (aka Sword of Grayskull).</p>
+<p>Statistical power, or sensitivity, is the likelihood of a significance test detecting an effect when there actually is one. Or another way of saying this is statistical power refers to the probability of correctly rejecting a false null hypothesis. If you are up on your types of statistical error this sounds like Type II error, right? Its related but statistical error and Type II error are different things.</p>
+<ul>
+<li><p><strong>Type I Error (α):</strong> This is the probability of rejecting a true null hypothesis. It represents the likelihood of finding a “false positive,” or detecting an effect that does not actually exist.</p></li>
+<li><p><strong>Type II Error (β):</strong> This is the probability of failing to reject a false null hypothesis. It represents the likelihood of a “false negative,” or not detecting an effect that actually exists.</p></li>
+<li><p><strong>Power (1- β):</strong> Power is the probability of correctly rejecting a false null hypothesis. It measures the likelihood that a study will detect a significant effect if one truly exists.</p></li>
+</ul>
+<p>Since power (1- β) and Type II error (β) are directly related, high statistical power means a high likelihood of detecting an effect if it exist, thereby reducing the chance of a Type II error.</p>
+<p>As you would expect given these definitions several factors can effect statistical likelihood and therefore statistical power. The first and foremost is the number of samples needed.</p>
+<section id="minimum-number-of-samples" class="level2">
+<h2 class="anchored" data-anchor-id="minimum-number-of-samples">Minimum number of samples</h2>
+<p>I often get asked how many samples do I need or what criterion did you use to screen the dataset to perform the trend test. Technically you only need two points to draw a line, but with those two points you don’t have the ability to understand the uncertainty (i.e.&nbsp;variance) of said line.</p>
+<p>Whats the absolute minimum needed to run the test? Most trend tests require 2 - 3 values to just do the math. Lets take the Kendall correlation as an example</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>yval2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">2</span>)<span class="sc">*</span><span class="fl">0.5</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xval2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(yval2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(yval2,xval2,<span class="at">method=</span><span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  yval2 and xval2
+T = 1, p-value = 1
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+tau 
+  1 </code></pre>
+</div>
+</div>
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>yval3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>)<span class="sc">*</span><span class="fl">0.5</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>xval3 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(yval3)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(yval3,xval3,<span class="at">method=</span><span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  yval3 and xval3
+T = 3, p-value = 0.3333
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+tau 
+  1 </code></pre>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="cell-output-display">
+<p><img src="20241103_Timeseries2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="336"></p>
+</div>
+</div>
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="cell-output-display">
+<p><img src="20241103_Timeseries2_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="336"></p>
+</div>
+</div>
+</div>
+</div>
+<p>What does this mean? For the Mann-Kendall test, the test statistic <span class="math inline">\(S\)</span> is calculated as the sum of signs of differences between all pairs of observations therefore you only technically need two points to perform the test … but again this lacks any certainty and does not have a robust amount of data to accurately estimate the statistical likelihood. We can do a thought experiment to look at the number of samples to calculate the exact critical values for the <span class="math inline">\(S\)</span> statistic. This can be achieved by calculating all possible <span class="math inline">\(S\)</span> values for a given sample size <span class="math inline">\(n\)</span> and determining the probabilities of obtaining these values under the null hypothesis of no trend.</p>
+<p>Here is the basic functions needed to generate the critical value look-up table for the Mann-Kendall <span class="math inline">\(S\)</span> statistic.</p>
+<ul>
+<li><p><code>calculate_S</code>: This function calculates the Mann-Kendall <span class="math inline">\(S\)</span>-Statistic for a given vector (x). It loops over all pairs <span class="math inline">\((i,j)\)</span> to compute the sum of signs. In the correlation test examples above this is the <code>T</code> statistic.</p></li>
+<li><p><code>calculate_Smax</code>: This function calculates the <span class="math inline">\(S_{max}\)</span> value for a given sample size (<span class="math inline">\(n\)</span>).</p></li>
+<li><p><code>generate_lookup_table</code>: This function generates all possible permutations of ranks for a given sample size <span class="math inline">\(n\)</span>, calculates <span class="math inline">\(S\)</span> for each permutation, and then tabulates the frequency of each unique <span class="math inline">\(S\)</span> value. It calculates the probability of each <span class="math inline">\(S\)</span>-value by dividing its frequency by the total number of permutations.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtools) <span class="co"># for permutations</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define function to calculate Mann-Kendall S statistic</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>calculate_S <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> (i <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n) {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      S <span class="ot">&lt;-</span> S <span class="sc">+</span> <span class="fu">sign</span>(x[j] <span class="sc">-</span> x[i])</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(S)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>calculate_Smax <span class="ot">&lt;-</span> <span class="cf">function</span>(n){n<span class="sc">*</span>(n<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>}</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to generate look-up table for a given sample size n</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>generate_lookup_table <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate all possible permutations of ranks</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  rank_permutations <span class="ot">&lt;-</span> <span class="fu">permutations</span>(n, n, <span class="at">v =</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate S for each permutation</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  S_values <span class="ot">&lt;-</span> <span class="fu">apply</span>(rank_permutations, <span class="dv">1</span>, calculate_S)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Count frequency of each S value</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  S_table <span class="ot">&lt;-</span> <span class="fu">table</span>(S_values)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate probabilities</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  total_permutations <span class="ot">&lt;-</span> <span class="fu">factorial</span>(n)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  prob_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">S =</span> <span class="fu">as.numeric</span>(<span class="fu">names</span>(S_table)),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">Frequency =</span> <span class="fu">as.integer</span>(S_table),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Smax = as.integer(n*(n-1)/2),</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">Probability =</span> <span class="fu">as.integer</span>(S_table) <span class="sc">/</span> total_permutations</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(prob_table)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lets look at samples sizes of 2, 3, 4 and 5. Any more than that and the process get bogged down (due to the computation of individual permutations). Lets use the lapply function to generate look up tables for a range of n values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate look-up tables for sample sizes n = 2, 3, 4, 5 and 10</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lookup_tables <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, generate_lookup_table)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>smax_val <span class="ot">&lt;-</span> <span class="fu">calculate_Smax</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(lookup_tables) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"n="</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>,<span class="st">"; Smax = "</span>,smax_val)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the look-up tables</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>lookup_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`n=2; Smax = 1`
+   S Frequency Probability
+1 -1         1         0.5
+2  1         1         0.5
+
+$`n=3; Smax = 3`
+   S Frequency Probability
+1 -3         1   0.1666667
+2 -1         2   0.3333333
+3  1         2   0.3333333
+4  3         1   0.1666667
+
+$`n=4; Smax = 6`
+   S Frequency Probability
+1 -6         1  0.04166667
+2 -4         3  0.12500000
+3 -2         5  0.20833333
+4  0         6  0.25000000
+5  2         5  0.20833333
+6  4         3  0.12500000
+7  6         1  0.04166667
+
+$`n=5; Smax = 10`
+     S Frequency Probability
+1  -10         1 0.008333333
+2   -8         4 0.033333333
+3   -6         9 0.075000000
+4   -4        15 0.125000000
+5   -2        20 0.166666667
+6    0        22 0.183333333
+7    2        20 0.166666667
+8    4        15 0.125000000
+9    6         9 0.075000000
+10   8         4 0.033333333
+11  10         1 0.008333333</code></pre>
+</div>
+</div>
+<p>Each look-up table contains:</p>
+<ul>
+<li><p><em>S:</em> The possible Mann-Kendall statics values</p></li>
+<li><p><em>Frequency:</em> The frequency of each <span class="math inline">\(S\)</span>-value among all permutations</p></li>
+<li><p><em>Probability:</em> The probability of obtaining each S-value under the null hypothesis.</p></li>
+<li><p><em>Smax:</em> The maximum possible value of <span class="math inline">\(S\)</span> for a given sample size. <span class="math inline">\(S_{max}\)</span> is useful for determining critical values and conducting hypothesis tests in the Mann-Kendall trend test, particularly when assessing the significance of the observed <span class="math inline">\(S\)</span>-statistic under the null hypothesis of no trend.</p></li>
+</ul>
+<p>As you can see a sample size of two (<code>n=2</code>) you have a an equal chance (probability) of accepting or rejecting your hypothesis.</p>
+<p>While this section pertains to how few samples are needed to do the test, its worth mentioning the other side of the coin. When sample sizes increase some of the mathematics changes slightly. For instance when <span class="math inline">\(n\)</span> is large (a relative term … lets just say <span class="math inline">\(n\ge10\)</span>), the standardized <span class="math inline">\(S\)</span> (often denoted as <span class="math inline">\(Z\)</span>) approximately follows a normal distribution. This allows the use of z-scores to determine statistical significance of the observed <span class="math inline">\(S\)</span>-statistic.</p>
+<p>Now that we know the fundamentals of two points make a straight line … we can move onto statistical power.</p>
+</section>
+<section id="how-to-do-a-power-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-do-a-power-analysis">How to do a power analysis</h2>
+<p>Statistical power analysis can be performed a couple different ways. For this post, lets assume this is a post-hoc statistical power analysis (remember you can do as power analysis before collecting samples to determine how many samples you need). In this example we will use a power calculation for a general linear model to approximate the power. The reason for the caveat is a general linear model is NOT a trend test (unless the data and model residuals fit the assumptions of the test … fat chance) and is different from the the Mann-Kendall and Thiel-Sen estimator.</p>
+<section id="pwr" class="level3">
+<h3 class="anchored" data-anchor-id="pwr"><code>pwr</code></h3>
+<p>The <code>pwr::pwr.f2.test(...)</code> is a function to calculate the statistical power for a linear model. Its pretty straight forward …</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwr)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>effect_size <span class="ot">&lt;-</span> <span class="fl">0.15</span>  <span class="co"># Estimate of the effect size (can be calculated or approximated)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span>        <span class="co"># Significance level</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>power <span class="ot">&lt;-</span> <span class="fl">0.8</span>         <span class="co"># Desired power</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform power analysis for linear regression</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>sample_size <span class="ot">&lt;-</span> <span class="fu">pwr.f2.test</span>(<span class="at">u =</span> <span class="dv">1</span>, <span class="at">f2 =</span> effect_size, <span class="at">sig.level =</span> alpha, <span class="at">power =</span> power)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Output the required number of samples</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>sample_size</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Multiple regression power calculation 
+
+              u = 1
+              v = 52.315
+             f2 = 0.15
+      sig.level = 0.05
+          power = 0.8</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>u = 1</code> represents one predictor variable (time, in this case).</p></li>
+<li><p><code>f2</code> is the effect size (Cohen’s <span class="math inline">\(f^{2}\)</span>) for linear models and is calculated using the models <span class="math inline">\(R_{2}\)</span>.</p></li>
+</ul>
+<center>
+<p><span class="math inline">\(f^{2} = \frac{R^{2}}{1 - R^{2}}\)</span></p>
+</center>
+<p>Of course knowing the effect size and power is half the information we want to know. Another way to do a power analysis and probably a more meaningful way would be a simulation based test. I’ll show you two different versions, a very basic version and a more elaborate version based off an analysis presented by <a href="https://mastodon.social/@mpschramm" target="_blank">Dr Schramm</a> <!--https://michaelpaulschramm.com/--> in this <a href="https://twj-ojs-tdl.tdl.org/twj/index.php/twj/article/view/7126" target="_blank">paper</a>.</p>
+</section>
+<section id="basic-simulation" class="level3">
+<h3 class="anchored" data-anchor-id="basic-simulation">Basic Simulation</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>true_slope <span class="ot">&lt;-</span> <span class="fl">0.05</span>  <span class="co"># Slope of the trend</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span>          <span class="co"># Standard deviation of errors</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>n_sim <span class="ot">&lt;-</span> <span class="dv">1000</span>       <span class="co"># Number of simulations</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">20</span>, <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">5</span>)  <span class="co"># Range of sample sizes to test</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to simulate data and fit regression model</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>power_simulation <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  significant_results <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_sim) {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> true_slope <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">summary</span>(model)<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>] <span class="sc">&lt;</span> alpha) {  <span class="co"># p-value of slope</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>      significant_results <span class="ot">&lt;-</span> significant_results <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(significant_results <span class="sc">/</span> n_sim)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Run simulations for each sample size</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>power_results <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sample_sizes, power_simulation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241103_Timeseries2_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Statistical power by sample size.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A power of 0.80 is typically considered appropriate, which equates to a 20% chance of encountering a Type II error. Remember from above the definition of power, if we are sampling from a population where the null hypothesis is false, the power is calculated as</p>
+<center>
+<span class="math display">\[ Power = \frac{N_{rejected}{N}\]</span>
+</center>
+<p>where <span class="math inline">\(N\)</span> is the total number of tests and <span class="math inline">\(N_{rejected}\)</span> are the total number of times the test rejected the null hypothesis. I highly recommend reading this <a href="https://twj-ojs-tdl.tdl.org/twj/index.php/twj/article/view/7126" target="_blank">paper</a> for a great IRL example of estimating statistical power in trend analyses. I’ve personally used variants of this but they haven’t officially made it into my peer-reviewed pubs yet.</p>
+</section>
+<section id="simulation-based-power-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-based-power-analysis">Simulation Based Power Analysis</h3>
+<p>Similar to our our <code>dat2</code> time series from the prior post we are adding in some extra noise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>n.yrs <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>n.vals <span class="ot">&lt;-</span> n.yrs<span class="sc">*</span><span class="dv">12</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">simulate_timeseries_vol</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n.vals,           <span class="co"># About 20 years of daily data</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">trend_slope =</span> <span class="fl">0.05</span>,   <span class="co"># Upward trend</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_amp =</span> <span class="dv">2</span>,     <span class="co"># Base seasonal amplitude</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">seasonal_period =</span> <span class="dv">12</span>, <span class="co"># Monthly seasonality</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_vol =</span> <span class="fl">0.5</span>,      <span class="co"># Initial volatility</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">vol_persistence =</span> <span class="fl">0.65</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">rw_sd =</span> <span class="fl">0.3</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="do">## add some years and months</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>timeseries  <span class="ot">&lt;-</span>  <span class="fu">cbind</span>(dat<span class="sc">$</span>timeseries,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">expand.grid</span>(<span class="at">Mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">Yr =</span> <span class="dv">1990</span><span class="sc">:</span>(<span class="dv">1990</span><span class="sc">+</span>(n.yrs<span class="dv">-1</span>)))</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>timeseries<span class="sc">$</span>date <span class="ot">&lt;-</span>  <span class="fu">with</span>(dat<span class="sc">$</span>timeseries,<span class="fu">as.Date</span>(<span class="fu">paste</span>(Yr,Mon,<span class="st">"01"</span>,<span class="at">sep=</span><span class="st">"-"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241103_Timeseries2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">The simulated time series.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Lets aggregate the data to year (<code>Yr</code>) for this example by calculating the annual mean</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dat_yr <span class="ot">&lt;-</span> <span class="fu">ddply</span>(dat<span class="sc">$</span>timeseries,<span class="fu">c</span>(<span class="st">"Yr"</span>),summarise,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">mean.val =</span> <span class="fu">mean</span>(value),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">sd.val =</span> <span class="fu">sd</span>(value)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241103_Timeseries2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="528"></p>
+<figcaption class="figure-caption">Quick plots of annually aggregated data.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Much like the basic simulation power analysis presented about this method will also use a simulation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mblm)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>yrs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dat_yr<span class="sc">$</span>Yr),<span class="fu">max</span>(dat_yr<span class="sc">$</span>Yr))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>yrs2 <span class="ot">&lt;-</span> yrs[<span class="dv">3</span><span class="sc">:</span><span class="fu">length</span>(yrs)]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>nsims <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>pvalues <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>power.trend.detect <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(yrs2)){</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  tmp.dat <span class="ot">&lt;-</span> <span class="fu">subset</span>(dat_yr,Yr<span class="sc">%in%</span><span class="fu">seq</span>(yrs[<span class="dv">1</span>],yrs2[i]))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsims) {</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    yval <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="fu">length</span>(tmp.dat<span class="sc">$</span>mean.val),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mean=</span>tmp.dat<span class="sc">$</span>mean.val,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd=</span><span class="fu">sd</span>(tmp.dat<span class="sc">$</span>mean.val))</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    trend.test <span class="ot">&lt;-</span> <span class="fu">with</span>(tmp.dat,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">cor.test</span>(yval,Yr,<span class="at">method=</span><span class="st">"kendall"</span>))</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    pvalues[j] <span class="ot">&lt;-</span>  trend.test<span class="sc">$</span>p.value</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  thiel_sen  <span class="ot">&lt;-</span>  <span class="fu">mblm</span>(mean.val<span class="sc">~</span>Yr,tmp.dat)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  trend <span class="ot">&lt;-</span> <span class="fu">with</span>(tmp.dat,<span class="fu">cor.test</span>(mean.val,Yr,<span class="at">method=</span><span class="st">"kendall"</span>))</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  power  <span class="ot">&lt;-</span>  <span class="fu">sum</span>(pvalues <span class="sc">&lt;</span> <span class="fl">0.05</span>)<span class="sc">/</span>nsims</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  rslt  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Yr=</span>yrs2[i],</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">slope =</span> <span class="fu">as.numeric</span>(<span class="fu">coefficients</span>(thiel_sen)[<span class="dv">2</span>]),</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">kendall.tau =</span> <span class="fu">as.numeric</span>(trend<span class="sc">$</span>estimate),</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">kendall.pval =</span> <span class="fu">as.numeric</span>(trend<span class="sc">$</span>p.value),</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>                      <span class="at">trend.power=</span>power)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  power.trend.detect  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(power.trend.detect,rslt)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>power.trend.detect<span class="sc">$</span>yrs <span class="ot">&lt;-</span> power.trend.detect<span class="sc">$</span>Yr<span class="sc">-</span><span class="fu">min</span>(dat_yr<span class="sc">$</span>Yr)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>power.trend.detect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Yr     slope kendall.tau kendall.pval trend.power yrs
+1  1992 0.3503085   0.3333333 1.000000e+00       0.000   2
+2  1993 0.5555924   0.6666667 3.333333e-01       0.000   3
+3  1994 0.7112633   0.8000000 8.333333e-02       0.096   4
+4  1995 0.7071783   0.8666667 1.666667e-02       0.161   5
+5  1996 0.6867529   0.9047619 2.777778e-03       0.290   6
+6  1997 0.7071783   0.9285714 3.968254e-04       0.411   7
+7  1998 0.7596028   0.9444444 4.960317e-05       0.549   8
+8  1999 0.7071783   0.9111111 2.976190e-05       0.620   9
+9  2000 0.6916715   0.8545455 4.624619e-05       0.643  10
+10 2001 0.6722881   0.8484848 1.634233e-05       0.742  11
+11 2002 0.6712462   0.7179487 2.839785e-04       0.616  12
+12 2003 0.6504437   0.6483516 7.575015e-04       0.620  13
+13 2004 0.5643232   0.6571429 3.303709e-04       0.688  14
+14 2005 0.5611362   0.6833333 8.266192e-05       0.721  15
+15 2006 0.4400709   0.7205882 1.148789e-05       0.750  16
+16 2007 0.4299183   0.7516340 1.442393e-06       0.856  17
+17 2008 0.4121871   0.7777778 1.649783e-07       0.878  18
+18 2009 0.4167471   0.8000000 1.731000e-08       0.926  19</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="20241103_Timeseries2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Simulation power analysis of annual trend on the <code>dat</code> dataset</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Based on this analysis, due to the variability in the data it took almost 18 simulated years of data before it reached a power of ≥ 0.80. Meanwhile, we didn’t see a “significant” trend until year five despite a relative low “power”. As more years were added, the power increased. Now this is based on annually aggregated data and an annual trend test. This could also be done on a seasonal Kendall trend test, which probably show different results given the seasonal nature of the data. We can also tune the knobs on the synthetic data function to see how things change given all the factors.</p>
+<p>Given all this trend analyses and power of the test are dependent upon several factors, including getting at the minimum number of samples needed. These factors include, but are not limited to:</p>
+<ol type="1">
+<li><p><em>Trend Strength:</em> For a <strong>“strong”</strong> trend, fewer points might suffice, but <strong>“weaker”</strong> trends require more data points to confidently discern a pattern.</p></li>
+<li><p><em>Data Variability:</em> Higher variability in the data means more points are needed to distinguish a trend from random fluctuations.</p></li>
+<li><p><em>Seasonality and Autocorrelation:</em> If there’s seasonality or serial correlation, you may need to account for it or have more data points to ensure the test’s assumptions are met.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="whats-next" class="level1">
+<h1>Whats next?</h1>
+<p>In this post we went over some of the ins and outs of how many data points/samples are needed for a trend analysis and looked at how to determine statistical power. I think for the next post we will talk about seasonal trend analyses. Stay Tuned!!</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Session Info
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>- Session info ---------------------------------------------------------------
+ setting  value
+ version  R version 4.1.0 (2021-05-18)
+ os       Windows 10 x64 (build 19045)
+ system   x86_64, mingw32
+ ui       RTerm
+ language (EN)
+ collate  English_United States.1252
+ ctype    English_United States.1252
+ tz       America/New_York
+ date     2024-11-03
+ pandoc   2.19.2
+ quarto   1.3.450
+
+- Packages -------------------------------------------------------------------
+ package       * version date (UTC) lib source
+ AnalystHelper * 0.1.5   2024-10-31 []  local
+ gtools        * 3.9.4   2022-11-27 []  CRAN (R 4.1.3)
+ mblm          * 0.12.1  2019-01-26 []  CRAN (R 4.1.1)
+ plyr          * 1.8.8   2022-11-11 []  CRAN (R 4.1.3)
+ pwr           * 1.3-0   2020-03-17 []  CRAN (R 4.1.3)
+ sessioninfo   * 1.2.2   2021-12-06 []  CRAN (R 4.1.3)
+
+
+------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">© CC-By Paul Julian II</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>
