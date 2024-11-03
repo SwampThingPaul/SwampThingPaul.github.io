@@ -1,0 +1,509 @@
+---
+title: "Time series Analysis (Part II), How Much Data?"
+author:
+  - name: Paul Julian
+date: 2024-11-03
+categories: [blog, time series,power]
+# image: /images/...
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r,include=F}
+library(AnalystHelper)
+
+wd = "C:/Julian_LaCie/_GitHub/SwampThingPaul.github.io"
+paths = c("/news/assests/20241103_Timeseries2/")
+plot.path = paste0(wd,paths[1])
+# Folder.Maker(plot.path)
+
+```
+
+In my last [post](https://swampthingecology.org/news/20241026_Timeseries1.html){target="_blank"} I gave a relatively high level overview of time series and some basic analyses. Next we are going to talk about how much data is needed to perform some of these basic tests. Not necessarily the ins and outs (i.e. assumptions) of the statistical test(s) but how much data is needed to (1) run the test and (2) get a meaningful result. Most of this will be a discussion (with exercises) on statistical power. We will be also bring back our [synthetic data functions](https://swampthingecology.org/news/20241026_Timeseries1.html#synthetic-data){target="_blank"} introduced in the last post to provide some context. Most of the discussion will be centered around the Kendall family of trend tests. 
+
+
+# Statistical Power
+
+```{r, out.width="40%",echo=F,fig.align="center"}
+knitr::include_graphics("./assests/20241103_Timeseries2/he-man-he-mana.gif")
+```
+
+... most of you probably knew that was coming.
+
+What is statistical power? ... No, its not the lesser known cousin of the Sword of Power (aka Sword of Grayskull). 
+
+Statistical power, or sensitivity, is the likelihood of a significance test detecting an effect when there actually is one. Or another way of saying this is statistical power refers to the probability of correctly rejecting a false null hypothesis. If you are up on your types of statistical error this sounds like Type II error, right? Its related but statistical error and Type II error are different things. 
+
+* __Type I Error (&alpha;):__ This is the probability of rejecting a true null hypothesis. It represents the likelihood of finding a "false positive," or detecting an effect that does not actually exist.
+
+* __Type II Error (&beta;):__ This is the probability of failing to reject a false null hypothesis. It represents the likelihood of a "false negative," or not detecting an effect that actually exists.
+
+* __Power (1- &beta;):__ Power is the probability of correctly rejecting a false null hypothesis. It measures the likelihood that a study will detect a significant effect if one truly exists.
+
+Since power (1- &beta;) and Type II error (&beta;) are directly related, high statistical power means a high likelihood of detecting an effect if it exist, thereby reducing the chance of a Type II error.  
+
+As you would expect given these definitions several factors can effect statistical likelihood and therefore statistical power. The first and foremost is the number of samples needed.
+
+## Minimum number of samples
+
+I often get asked how many samples do I need or what criterion did you use to screen the dataset to perform the trend test. Technically you only need two points to draw a line, but with those two points you don't have the ability to understand the uncertainty (i.e. variance) of said line. 
+
+Whats the absolute minimum needed to run the test? Most trend tests require 2 - 3 values to just do the math. Lets take the Kendall correlation as an example 
+
+::: {layout-ncol=2}
+
+```{r kendall2}
+set.seed(123)
+yval2 <- rnorm(2)*0.5
+xval2 <- 1:length(yval2)
+cor.test(yval2,xval2,method="kendall")
+```
+
+
+```{r kendall3}
+set.seed(123)
+yval3 <- rnorm(3)*0.5
+xval3 <- 1:length(yval3)
+cor.test(yval3,xval3,method="kendall")
+
+```
+
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=3.5,fig.height=3}
+par(mar = c(5,4,1,1))
+plot(xval2,yval2,las=1,ylab = "Y-Value",xlab="Time")
+```
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=3.5,fig.height=3}
+
+par(mar = c(5,4,1,1))
+plot(xval3,yval3,las=1,ylab = "Y-Value",xlab="Time")
+```
+
+:::
+
+What does this mean? For the Mann-Kendall test, the test statistic $S$ is calculated as the sum of signs of differences between all pairs of observations therefore you only technically need two points to perform the test ... but again this lacks any certainty and does not have a robust amount of data to accurately estimate the statistical likelihood. We can do a thought experiment to look at the number of samples to calculate the exact critical values for the $S$ statistic. This can be achieved by calculating all possible $S$ values for a given sample size $n$ and determining the probabilities of obtaining these values under the null hypothesis of no trend.
+
+Here is the basic functions needed to generate the critical value look-up table for the Mann-Kendall $S$ statistic. 
+
+* `calculate_S`: This function calculates the Mann-Kendall $S$-Statistic for a given vector (x). It loops over all pairs $(i,j)$ to compute the sum of signs. In the correlation test examples above this is the `T` statistic. 
+
+* `calculate_Smax`: This function calculates the $S_{max}$ value for a given sample size ($n$). 
+
+* `generate_lookup_table`: This function generates all possible permutations of ranks for a given sample size $n$, calculates $S$ for each permutation, and then tabulates the frequency of each unique $S$ value. It calculates the probability of each $S$-value by dividing its frequency by the total number of permutations.
+
+
+```{r, warning=FALSE}
+library(gtools) # for permutations
+
+# Define function to calculate Mann-Kendall S statistic
+calculate_S <- function(x) {
+  n <- length(x)
+  S <- 0
+  for (i in 1:(n - 1)) {
+    for (j in (i + 1):n) {
+      S <- S + sign(x[j] - x[i])
+    }
+  }
+  return(S)
+}
+
+calculate_Smax <- function(n){n*(n-1)/2}
+
+# Function to generate look-up table for a given sample size n
+generate_lookup_table <- function(n) {
+  # Generate all possible permutations of ranks
+  rank_permutations <- permutations(n, n, v = 1:n)
+  
+  # Calculate S for each permutation
+  S_values <- apply(rank_permutations, 1, calculate_S)
+  
+  # Count frequency of each S value
+  S_table <- table(S_values)
+  
+  # Calculate probabilities
+  total_permutations <- factorial(n)
+  prob_table <- data.frame(
+    S = as.numeric(names(S_table)),
+    Frequency = as.integer(S_table),
+    # Smax = as.integer(n*(n-1)/2),
+    Probability = as.integer(S_table) / total_permutations
+  )
+  
+  return(prob_table)
+}
+
+```
+
+Lets look at samples sizes of 2, 3, 4 and 5. Any more than that and the process get bogged down (due to the computation of individual permutations). Lets use the lapply function to generate look up tables for a range of n values. 
+
+```{r}
+# Generate look-up tables for sample sizes n = 2, 3, 4, 5 and 10
+lookup_tables <- lapply(2:5, generate_lookup_table)
+smax_val <- calculate_Smax(2:5)
+names(lookup_tables) <- paste0("n=", 2:5,"; Smax = ",smax_val)
+
+# Display the look-up tables
+lookup_tables
+```
+
+Each look-up table contains:
+
+* _S:_  The possible Mann-Kendall statics values
+
+* _Frequency:_  The frequency of each $S$-value among all permutations
+
+* _Probability:_  The probability of obtaining each S-value under the null hypothesis.
+
+* _Smax:_  The maximum possible value of $S$ for a given sample size. $S_{max}$ is useful for determining critical values and conducting hypothesis tests in the Mann-Kendall trend test, particularly when assessing the significance of the observed $S$-statistic under the null hypothesis of no trend.
+
+As you can see a sample size of two (`n=2`) you have a an equal chance (probability) of accepting or rejecting your hypothesis. 
+
+While this section pertains to how few samples are needed to do the test, its worth mentioning the other side of the coin. When sample sizes increase some of the mathematics changes slightly. For instance when $n$ is large (a relative term ... lets just say $n\ge10$), the standardized $S$ (often denoted as $Z$) approximately follows a normal distribution. This allows the use of z-scores to determine statistical significance of the observed $S$-statistic. 
+
+Now that we know the fundamentals of two points make a straight line ... we can move onto statistical power. 
+
+## How to do a power analysis
+
+Statistical power analysis can be performed a couple different ways. For this post, lets assume this is a post-hoc statistical power analysis (remember you can do as power analysis before collecting samples to determine how many samples you need). In this example we will use a power calculation for a general linear model to approximate the power. The reason for the caveat is a general linear model is NOT a trend test (unless the data and model residuals fit the assumptions of the test ... fat chance) and is different from the the Mann-Kendall and Thiel-Sen estimator.
+
+### `pwr` 
+
+The `pwr::pwr.f2.test(...)` is a function to calculate the statistical power for a linear model. Its pretty straight forward ...
+
+```{r,warning=F}
+library(pwr)
+
+# Define parameters
+effect_size <- 0.15  # Estimate of the effect size (can be calculated or approximated)
+alpha <- 0.05        # Significance level
+power <- 0.8         # Desired power
+
+# Perform power analysis for linear regression
+sample_size <- pwr.f2.test(u = 1, f2 = effect_size, sig.level = alpha, power = power)
+
+# Output the required number of samples
+sample_size
+```
+
+* `u = 1` represents one predictor variable (time, in this case).
+
+* `f2` is the effect size (Cohen's $f^{2}$) for linear models and is calculated using the models $R_{2}$. 
+
+<center>
+
+$f^{2} = \frac{R^{2}}{1 - R^{2}}$
+
+</center>
+
+Of course knowing the effect size and power is half the information we want to know. Another way to do a power analysis and probably a more meaningful way would be a simulation based test. I'll show you two different versions, a very basic version and a more elaborate version based off an analysis presented by [Dr Schramm](https://mastodon.social/@mpschramm){target="_blank"} <!--https://michaelpaulschramm.com/--> in this [paper](https://twj-ojs-tdl.tdl.org/twj/index.php/twj/article/view/7126){target="_blank"}.
+
+### Basic Simulation
+
+```{r}
+set.seed(123)
+# Parameters
+true_slope <- 0.05  # Slope of the trend
+sigma <- 1          # Standard deviation of errors
+n_sim <- 1000       # Number of simulations
+sample_sizes <- seq(20, 100, by = 5)  # Range of sample sizes to test
+alpha <- 0.05
+
+# Function to simulate data and fit regression model
+power_simulation <- function(n) {
+  significant_results <- 0
+  for (i in 1:n_sim) {
+    x <- 1:n
+    y <- true_slope * x + rnorm(n, mean = 0, sd = sigma)
+    model <- lm(y ~ x)
+    if (summary(model)$coefficients[2, 4] < alpha) {  # p-value of slope
+      significant_results <- significant_results + 1
+    }
+  }
+  return(significant_results / n_sim)
+}
+
+# Run simulations for each sample size
+power_results <- sapply(sample_sizes, power_simulation)
+
+```
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="Statistical power by sample size."}
+# Plot power vs. sample size
+plot(sample_sizes, power_results, type = "b", xlab = "Sample Size", ylab = "Power", las=1)
+abline(h = 0.8, col = "red", lty = 2)  # Desired power threshold
+```
+
+A power of 0.80 is typically considered appropriate, which equates to a 20% chance of encountering a Type II error. Remember from above the definition of power, if we are sampling from a population where the null hypothesis is false, the power is calculated as 
+
+<center>
+$$ Power = \frac{N_{rejected}{N}$$ 
+</center> 
+
+where $N$ is the total number of tests and $N_{rejected}$ are the total number of times the test rejected the null hypothesis. I highly recommend reading this [paper](https://twj-ojs-tdl.tdl.org/twj/index.php/twj/article/view/7126){target="_blank"} for a great IRL example of estimating statistical power in trend analyses. I've personally used variants of this but they haven't officially made it into my peer-reviewed pubs yet. 
+
+### Simulation Based Power Analysis
+
+```{r sim fun, echo=F}
+simulate_timeseries <- function(n = 1000,            # Number of observations
+                                trend_slope = 0.01,    # Slope of linear trend
+                                seasonal_amp = 2,      # Amplitude of seasonal component
+                                seasonal_period = 12,  # Period length
+                                noise_mean = 1,        # mean of noise
+                                noise_sd = 0.5,        # Standard deviation of noise  
+                                seed.val = 123         # value to set.seed(...)
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # Create components
+  # 1. Linear trend
+  trend <- trend_slope * t
+  # 2. Seasonal component using sine wave
+  seasonal <- seasonal_amp * sin(2 * pi * t / seasonal_period)
+  # 3. Random noise (stationary component)
+  noise <- rnorm(n, mean = noise_mean, sd = noise_sd)
+  # Combine components
+  ts_data <- trend + seasonal + noise
+  
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components for analysis
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise
+    )
+  ))
+}
+
+simulate_timeseries_vol <- function(n = 1000,              # Number of observations
+                                    trend_slope = 0.01,    # Slope of linear trend
+                                    seasonal_amp = 2,      # seasonal component
+                                    seasonal_period = 12,  # Period length
+                                    init_vol = 0.5,        # Initial volatility
+                                    vol_persistence = 0.95,# Persistence in volatility
+                                    rw_sd = 0.1,           # Random walk innovation SD
+                                    seed.val = 123         # value to set.seed(...)  
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # 1. Create non-linear trend (combining linear trend with random walk)
+  linear_trend <- trend_slope * t
+  random_walk <- cumsum(rnorm(n, 0, rw_sd))
+  trend <- linear_trend + random_walk
+  # 2. Create time-varying seasonal component
+  # Amplitude changes over time following a random walk
+  varying_amplitude <- seasonal_amp + cumsum(rnorm(n, 0, rw_sd/5))
+  seasonal <- varying_amplitude * sin(2 * pi * t / seasonal_period)
+  # 3. Generate time-varying volatility (GARCH-like process)
+  # Initialize volatility vector
+  volatility <- numeric(n)
+  volatility[1] <- init_vol
+  # Generate volatility process
+  for(i in 2:n) {
+    # Volatility follows AR(1) process with innovations
+    volatility[i] <- sqrt(0.01 + 
+                            vol_persistence * volatility[i-1]^2 + 
+                            (1 - vol_persistence) * rnorm(1, 0, 0.1)^2)
+  }
+  # 4. Generate heteroskedastic noise
+  noise <- rnorm(n, 0, 1) * volatility
+  # 5. Add structural breaks
+  # Add random level shifts
+  n_breaks <- max(1, round(n/200))  # Approximately one break every 200 observations
+  break_points <- sort(sample(2:n, n_breaks))
+  level_shifts <- cumsum(rnorm(n_breaks, 0, 2))  # Random shift magnitudes
+  breaks <- numeric(n)
+  current_break <- 1
+  for(i in 1:n) {
+    if(current_break <= length(break_points) && i >= break_points[current_break]) {
+      breaks[i:n] <- level_shifts[current_break]
+      current_break <- current_break + 1
+    }
+  }
+  
+  # Combine all components
+  ts_data <- trend + seasonal + noise + breaks
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise,
+      breaks = breaks,
+      volatility = volatility
+    )
+  ))
+}
+
+```
+
+Similar to our our `dat2` time series from the prior post we are adding in some extra noise. 
+
+```{r}
+n.yrs <- 20
+n.vals <- n.yrs*12 
+
+dat <- simulate_timeseries_vol(
+  n = n.vals,           # About 20 years of daily data
+  trend_slope = 0.05,   # Upward trend
+  seasonal_amp = 2,     # Base seasonal amplitude
+  seasonal_period = 12, # Monthly seasonality
+  init_vol = 0.5,      # Initial volatility
+  vol_persistence = 0.65,
+  rw_sd = 0.3
+)
+## add some years and months
+dat$timeseries  <-  cbind(dat$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:(1990+(n.yrs-1)))
+)
+dat$timeseries$date <-  with(dat$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+
+
+```
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="The simulated time series."}
+
+plot(value~date,dat$timeseries,type="l",col="dodgerblue", lwd=2,las=1,main = "Simulated Time Series\n(dat)", ylab = "Value",xlab ="Date")
+
+```
+
+Lets aggregate the data to year (`Yr`) for this example by calculating the annual mean
+```{r,warning=F}
+library(plyr)
+dat_yr <- ddply(dat$timeseries,c("Yr"),summarise,
+                mean.val = mean(value),
+                sd.val = sd(value)
+                )
+```
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=5.5,fig.height=5,fig.align='center',fig.cap="Quick plots of annually aggregated data."}
+
+plot(mean.val~Yr,dat_yr,type="l",col="dodgerblue1", lwd=2, 
+     main = "Annual Aggregated\nSimulated Time Series\n(dat1)", ylab = "Value",xlab ="Year",
+     ylim = c(0,12),las=1)
+points(mean.val~Yr,dat_yr,pch=19,cex=1)
+errorbars(dat_yr$Yr,dat_yr$mean.val,dat_yr$sd.val,"black",length=0.01)
+```
+
+Much like the basic simulation power analysis presented about this method will also use a simulation.  
+
+```{r,warning=F}
+library(mblm)
+
+yrs <- seq(min(dat_yr$Yr),max(dat_yr$Yr))
+yrs2 <- yrs[3:length(yrs)]
+
+nsims <- 1000
+pvalues <- NA
+power.trend.detect <- data.frame()
+set.seed(123)
+for(i in 1:length(yrs2)){
+  
+  tmp.dat <- subset(dat_yr,Yr%in%seq(yrs[1],yrs2[i]))
+  
+  for (j in 1:nsims) {
+    yval <- rnorm(n=length(tmp.dat$mean.val),
+                  mean=tmp.dat$mean.val,
+                  sd=sd(tmp.dat$mean.val))
+    trend.test <- with(tmp.dat,
+                       cor.test(yval,Yr,method="kendall"))
+    pvalues[j] <-  trend.test$p.value
+  }
+  
+  thiel_sen  <-  mblm(mean.val~Yr,tmp.dat)
+  trend <- with(tmp.dat,cor.test(mean.val,Yr,method="kendall"))
+  
+  power  <-  sum(pvalues < 0.05)/nsims
+  rslt  <- data.frame(Yr=yrs2[i],
+                      slope = as.numeric(coefficients(thiel_sen)[2]),
+                      kendall.tau = as.numeric(trend$estimate),
+                      kendall.pval = as.numeric(trend$p.value),
+                      trend.power=power)
+  power.trend.detect  <- rbind(power.trend.detect,rslt)
+}
+power.trend.detect$yrs <- power.trend.detect$Yr-min(dat_yr$Yr)
+
+power.trend.detect
+```
+
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=5,fig.align='center',fig.cap="Simulation power analysis of annual trend on the `dat` dataset"}
+par(family="serif",mar=c(1,2.5,0.5,1.5),oma=c(3,2,0.5,0.25));
+layout(matrix(1:2,2,1,byrow = F),heights=c(0.60,1))
+lab.ln=2.25
+
+ylim.val=c(0,1);by.y=0.2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(1,20);by.x=1;xmaj=seq(xlim.val[1],xlim.val[2],by.x);xmin=seq(xlim.val[1],xlim.val[2],by.x/by.x)
+plot(trend.power~yrs,power.trend.detect,type="n",ann=F,axes=F,ylim=ylim.val,xlim=xlim.val)
+abline(h=ymaj,v=xmaj,lty=3,col="grey",lwd=0.75)
+abline(h=0.8,lty=2)
+with(power.trend.detect,pt_line(yrs,trend.power,1,adjustcolor("black",0.5),1.5,21,"grey",1.5,0.1))
+axis_fun(1,xmaj,xmin,NA)
+axis_fun(2,ymaj,ymin,format(ymaj));box(lwd=1)
+mtext(side=2,line=lab.ln,"Power")
+
+ylim.val=c(0,1);by.y=0.2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+plot(slope~yrs,power.trend.detect,type="n",ann=F,axes=F,ylim=ylim.val,xlim=xlim.val)
+abline(h=ymaj,v=xmaj,lty=3,col="grey",lwd=0.75)
+with(power.trend.detect,pt_line(yrs,slope,1,adjustcolor("black",0.5),1.5,
+                                ifelse(kendall.pval<0.05,21,23),
+                                ifelse(kendall.pval<0.05,"indianred1","grey"),1.5,0.1))
+axis_fun(1,xmaj,xmin,xmaj,line=-0.5)
+axis_fun(2,ymaj,ymin,format(ymaj));box(lwd=1)
+mtext(side=2,line=lab.ln,"Thiel-Sen Slope (\u03BCg P L\u207B\u00B9 Yr\u207B\u00B9)")
+mtext(side=1,line=2,"Years of Monitoring")
+legend("bottomleft",legend=c("\u03C1-value < 0.05","\u03C1-value > 0.05"),
+       pch=c(21,23),pt.bg=c("indianred1","grey"),
+       lty=c(0),lwd=0.1,col="black",
+       pt.cex=1.5,ncol=1,cex=1,bty="n",y.intersp=1.1,x.intersp=0.75,xpd=NA,xjust=0,yjust=1)
+
+```
+
+Based on this analysis, due to the variability in the data it took almost 18 simulated years of data before it reached a power of &GreaterEqual; 0.80. Meanwhile, we didn't see a "significant" trend until year five despite a relative low "power". As more years were added, the power increased. Now this is based on annually aggregated data and an annual trend test. This could also be done on a seasonal Kendall trend test, which probably show different results given the seasonal nature of the data. We can also tune the knobs on the synthetic data function to see how things change given all the factors. 
+
+Given all this trend analyses and power of the test are dependent upon several factors, including getting at the minimum number of samples needed. These factors include, but are not limited to: 
+
+1. _Trend Strength:_ For a __"strong"__ trend, fewer points might suffice, but __"weaker"__ trends require more data points to confidently discern a pattern.
+
+2. _Data Variability:_ Higher variability in the data means more points are needed to distinguish a trend from random fluctuations.
+
+3. _Seasonality and Autocorrelation:_ If there’s seasonality or serial correlation, you may need to account for it or have more data points to ensure the test's assumptions are met.
+
+
+# Whats next?
+
+In this post we went over some of the ins and outs of how many data points/samples are needed for a trend analysis and looked at how to determine statistical power. I think for the next post we will talk about seasonal trend analyses. Stay Tuned!! 
+
+:::{.callout-tip collapse="true"}
+# Session Info
+```{r, echo = FALSE,warning=FALSE,message=FALSE}
+library(sessioninfo)
+# save the session info as an object
+pkg_sesh <- session_info(pkgs = "attached",info=c("platform","package"))
+
+# Remove package library path
+pkg_sesh$packages$library = NULL
+
+# get the quarto version
+quarto_version <- system("quarto --version", intern = TRUE)
+
+# inject the quarto info
+pkg_sesh$platform$quarto <- system("quarto --version", intern = TRUE)
+
+# modify pandoc info
+pkg_sesh$platform$pandoc = trimws(sapply(strsplit(pkg_sesh$platform$pandoc,"@"),"[",1))
+
+# print it out
+pkg_sesh
+
+```
+
+:::

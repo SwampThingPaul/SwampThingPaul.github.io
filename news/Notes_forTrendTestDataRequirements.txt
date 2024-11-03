@@ -1,0 +1,7 @@
+Notes on data requirements
+
+https://sites.google.com/site/davidsstatistics/davids-statistics/mann-kendall-trend
+
+https://vsp.pnnl.gov/help/vsample/design_trend_mann_kendall.htm
+
+https://chatgpt.com/share/671f97a1-5824-8011-8218-cd9afc3a0556
