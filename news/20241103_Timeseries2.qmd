@@ -169,7 +169,7 @@ Statistical power analysis can be performed a couple different ways. For this po
 
 ### `pwr` 
 
-The `pwr::pwr.f2.test(...)` is a function to calculate the statistical power for a linear model. Its pretty straight forward ...
+The `pwr.f2.test(...)` function in the `pwr` library calculates the statistical power for a linear model. Its pretty straight forward ...
 
 ```{r,warning=F}
 library(pwr)
@@ -435,7 +435,7 @@ power.trend.detect
 ```
 
 
-```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=5,fig.align='center',fig.cap="Simulation power analysis of annual trend on the `dat` dataset"}
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=5,fig.align='center',fig.cap="Simulation based power analysis of annual trend on the `dat` dataset using a normal distribution."}
 par(family="serif",mar=c(1,2.5,0.5,1.5),oma=c(3,2,0.5,0.25));
 layout(matrix(1:2,2,1,byrow = F),heights=c(0.60,1))
 lab.ln=2.25
@@ -468,6 +468,136 @@ legend("bottomleft",legend=c("\u03C1-value < 0.05","\u03C1-value > 0.05"),
 ```
 
 Based on this analysis, due to the variability in the data it took almost 18 simulated years of data before it reached a power of &GreaterEqual; 0.80. Meanwhile, we didn't see a "significant" trend until year five despite a relative low "power". As more years were added, the power increased. Now this is based on annually aggregated data and an annual trend test. This could also be done on a seasonal Kendall trend test, which probably show different results given the seasonal nature of the data. We can also tune the knobs on the synthetic data function to see how things change given all the factors. 
+
+This analysis was done by simulating from a normal distribution, it can also be done with other distributions such as Gamma or even Tweedie. These distributions are great for right skewed data (always positive). Below is an example using the tweedie to perform the power simulations, its a litte more involved to simulate around a given mean due to the distributions parameters and how variance is estimated. From a tweedie distribution variance is estimates as:
+
+<center>
+$$Var(Y) = \phi \cdot \mu^{p}$$
+</center>
+
+Where: 
+
+* $\phi$ is the dispersion parameter
+* $\mu$ is the mean of the distribution
+* $p$ is the Tweedie power parameter which determines the specific type or distribution (e.g. $p=1$ is a Poisson distribution, $p=2$ is a Gamma distribution and $p=3$ is a Inverse Gaussian distribution)
+
+To determine the standard deviation (what we usually plug into things like `rnorm(...)`) you take the square root of the variance:
+
+<center>
+$$\sigma_{Y} = \sqrt{\phi \cdot \mu^{p}}$$
+</center>
+
+To estimate a given standard deviation we need to solve for $\phi$ in the equation above. 
+
+<center>
+$$\phi = \dfrac{\sigma_{y}}{\mu^{p}}$$ 
+</center>
+
+```{r,echo=F,warning=F,message=F,eval=F}
+library(tweedie)
+
+tw_prof <- tweedie.profile(mean.val~1,data = dat_yr,p.vec = seq(1.0, 3.0, by = 0.2))
+tw_prof$p.max
+tw_prof$phi.max
+```
+
+For purposes of this exercise lets assume a power parameter of $p$ of 1.2. To get a better sense of distribution variables you can use the `tweedie.profile` function in the `tweedie` library. First lets double check we can estimate close to the mean and standard deviation we are expecting
+
+```{r}
+library(tweedie)
+
+# Set parameters
+mu <- 2        # Example mean
+p <- 1.2       # Example Tweedie power parameter 
+sigma_Y <- 1   # the expected standard deviation 
+phi <- sigma_Y / (mu^p)  # Calculate phi for a given standard deviation
+
+# Simulate Tweedie data
+set.seed(123)
+sim_data <- rtweedie(n = 1000, mu = mu, phi = phi, power = p)
+
+# Check standard deviation of simulated data
+sd(sim_data)
+
+# Check mean of simulated data
+mean(sim_data)
+
+```
+
+... close enough for government distributions. Lets replace the `rnorm` in the power analysis above with `rtweedie` and go through the process.   
+
+```{r}
+
+tw.p <- 1.2 # Tweedie power parameter
+
+pvalues <- NA
+power.trend.detect.tw <- data.frame()
+set.seed(123)
+for(i in 1:length(yrs2)){
+  
+  tmp.dat <- subset(dat_yr,Yr%in%seq(yrs[1],yrs2[i]))
+  
+  for (j in 1:nsims) {
+    tw.mu <- (tmp.dat$mean.val)
+    tw.phi <- sd(tmp.dat$mean.val) / (tw.mu^tw.p)
+    
+    yval <- rtweedie(n=length(tmp.dat$mean.val),
+                     mu = tw.mu, phi = tw.phi, power = tw.p)
+    trend.test <- with(tmp.dat,
+                       cor.test(yval,Yr,method="kendall"))
+    pvalues[j] <-  trend.test$p.value
+  }
+  
+  thiel_sen  <-  mblm(mean.val~Yr,tmp.dat)
+  trend <- with(tmp.dat,cor.test(mean.val,Yr,method="kendall"))
+  
+  power  <-  sum(pvalues < 0.05)/nsims
+  rslt  <- data.frame(Yr=yrs2[i],
+                      slope = as.numeric(coefficients(thiel_sen)[2]),
+                      kendall.tau = as.numeric(trend$estimate),
+                      kendall.pval = as.numeric(trend$p.value),
+                      trend.power=power)
+  power.trend.detect.tw  <- rbind(power.trend.detect.tw,rslt)
+}
+power.trend.detect.tw$yrs <- power.trend.detect.tw$Yr-min(dat_yr$Yr)
+
+power.trend.detect.tw
+
+```
+
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=5,fig.align='center',fig.cap="Simulation based power analysis of annual trend on the `dat` dataset using a tweedie distribution."}
+par(family="serif",mar=c(1,2.5,0.5,1.5),oma=c(3,2,0.5,0.25));
+layout(matrix(1:2,2,1,byrow = F),heights=c(0.60,1))
+lab.ln=2.25
+
+ylim.val=c(0,1);by.y=0.2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(1,20);by.x=1;xmaj=seq(xlim.val[1],xlim.val[2],by.x);xmin=seq(xlim.val[1],xlim.val[2],by.x/by.x)
+plot(trend.power~yrs,power.trend.detect.tw,type="n",ann=F,axes=F,ylim=ylim.val,xlim=xlim.val)
+abline(h=ymaj,v=xmaj,lty=3,col="grey",lwd=0.75)
+abline(h=0.8,lty=2)
+with(power.trend.detect.tw,pt_line(yrs,trend.power,1,adjustcolor("black",0.5),1.5,21,"grey",1.5,0.1))
+axis_fun(1,xmaj,xmin,NA)
+axis_fun(2,ymaj,ymin,format(ymaj));box(lwd=1)
+mtext(side=2,line=lab.ln,"Power")
+
+ylim.val=c(0,1);by.y=0.2;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+plot(slope~yrs,power.trend.detect.tw,type="n",ann=F,axes=F,ylim=ylim.val,xlim=xlim.val)
+abline(h=ymaj,v=xmaj,lty=3,col="grey",lwd=0.75)
+with(power.trend.detect.tw,pt_line(yrs,slope,1,adjustcolor("black",0.5),1.5,
+                                ifelse(kendall.pval<0.05,21,23),
+                                ifelse(kendall.pval<0.05,"indianred1","grey"),1.5,0.1))
+axis_fun(1,xmaj,xmin,xmaj,line=-0.5)
+axis_fun(2,ymaj,ymin,format(ymaj));box(lwd=1)
+mtext(side=2,line=lab.ln,"Thiel-Sen Slope (\u03BCg P L\u207B\u00B9 Yr\u207B\u00B9)")
+mtext(side=1,line=2,"Years of Monitoring")
+legend("bottomleft",legend=c("\u03C1-value < 0.05","\u03C1-value > 0.05"),
+       pch=c(21,23),pt.bg=c("indianred1","grey"),
+       lty=c(0),lwd=0.1,col="black",
+       pt.cex=1.5,ncol=1,cex=1,bty="n",y.intersp=1.1,x.intersp=0.75,xpd=NA,xjust=0,yjust=1)
+```
+
+Using a Tweedie distribution gives a slightly different evaluation of statistical power than the normal distribution estimate above. As in most cases, distribution matters feel free to adapt this code for whatever distribution your data is in.   
 
 Given all this trend analyses and power of the test are dependent upon several factors, including getting at the minimum number of samples needed. These factors include, but are not limited to: 
 

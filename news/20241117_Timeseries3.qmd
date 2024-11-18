@@ -1,0 +1,543 @@
+---
+title: "Time series Analysis (Part III), Welcome to the Kendall Family?"
+author:
+  - name: Paul Julian
+date: 2024-11-17
+categories: [blog, time series,trend]
+# image: /images/...
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r,include=F}
+library(AnalystHelper)
+
+wd = "C:/Julian_LaCie/_GitHub/SwampThingPaul.github.io"
+paths = c("/news/assests/20241117_Timeseries3/")
+plot.path = paste0(wd,paths[1])
+# Folder.Maker(plot.path)
+
+simulate_timeseries <- function(n = 1000,            # Number of observations
+                                trend_slope = 0.01,    # Slope of linear trend
+                                seasonal_amp = 2,      # Amplitude of seasonal component
+                                seasonal_period = 12,  # Period length
+                                noise_mean = 1,        # mean of noise
+                                noise_sd = 0.5,        # Standard deviation of noise  
+                                seed.val = 123         # value to set.seed(...)
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # Create components
+  # 1. Linear trend
+  trend <- trend_slope * t
+  # 2. Seasonal component using sine wave
+  seasonal <- seasonal_amp * sin(2 * pi * t / seasonal_period)
+  # 3. Random noise (stationary component)
+  noise <- rnorm(n, mean = noise_mean, sd = noise_sd)
+  # Combine components
+  ts_data <- trend + seasonal + noise
+  
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components for analysis
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise
+    )
+  ))
+}
+
+simulate_timeseries_vol <- function(n = 1000,              # Number of observations
+                                    trend_slope = 0.01,    # Slope of linear trend
+                                    seasonal_amp = 2,      # seasonal component
+                                    seasonal_period = 12,  # Period length
+                                    init_vol = 0.5,        # Initial volatility
+                                    vol_persistence = 0.95,# Persistence in volatility
+                                    rw_sd = 0.1,           # Random walk innovation SD
+                                    seed.val = 123         # value to set.seed(...)  
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # 1. Create non-linear trend (combining linear trend with random walk)
+  linear_trend <- trend_slope * t
+  random_walk <- cumsum(rnorm(n, 0, rw_sd))
+  trend <- linear_trend + random_walk
+  # 2. Create time-varying seasonal component
+  # Amplitude changes over time following a random walk
+  varying_amplitude <- seasonal_amp + cumsum(rnorm(n, 0, rw_sd/5))
+  seasonal <- varying_amplitude * sin(2 * pi * t / seasonal_period)
+  # 3. Generate time-varying volatility (GARCH-like process)
+  # Initialize volatility vector
+  volatility <- numeric(n)
+  volatility[1] <- init_vol
+  # Generate volatility process
+  for(i in 2:n) {
+    # Volatility follows AR(1) process with innovations
+    volatility[i] <- sqrt(0.01 + 
+                            vol_persistence * volatility[i-1]^2 + 
+                            (1 - vol_persistence) * rnorm(1, 0, 0.1)^2)
+  }
+  # 4. Generate heteroskedastic noise
+  noise <- rnorm(n, 0, 1) * volatility
+  # 5. Add structural breaks
+  # Add random level shifts
+  n_breaks <- max(1, round(n/200))  # Approximately one break every 200 observations
+  break_points <- sort(sample(2:n, n_breaks))
+  level_shifts <- cumsum(rnorm(n_breaks, 0, 2))  # Random shift magnitudes
+  breaks <- numeric(n)
+  current_break <- 1
+  for(i in 1:n) {
+    if(current_break <= length(break_points) && i >= break_points[current_break]) {
+      breaks[i:n] <- level_shifts[current_break]
+      current_break <- current_break + 1
+    }
+  }
+  
+  # Combine all components
+  ts_data <- trend + seasonal + noise + breaks
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise,
+      breaks = breaks,
+      volatility = volatility
+    )
+  ))
+}
+
+
+```
+
+So far we've gone over the basics of time series ([Part I](https://swampthingecology.org/news/20241026_Timeseries1.html){target="_blank"}), minimum number of samples, power analyses and some basic trend analyses ([Part II](https://swampthingecology.org/news/20241103_Timeseries2.html){target="_blank"}). In this post we will talk more explicitly about the Kendall family of trend test, more specifically seasonal trends. 
+
+```{r,out.width = "40%",echo=F,fig.align="center"}
+knitr::include_graphics("./assests/20241117_Timeseries3/the-god-father-marlon-brando.gif")
+```
+
+# Trend Tests
+
+In the last two posts I introduce the Kendall trend test. In those posts, I used the `cor.test(..., method="kendall")` function in `stat` (i.e. base) R. There are several different R-packages dedicated to trend analyses such as `Kendall`, `trend`, `wq` and `EnvStats`. This is by no means an exhaustive list and I'm sure there are other package on CRAN, GitHub or other platforms that do trend analyses. In my years of being a data analyst, specific to trend analyses these packages (and other platforms) were compared to the USGS Computer program for the Kendall family of trend test but more on that later. 
+
+## Kendall Trend Test
+
+While this might come down to semantics but across the literature you'll seen **Mann-Kendall** (trend) test and **Kendall** trend test, test or rank correlation test. Overall these tests are one in the same, its partly in how they are applied (to some degree). For instance the Mann-Kendall test specifically used to detect monotonic trend in a time series while Kendall tests whether two variables are related in a monotonic way, irrespective of temporal structure. Moreover, the Mann-Kendall test incorporates the temporal order of observation to assess whether values are consistently increasing or decreasing over time. Therefore, one could say (and the `EnvStats` help page for `kendallTrendTest` provides a detailed discussion) that the Mann-Kendall is a special case of the test for independence based on the Kendall's tau statistic. Which both the &#120591 (Kendall) and S-statistic (Mann-Kendall) both measure the ratio of concordant and discordant pairs, its just the Mann-Kendall interpretation includes a time order. If you dig into the source code for `stats::cor.test()` and `EnvStats::kendallTrendTest` you'll see things are calculated nearly identically. 
+
+While the Kendall (or Mann-Kendall in our case) is a non-parametric statistic, as in there are no assumptions made about the distribution of the X (time) and Y variables there are some assumptions of the test. 
+
+* **Monotonic Trend:** the test assumes (hence its use to test the hypothesis) the presence of a monotonic trend in the data (irrespective of direction) but does not assume linearity. 
+    * If the data set has periodic components it could mislead results. Below is an example where one dataset is monotonically  increasing (left) while the other is increasing there is a strong seasonal component (right), both are significantly increasing. If you do the trend analysis, this variability in the second (right) dataset is reflected in the lower (tau or S-statistic ... depending on the test).
+
+```{r sim, echo=FALSE,message=FALSE, results='hide'}
+n.yrs <- 5
+n.vals <- n.yrs*12 
+test  <-  simulate_timeseries(n=n.vals,seasonal_period = 1,seasonal_amp=1,trend_slope=0.1)
+test2 <-  simulate_timeseries(n=n.vals,seasonal_period = 4,seasonal_amp=2,trend_slope=0.1)
+
+test$timeseries  <-  cbind(test$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:(1990+(n.yrs-1)))
+)
+test$timeseries$date <-  with(test$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+test$timeseries$dec.date <- lubridate::decimal_date(test$timeseries$date)
+
+# test2 <-  simulate_timeseries(n=n.vals,seasonal_period = 4,seasonal_amp=2,trend_slope=0.1)
+test2$timeseries  <-  cbind(test2$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:(1990+(n.yrs-1)))
+)
+test2$timeseries$date <-  with(test2$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+test2$timeseries$dec.date <- lubridate::decimal_date(test2$timeseries$date)
+
+## kendall
+with(test$timeseries,cor.test(value,dec.date,method="kendall"))
+with(test2$timeseries,cor.test(value,dec.date,method="kendall"))
+
+## Envstats
+EnvStats::kendallTrendTest(value~dec.date,test$timeseries)
+EnvStats::kendallTrendTest(value~dec.date,test2$timeseries)
+
+## Serial correlation
+with(test$timeseries,lmtest::dwtest(value~dec.date))
+with(test$timeseries,lmtest::bgtest(value~dec.date))
+
+with(test2$timeseries,lmtest::dwtest(value~dec.date))
+with(test2$timeseries,lmtest::bgtest(value~dec.date))
+```
+
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="Contrasting simulated time series realtive to trend."}
+layout(matrix(1:2,1,2))
+
+plot(value~date,test$timeseries,type="n",las=1, ylab = "Value",xlab ="Date")
+lines(value~date,test$timeseries,col="dodgerblue", lwd=2)
+points(value~date,test$timeseries,pch=21,bg="dodgerblue", lwd=0.1)
+mod <- mblm::mblm(value~dec.date,test$timeseries,repeated = F)
+x.val <- with(test$timeseries,seq(min(dec.date),max(dec.date),length.out=20))
+mod.pred <- predict(mod,data.frame(dec.date = x.val))
+x.val.date <- as.Date(lubridate::date_decimal(x.val))
+lines(x.val.date,mod.pred,lwd=2)
+
+plot(value~date,test2$timeseries,type="n",las=1, ylab = "Value",xlab ="Date")
+lines(value~date,test2$timeseries,col="indianred1", lwd=2)
+points(value~date,test2$timeseries,pch=21,bg="indianred1", lwd=0.1)
+mod <- mblm::mblm(value~dec.date,test$timeseries,repeated = F)
+x.val <- with(test2$timeseries,seq(min(dec.date),max(dec.date),length.out=20))
+mod.pred <- predict(mod,data.frame(dec.date = x.val))
+x.val.date <- as.Date(lubridate::date_decimal(x.val))
+lines(x.val.date,mod.pred,lwd=2)
+
+```
+
+
+* **Data Independence:** the observations in the time series are assumed to be independent. If there is serial autocorrelation then the test statistic could be biased. However, given the nature of the data, serial correlations are sometimes unavoidable and generally pose a challenge. However, there are ways to check and methods, such as "*pre-whitening*" to account for it. 
+
+To check for serial correlation a simple autocorrelation function can be used. There are other tests like the Durbin-Watson test `lmtest::dwtest` or the Breusch-Godfrey test `lmtest::bgtest` but these test evaluate the residuals of the model to evaluate autocorrelation not autocorrelation of the data itself like `acf`. 
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="ACF plot of the simulated time series datasets."}
+
+layout(matrix(1:2,1,2))
+acf(test$timeseries$value,col="dodgerblue1",lwd=2,main=NA)
+acf(test2$timeseries$value,col="indianred1",lwd=2,main=NA)
+
+```
+
+Here is a pre-whitening method that can be implemented without any additional packages. The pre-whitening procedure accounts for autocorrelation and removes its "effect" by performing the trend analysis on the residuals of the ar model. For more reading on pre-whitening here is a great paper I've come across and frequently come back to. 
+
+Yue S, Pilon P. 2004. A comparison of the power of the t test, Mann-Kendall and bootstrap tests for trend detection. Hydrological Sciences Journal. 49:1–37. https://doi.org/10.1623/hysj.49.1.21.53996
+
+```{r,eval=F}
+# simulated data (used simulate_timeseries function from prior posts)
+test  <-  simulate_timeseries(n=n.vals,
+                              seasonal_period = 1,
+                              seasonal_amp=1,
+                              trend_slope=0.1)
+test$timeseries  <-  cbind(test$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:(1990+(n.yrs-1)))
+)
+test$timeseries$date <-  with(test$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+test$timeseries$dec.date <- lubridate::decimal_date(test$timeseries$date)
+
+```
+
+```{r,dpi=96,fig.width=7,fig.height=4.5,fig.align='center'}
+# Fit AR(1) Model
+ar_model <- ar(test$timeseries$value, order.max = 1, 
+               method = "yule-walker")
+# ar_model$order  # Optimal order selected
+# ar_model$ar     # Estimated AR(1) coefficient
+test$timeseries$ar.residuals <- ar_model$resid
+# plot(ar_model$resid, type = "l", main = "Residuals")
+
+# Perform Kendall Test on Residuals
+with(test$timeseries,cor.test(ar.residuals,dec.date,method="kendall"))
+acf(test$timeseries$ar.residuals,na.action=na.pass,
+    col="dodgerblue1",lwd=2,main=NA)
+
+# another way to do it (like zyp R-package)
+data <- test$timeseries$value
+c <- acf(data,lag.max=1,plot=FALSE,na.action=na.pass)$acf[2]
+n <- length(test$timeseries$value)
+
+residuals2 <- (data[2:n] - c * data[1:(n-1)]) / (1 - c)
+pw.time <- test$timeseries$dec.date[1:(n-1)]
+
+cor.test(residuals2,pw.time,method="kendall")
+acf(residuals2,na.action=na.pass,col="dodgerblue1",lwd=2,main=NA)
+```
+
+You get the same results!!
+
+* **Homogeneity:** The data must come from a homogeneous population, meaning that the process generating the data does not change systematically over time.
+
+* **Handling Ties:** The test assumes that ties (equal values in the data) are either minimal or appropriately accounted for.
+
+* **Sufficient Sample Size:** A sufficiently large sample size is required to achieve reliable results, particularly for datasets with variability. See last post about sample size and statistical power. 
+
+While data can be aggregated to be tested using the Mann-Kendall test, if the data has a strong seasonal component or serial dependence then its usually recommended (depending on the question being asked) to use the seasonal Mann-Kendall Test to adjust for autocorrelation. 
+
+
+## Seasonal Mann-Kendall Trend Test
+
+Most of the assumptions of the Seasonal Mann-Kendall trend test are similar to those of the Mann-Kendall test, just most are applied to the seasonal data. The key assumptions are: 
+
+* **Seasonal Independence:** Each group or season is treated as an independent data set and therefore the seasonal trends are independent of one another. 
+
+* **Consistency in Seasonal Grouping:** The data must be grouped into consistent and comparable seasons or time periods (e.g., months, quarters). The length of seasons should be uniform across the data set. Other methods could be applied if the start of a particular season is not consistent (stay tuned).
+
+* **Homogeneity of Data within Seasons:** The data must come from a homogeneous population during a particular season. Some text regarding the method also references data coming from the same distribution within each season, however I have not been able to find a consistent method. The `EnvStats` package does have a heterogeneity test built into the `kendallSeasonalTrendTest()` but this test focus on evaluating if there is heterogeneity of trend direction across seasons.  
+
+* **Trend within Seasons is Monotonic:** similar to Mann-Kendall assumptions above but specific for each season. 
+
+When doing the seasonal Mann-Kendall test, the one thing I check first is the Heterogeneity Test for Trend. As mentioned above, the `EnvStats::kendallSeasonalTrendTest()` performed this test along with all the other trend analyses. Here is an example. 
+
+```{r,eval=F}
+test2 <-  simulate_timeseries(n=n.vals,
+                              seasonal_period = 4,
+                              seasonal_amp=2,trend_slope=0.1)
+test2$timeseries  <-  cbind(test2$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:(1990+(n.yrs-1)))
+)
+test2$timeseries$date <-  with(test2$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+test2$timeseries$dec.date <- lubridate::decimal_date(test2$timeseries$date)
+```
+
+We will assume that month is the season of interest. This could also be broken into meterological, or hydrological seasons as well, but they have to be numeric.
+```{r,warning=FALSE,message=FALSE}
+library(EnvStats)
+kendallSeasonalTrendTest(value~Mon+Yr,test2$timeseries)
+```
+
+In the results you see *Test Statistics: Chi-Square (Het)* and *P-values: Chi-Square (Het)* these are the results of the Van Belle-Hughes Heterogeneity Test for Trend. If you wanted to do this outside of the `EnvStats` package you can with the following example. 
+
+```{r,warning=FALSE,message=FALSE}
+library(reshape2)
+## Format the data
+test2.df <- dcast(test2$timeseries,Yr~Mon,value.var="value",mean)
+
+#yr.vals <- as.numeric(names(test2.df[, -1]))
+mk_results <- apply(test2.df[, -1], 1,
+                     FUN = function(x){
+                       tmp <- cor.test(x=x,y=1:length(x),method="kendall")
+                       tmp2 <- data.frame(tau=as.numeric(tmp$estimate),
+                                          pval=as.numeric(tmp$p.value)
+                       )
+                       return(tmp2)
+                      }
+)
+                        
+
+# Extract p-values and tau values
+p_values <- sapply(mk_results, function(x) x$pval)  # p-values
+tau_values <- sapply(mk_results, function(x) x$tau)  # Tau values
+
+# Perform a chi-square test for heterogeneity
+chi_square_result <- chisq.test(p_values)
+chi_square_result
+
+```
+
+While the chi-squared statistic differs slightly, the p-value remains the same and does a good job approximating the method in `EnvStats`. 
+
+This can also be done using the `Kendall` R-package like this:
+
+```{r,warning=FALSE,message=FALSE}
+library(Kendall)
+
+## Format the data
+test2.df <- dcast(test2$timeseries,Mon~Yr,value.var="value",mean)
+
+# Apply Mann-Kendall test for trend on each time series (column). 
+mk_results <- lapply(test2.df[, -1], MannKendall)
+
+p_values <- sapply(mk_results, function(x) x$sl)  # p-values
+tau_values <- sapply(mk_results, function(x) x$tau)  # Tau values
+
+# Perform a chi-square test for heterogeneity
+chi_square_result <- chisq.test(p_values)
+chi_square_result
+```
+
+However, because how it performs trend test the values differ slightly. This is where knowing/learning how to lift the hood of the functions/packages helps. If you dig into the source code for the `Kendall` R-package you find that the functions within use a Fortran script with functions in it that differ slightly from how other packages do it. Not saying its wrong or right, just different. 
+
+The `wql` R-package has a tests for homogeneity of seasonal trends function and produces results identical to those produced by `EnvStats`. 
+
+<!-- https://github.com/jsta/wql/blob/master/R/trendHomog.R -->
+
+```{r}
+library(wql)
+
+ts(test2$timeseries$value,frequency = 12)|>
+  trendHomog()
+
+```
+
+
+```{r,include=F,eval=F}
+# From wql::trendHomog
+test2.df <- dcast(test2$timeseries,Yr~Mon,value.var="value",mean)
+vBH_hetero <- function(x){
+  Sval <- apply(x,2,FUN = function(y){
+    y <- y
+    t <- 1:length(y)
+    
+    outr <- sign(outer(y, y, "-")/outer(t, t, "-"))
+    S <- sum(outr[lower.tri(outr)],na.rm=T)
+    return(S)
+  })
+  
+  varS <- apply(x,2,FUN = function(y){
+    ties <- rle(sort(y))$lengths
+    n <- length(y)
+    t1 <- n * (n - 1) * (2 * n + 5)
+    t2 <- sum(ties * (ties - 1) * (2 * ties + 5))
+    varS <- (t1 - t2)/18
+    return(varS)
+  })
+  
+  fr <- length(varS)
+  Z <- Sval / sqrt(varS)
+  chi2.tot <- sum(Z ^ 2)
+  Zbar <- mean(Z)
+  chi2.trend <- fr * Zbar ^ 2
+  chi2.homog <- chi2.tot - chi2.trend
+  p.value <- pchisq(chi2.homog, fr - 1, 0, FALSE)
+  
+  data.frame(chi2.trend = chi2.trend,
+             chi2.homog = chi2.homog,
+             p.value = p.value,
+             n = fr)
+}
+
+vBH_hetero(test2.df[,-1])
+
+```
+
+If you are curious like me and wonder how the chi squared is EXACTLY calculated here is the simplified code extracted (and slightly modified) from the `wql::trendHomog` function.
+
+```{r}
+test2.df <- dcast(test2$timeseries,Yr~Mon,value.var="value",mean)
+
+vBH_hetero <- function(x){
+  Sval <- apply(x,2,FUN = function(y){
+    y <- y
+    t <- 1:length(y)
+    
+    outr <- sign(outer(y, y, "-")/outer(t, t, "-"))
+    S <- sum(outr[lower.tri(outr)],na.rm=T)
+    return(S)
+  })
+  
+  varS <- apply(x,2,FUN = function(y){
+    ties <- rle(sort(y))$lengths
+    n <- length(y)
+    t1 <- n * (n - 1) * (2 * n + 5)
+    t2 <- sum(ties * (ties - 1) * (2 * ties + 5))
+    varS <- (t1 - t2)/18
+    return(varS)
+  })
+  
+  fr <- length(varS)
+  Z <- Sval / sqrt(varS)
+  chi2.tot <- sum(Z ^ 2)
+  Zbar <- mean(Z)
+  chi2.trend <- fr * Zbar ^ 2
+  chi2.homog <- chi2.tot - chi2.trend
+  p.value <- pchisq(chi2.homog, fr - 1, 0, FALSE)
+  
+  data.frame(chi2.trend = chi2.trend,
+             chi2.homog = chi2.homog,
+             p.value = p.value,
+             n = fr)
+}
+
+# Input data by removing the month column
+vBH_hetero(test2.df[,-1])
+
+```
+
+## Other Kendall Tests
+
+There are other Kendall tests but they are generally variants to the Mann-Kendall or seasonal Mann-Kendall including the Regional Kendall Tests which can also include seasonal tests. Other tests to include in the Kendall family are flow-adjusted trends and censored data (non-detects). 
+
+## USGS software vs R-package
+
+As mentioned at the start of this post, the USGS Kendall family of trend tests ([link to info](https://pubs.usgs.gov/publication/sir20055275){target="_blank"}). Typically this software (and the code behind it) is used by some analyst to benchmark again other routines/code/methods. Much like how some estimates of a given statistical test can vary between packages based on the way things are calculated or how the different code infrastructure does the maths. That being said there is no direct translation or "R-version" of the USGS program (yet...saving it for a rainy day). For those interested, here is a workflow comparison between the USGS software and the various R-package. 
+
+```{r,echo=FALSE,message=FALSE,warning=F}
+library(flextable)
+
+workflow_comparison <- data.frame(
+  Feature = c(
+    "Mann-Kendall Test",
+    "Seasonal Kendall Test",
+    "Flow-Adjusted Trends",
+    "Censored Data Handling",
+    "Theil-Sen Slope Estimation",
+    "Autocorrelation Adjustment",
+    "Visualization"
+  ),
+  USGS_Kendall_Software = c(
+    "Built-in",
+    "Built-in",
+    "Built-in",
+    "Built-in",
+    "Built-in",
+    "Built-in (limited)",
+    "Basic"
+  ),
+  R_Packages = c(
+    "`Kendall`, `trend`, `EnvStats`",
+    "`trend::seaKen`, `wq`",
+    "Customizable (e.g., `mgcv`), `EGRET`",
+    "`NADA`, `NADA2`, `survival`",
+    "`trend`, `mblm`, `wq`",
+    "`trend`, `zyp`",
+    "`ggplot2`, Base R"
+  )
+)
+
+tab <- flextable(workflow_comparison)|>
+  set_header_labels(
+    Feature = "Feature",
+    USGS_Kendall_Software = "USGS Kendall Software",
+    R_Packages = "R Packages")|>
+  theme_vanilla()|>
+  autofit()|>
+  # font(j = "R_Packages", fontname = "Courier New", part = "body")|>
+  # bg(i = ~ grepl("`", R_Packages), j = "R_Packages", bg = "#e8f5e9", part = "body")|>
+  align(j=2:3,align = "center", part = "all")|>
+  align(j=1,align = "center", part = "header")|>
+  bold(part = "header")|>
+  bg(bg = "#f4f4f4", part = "header")|>
+  fontsize(size = 10, part = "all")
+  # compose(
+  # j = "R_Packages", value = as_paragraph(as_chunk(R_Packages)),part = "body")|>
+  # font(i = ~ grepl("`", R_Packages), j = "R_Packages", fontname = "Courier New")|>
+  # bg(i = ~ grepl("`", R_Packages), j = "R_Packages", bg = "#f0f0f0")|>
+  # padding(i = ~ grepl("`", R_Packages), j = "R_Packages", padding = 2)
+
+tab
+
+```
+
+Remember (as discussed above) some R-packages calculate things slightly different. They shouldn't be so different that it would changes the final outcome but enough to question how a particular statistic was calculated. 
+
+
+# Whats next?
+
+Hope this provided you with some additional understanding of how trend analyses work, some of the assumptions of the data needed and verify your results to be more confident in your trend analysis adventures. The next post will dig into stationary and  periodicity in terms of trend analysis and what that means for other tests. 
+
+
+:::{.callout-tip collapse="true"}
+# Session Info
+```{r, echo = FALSE,warning=FALSE,message=FALSE}
+library(sessioninfo)
+# save the session info as an object
+pkg_sesh <- session_info(pkgs = "attached",info=c("platform","package"))
+
+# Remove package library path
+pkg_sesh$packages$library = NULL
+
+# get the quarto version
+quarto_version <- system("quarto --version", intern = TRUE)
+
+# inject the quarto info
+pkg_sesh$platform$quarto <- system("quarto --version", intern = TRUE)
+
+# modify pandoc info
+pkg_sesh$platform$pandoc = trimws(sapply(strsplit(pkg_sesh$platform$pandoc,"@"),"[",1))
+
+# print it out
+pkg_sesh
+
+```
+
+:::

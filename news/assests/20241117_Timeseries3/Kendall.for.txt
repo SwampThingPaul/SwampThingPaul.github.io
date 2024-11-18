@@ -1,0 +1,1887 @@
+C     Last change:  DKM  24 Aug 2005    2:26 pm
+c     Program Kendall 2005 version
+c
+c     A program to read a set of paired data values and compute Kendall's
+c        tau correlation coefficient and the Kendall slope estimator.
+c     Four types of analyses are available::
+c        1. Seasonal Kendall test with time series (decimal year) data.
+c           Time seies data are converted to seasonal values based on equal
+c           length periods.  The program then computes the seasonal Kendall
+c           test for trend.  Results are reported for water years (October
+c           through September).
+c           Maximum 50  years (water or calendar) and 120 seasons per year.
+c        2. Seasonal Kendal test with seasons specified.
+c           Year and season are used directly to compute the seasonal Kendall
+c           test for trend.  Seasons can be variable length periods.  Results
+c           are reported for calendar years.
+c           Maximum 50 years (water or calendar) and 120 seasons per year.
+c        3. Regional Kendall test.
+c           Data from multiple locations within a region are tested individually
+c           for temporal trends, and the results are combined into a general
+c           regional trend test.  Results are reported as a regional trend over
+c           calendar years.
+c           Maximum 50 calendar years and 120 location.
+c        4. Kendal correlation.
+c           Nonparametric test for monotonic correlation of X and Y data.
+c           Maximum of 500 X,Y data pairs.
+c     For seasonal Kendall analyses (types 1 and 2) an option is available to
+c        test for trend in flow-adjusted concentration. This involves computing
+c        LOWESS smooth coordinates for the relation between flow and concentration.
+c        The seasonal Kendall test is then applied to the residuals.
+c
+c     Each set of data consists of two types of records. The first
+c        record is fixed format and describes the data. The data follows
+c        in free format, one record per observation (maximum of 6000 records).
+c
+c     First record:
+c        Column  Format  Variable  Contents
+c           1      i1     itype    Type of data (1, 2, 3, or 4)
+c           3      i1     lws      Switch for computing LOWESS
+c                                  (itype 1 and 2 only)
+c                                    0 = no
+c                                    1 = yes
+c          5-7     i3     nseas    Number of seasons or locations (maximum of 120)
+c                                    (needed only for itype = 1)
+c          9-67    a60    title    Title for this set of data
+c
+c     Next records:
+c        The data values in free format separated by blanks or commas. Data requirements
+c        for the four types of analyses are::
+c           1 without LOWESS - Decimal year and an associated data value.
+c             with LOWESS    - Decimal year, an associated data value, and daily or instantaneous streamflow.
+c           2 without LOWESS - Integer year, season, and data value.
+c             with LOWESS    - Integer year, season, data value, and daily or instantaneous streamflow.
+c             In both cases "season" must be incremental with the first season of the calendar year = 1.
+c           3                - Integer year, location, and data value.
+c                              "Location" must be a number, but locations and years
+c                              in the data set can be in any order.
+c           4 without LOWESS - Two associated data values, X and Y.
+c             with LOWESS    - X value, Y value, Z value (flow, etc.).
+c
+c     Code history:
+c        28 Oct 88  JRSlack: Converted to Lahey F77L Version 3.00.
+c        29 Apr 99  DKMueller & DRHelsel: I/O converted for statistics training classes.
+c                                         Simple Kendall correlation added.
+c        08 May 99  DKMueller & DRHelsel: LOWESS added, I/O modified.
+C        16 Mar 04  DKMueller: kens n limitation increased from 50 to 2500.
+c        14 Aug 05  DKMueller & DRHelsel: Regional Kendall test added, I/O revised, array sizes increased.
+c        23 Aug 05  DKMueller & DRHelsel: Reg Kendall read revised for arbitraty location numbering.
+
+      real yreg(6120),yvalue(6000),dectime(6000),year(6000),season(6000)
+      REAL location(6000)
+      REAL xvalue(6000),flow(6000),pred(6000),resid(6000)
+      real results(8)
+      character*60 title, filein, fileout
+      integer maxprds/6120/
+
+      write (*,'(a:) ') ' Enter filename for input data --> '
+        read (*,'(a)') filein
+        m=nchars(filein)
+        open (20, file=filein(1:m),status='OLD')
+        write (*,*) ' Input file opened ', filein
+    3 write (*,'(a:) ') ' Enter filename for output --> '
+        read (*,'(a)') fileout
+        IF(fileout .ne. filein) GOTO 4
+        write (*,'(a:) ') ' Output file name is same as input file'
+        GOTO 3
+    4   m=nchars(fileout)
+        open (30, file=fileout(1:m))
+        write (*,*) ' Output file opened ', fileout
+
+      read (20,2001,end=91) itype, lws, nseas, title  ! Read a dataset header
+ 2001 format (i1,i2,i4,1x,a60)
+      if (itype .lt. 2 .and. nseas .lt. 1) goto 92
+      if (lws .lt. 1) goto 7                          ! Read additional LOWESS data
+    5 WRITE(*,'(a:) ') ' Enter smoothness coefficient f -->'
+        READ(*,'(f4.0)') f
+      if (f.gt.0 .and. f.lt. 1.0 ) goto 6
+      write(*,'(a)')' f must be between 0.0 and 1.0'
+      go to 5
+    6 WRITE(*,1004) f
+ 1004 format (' '/' LOWESS coefficient read =', f5.2)
+    7 write (*,1005) title
+ 1005 format (' '/' Reading data for: ',a60/)
+      if (itype .gt. 3) goto 40
+      if (itype .gt. 2) goto 30
+      if (itype .gt. 1) goto 20
+
+      write (*,1006) nseas                           ! Analysis type 1
+ 1006 FORMAT (' Number of seasons =',i3/)
+      n = 1
+   10 CONTINUE                                       ! Read data
+      if (lws .gt. 0) GOTO 11
+      read (20,*,end=15) dectime(n), yvalue(n)
+      GOTO 12
+   11 read (20,*,end=15) dectime(n), yvalue(n), flow(n)
+   12 n = n+1
+        if (n .gt. 6001) goto 95
+      goto 10
+   15 n = n-1
+      goto 70
+
+   20 continue                                       ! Analysis type 2
+      n = 1
+      nseas = 0
+   21 continue                                       ! Read data
+      if (lws .gt. 0) GOTO 22
+      read (20,*,end=24) year(n), season(n), yvalue(n)
+      GOTO 23
+   22 read (20,*,end=24) year(n), season(n), yvalue(n), flow(n)
+   23   if (season(n) .gt. 120) goto 93
+        if (season(n) .gt. nseas) nseas = season(n)
+      n = n+1
+      if (n .gt. 6001) goto 95
+      goto 21
+   24 write (*,1006) nseas
+      n = n-1
+      if (nseas .lt. 2) GOTO 26
+      do 25 i=1,n                                    ! Create decimal time for each season
+        if (season(i) .gt. 0)                        ! make decimal slightly larger than mid-season
+     +     dectime(i) = int(year(i)) + (season(i)-0.49)/nseas
+   25 continue
+      GOTO 70
+   26 do 27 i=1,n
+        if (season(i) .gt. 0) dectime(i) = year(i)
+   27 continue
+      GOTO 70
+
+   30 CONTINUE                                       ! Analysis type 3
+      n = 1
+      nloc = 0
+   31 continue                                       ! Read data
+      read (20,*,end=32) year(n), location(n), yvalue(n)
+      n = n+1
+      if (n .gt. 6001) goto 95
+      goto 31
+   32 n = n-1
+      call vsrt3(location,year,yvalue,n)
+      nseas = 1                                          ! Convert locations to "seasons"
+      season(1) = nseas                                  !   for use in seaken subroutine
+      do 33 i=2,n
+        if (location(i) .gt. location(i-1)) nseas = nseas + 1
+        season(i) = nseas
+   33 continue
+      if (nseas .gt. 120) goto 94
+      do 34 i=1,n                                          ! Create "dectime" with a unique
+        dectime(i) = int(year(i)) + (season(i)-0.49)/nseas !   decimal part for each location
+   34 continue
+      write (*,1007) nseas
+ 1007 FORMAT (' Number of locations =',i3/)
+      GOTO 70
+
+   40 continue                                       ! Analysis type 4
+      n = 1
+      nseas = 1
+   41 continue
+      if (lws .gt. 0) GOTO 42
+      read (20,*,END=44) xvalue(n), yvalue(n)
+      GOTO 43
+   42 read (20,*,END=44) xvalue(n), yvalue(n), flow(n)
+   43 n = n+1
+      if (n .gt. 501) GOTO 96
+      GOTO 41
+   44 n = n-1
+
+   70 continue
+      write (*,1008) n
+ 1008 format (' Data read - ',i4,' values'/)
+
+      if (itype .gt. 3) GOTO 80                     ! Calculate statistics.
+      if (lws .lt. 1) GOTO 72
+
+      call vsrt3(flow,yvalue,dectime,n)             ! Sort data by flow for LOWESS
+      call lowess(flow,yvalue,n,f,pred)
+      do 71 i=1,n
+        resid(i) = yvalue(i) - pred(i)
+   71 CONTINUE
+      call vsrt5(dectime,yvalue,flow,pred,resid,n)  ! re-sort by date for Seaken
+
+      call makeseas(resid,dectime,n,nseas,yreg,nprds,maxprds,
+     2              base,itype)
+      GOTO 75
+
+   72 call makeseas(yvalue,dectime,n,nseas,yreg,nprds,maxprds,
+     2              base,itype)
+   75 continue
+
+      call seaken(yreg,nprds,nseas,results,itype)
+      GOTO 85
+
+   80 if (lws .gt. 0) GOTO 81                       ! Data type 4.
+      call vsrtx(xvalue,yvalue,n)
+      call kentau(xvalue,yvalue,n,results)
+      GOTO 85
+   81 call vsrt3(flow,yvalue,xvalue,n)              ! Sort data by flow for LOWESS
+      call lowess(flow,yvalue,n,f,pred)
+      do 82 i=1,n
+        resid(i) = yvalue(i) - pred(i)
+   82 CONTINUE
+      call vsrt5(xvalue,yvalue,flow,pred,resid,n)   ! re-sort by date for Kentau
+
+      call kentau(xvalue,resid,n,results)
+
+   85 call seakenrp(itype,lws,title,nprds,nseas,base,f,results)  ! Print results.
+
+      stop ' Normal termination.'
+   91 stop ' Data file is empty.'
+   92 stop ' Selected seasons less than 1.'
+   93 stop ' More than 120 seasons requested.'
+   94 stop ' More than 120 locations requested.'
+   95 stop ' More than 6000 input data values.'
+   96 STOP ' More than 500 X,Y data pairs.'
+ 100  end
+
+
+      FUNCTION NCHARS(LINE)
+C RETURNS NUMBER OF CHARACTERS IN LINE
+      CHARACTER*(60) LINE,USE
+      USE=LINE
+      DO 10 J=60,1,-1
+        IF(USE(J:J).NE.' ') THEN
+          NCHARS=J
+          GO TO 99
+        ENDIF
+10    CONTINUE
+      NCHARS=0
+99    RETURN
+      END
+
+
+      subroutine seaken(y,n,nseas,results,itype)
+c
+c     Seasonal Kendall test for trend.
+c
+c     Arguments:
+c        y is the data vector in chronological order with one observation
+c           (or missing value = -99999.0) per time period (season or location).
+c        n is the length (total number of time periods) of y, it should be
+c           be a multiple of nseas.
+c        nseas is the number of equally sized time periods per year.
+c        results is the output vector containing
+c           results(1) = Kendall's tau,
+c           results(2) = p-level without serial correlation correction,
+c           results(3) = p-level with serial correlation correction,
+c           results(4) = slope estimate,
+c           results(5) = median value of time,
+c           results(6) = median value of the data,
+c           results(7) = Kendall S (sum of pluses and minuses), and
+c           results(8) = normal variate (z-value).
+c        Each p-level is the attained (two-sided) significance level of the
+c           test [e.g., if (p-level.le.0.05) reject the null hypothesis
+c           of no trend at the 5% level].
+c
+c     Limitations:
+c        The number of time periods per year (nseas) must not be greater
+c           then 120 (seasons or locations).
+c        The number of years may not be greater than 50
+c           (however, to account for 50 calendar years with data filled in to
+c            make complete water years, the internal program limitation has
+c            been increased to 51.)
+c        Thus n from subroutine makeseas must be no greater than 6120 (=120*51).
+c
+c     References:
+c     1) A Nonparametric Trend Test for Seasonal Data with Serial
+c          Dependence, R.M.Hirsch & J.R.Slack, Water Resources Research,
+c          Vol.20, No.6, Pages 727-732, June 1984.
+c     2) Techniques of Trend Analysis for Monthly Water Quality Data,
+c          R.M.Hirsch, J.R.Slack, & R.A.Smith, Water Resources Research,
+c          Vol.18, No.1, Pages 107-121, February 1982.
+c
+c     Variables names correspond approximately to the variables used in
+c        the first reference. Equation numbers cited in the code comments
+c        refer to the first reference.
+c
+c     Subprograms called:
+c        kens  to compute the basic statistics for a season or location.
+c        rank  to compute the ranks of the data.
+c        sgn   to compute the sign of a value.
+c        cdfn  to compute the cumulative Normal distribution function.
+c        vsrta to sort a vector (IMSL, included in code).
+c        vsrtr to sort a vector (IMSL, included in code).
+c
+c     Code history:
+c        28 May 85  JRSlack  Initial coding.
+c        18 Dec 85  JRSlack  Trap to handle each season being all ties.
+c        28 Oct 88  JRSlack  Converted to Lahey F77L Version 3.00.
+c
+      real y(n), yjg(51,120), x(51), rjg(51,120), results(8)
+      common /holddiff/ ydiff(153000)    ! Array to hold differences (see 'kens' subroutine).
+      real ycheck/-99998.0/              ! Check for missing values against this.
+c
+c     Input error checking.
+c
+      if (nseas.gt.120) stop ' More than 120 seasons or locations.'
+      nyrs = n / nseas                  ! Integral number of years.
+      if (nyrs.gt.51) stop ' More than 50 years.'
+      if (nseas*nyrs.ne.n) write (*,1001)
+ 1001 format(/' WARNING: The last year of data you supplied'
+     2        ' is incomplete and will be ignored.'/
+     3        ' If you want it used, add a missing value (-99999)'/
+     4        ' for each season through the end of the water year,'/
+     5        ' or for each location during the last calendar year'//)
+c
+c       Compute the s value for each of the nseas seasons,
+c          compute the diagonal elements of the covariance matrix,
+c          and add them up.
+c
+      index = 1       ! Next available location in array ydiff.
+      sumcomp = 0.0   ! Number of comparisons.
+      sums = 0.0      ! Sum of S's.
+      sumsiggh = 0.0  ! Sum of sigma sub gh.
+      sumngh=0.0      ! Sum for 3rd part of equation 14.
+      sumngh2=0.0     ! Sum of squares for 3rd part of equation 14.
+c
+c        Move the data into a new array to make subroutine calls easier.
+c
+      do 20 iseas = 1, nseas
+      ng = 0
+      do 10 iyr = 1 , nyrs   ! Each time period corresponding to this season.
+      yjg(iyr,iseas) = y((iyr-1) * nseas + iseas)
+      if (yjg(iyr,iseas) .gt. ycheck) ng = ng + 1
+      x(iyr) = real(iyr)                    ! Year counter for kens subroutine.
+   10 continue
+      sumngh = sumngh + ng+1                ! Note addition of 1 for eq. 14.
+      sumngh2 = sumngh2 + (ng+1)**2         !   "
+      call kens(x,yjg(1,iseas),nyrs,s,var,ncomp,ydiff(index))
+c
+c      For testing, ncomp must equal ng(ng-1)/2.
+      if (ncomp.ne.(ng*(ng-1))/2) stop ' ncomp vs ng error in seaken.'
+c
+      index = index + ncomp
+      sums = sums + s
+      sumsiggh = sumsiggh + var             ! Variance part of eq. 5.
+      sumcomp = sumcomp + ncomp
+      call rank(yjg(1,iseas),rjg(1,iseas),nyrs)  ! Ranks for RigRih.
+   20 continue
+c
+c     Check for the possibility that each season is all ties; i.e., was a
+c        constant giving zero variance in each season.
+c
+      if (sumsiggh.le.0.0) then
+         results(1)=0.0
+         results(2)=1.0
+         results(3)=1.0
+         results(4)=0.0
+         go to 70
+      endif
+c
+c     First results.
+c
+      tau = sums / sumcomp                  ! Kendall's tau.
+c
+                             results(7) = sums
+                             results(1) = tau
+c
+      if (sums.gt.0.0) sums = sums - 1.0    ! Continuity correction.
+      if (sums.lt.0.0) sums = sums + 1.0    !   "
+      z = sums / sqrt(sumsiggh)             ! Approximately Normal deviate.
+      if (z.le.0.0) plevel = 2.0 * cdfn(z)
+      if (z.gt.0.0) plevel = 2.0 * (1.0 - cdfn(z))
+c
+c                                           ! p-level without correction.
+c
+                             results(8) = z
+                             results(2) = plevel
+c
+      sumngh=sumngh**2-sumngh2              ! Sum over g&h of (ng+1)(nh+1).
+c
+c     Now calculate the serial correlation correction.
+c       Compute covariances.
+c
+      sumkgh=0.0
+      sumrgh=0.0
+      do 60 j=1,nyrs
+c
+c     Sum RigRih part.
+c
+      sumr=0.0
+      sumr2=0.0
+      do 30 iseas=1,nseas
+      sumr=sumr+rjg(j,iseas)
+      sumr2=sumr2+rjg(j,iseas)**2
+   30 continue
+      sumrgh=sumrgh+sumr**2-sumr2
+      do 50 i=1,j-1                         ! This requires zero-trip DO loops.
+c
+c     Sum Kgh part.
+c
+      sumy=0.0
+      sumy2=0.0
+      do 40 iseas=1,nseas
+      yj=yjg(j,iseas)
+      yi=yjg(i,iseas)
+      if (yi.le.ycheck.or.yj.le.ycheck) go to 40  ! Skip missing values.
+      s=sgn(yj-yi)
+      sumy=sumy+s
+      sumy2=sumy2+s**2
+   40 continue
+      sumkgh=sumkgh+sumy**2-sumy2
+   50 continue
+   60 continue
+c
+c     Add covariance to eq. 5.
+c
+      sumsiggh=sumsiggh+(sumkgh+4.0*sumrgh-nyrs*sumngh)/3.0
+      if (sumsiggh.le.0.0) go to 400
+      z = sums / sqrt(sumsiggh)             ! Approximately normal deviate.
+      if (z.le.0.0) plevel = 2.0 * cdfn(z)
+      if (z.gt.0.0) plevel = 2.0 * (1.0 - cdfn(z))
+c                                           ! p-level with correction.
+c
+                             results(3)=plevel
+c
+c     Calculte the slope estimate.
+c
+      index = index - 1                     ! Adjust index to actual used.
+      call vsrta(ydiff,index)               ! Sort the difference vector.
+      slope = (ydiff((index+1)/2) + ydiff((index+2)/2)) / 2.0
+c                                           ! The median is the slope.
+c
+                             results(4)=slope
+c
+c     Pick up here on zero variance seasons since the seasons may
+c        each be constant but not the same constant.
+c
+   70 continue
+c
+c     The trend line is the line with given slope going thru the
+c        point (tmed,dmed) where
+c           tmed is the median in time (x-axis) and
+c           dmed is the median of the data (y-axis).
+
+      tmed = nyrs / 2.0                     ! Median vaule of time.
+      IF(itype .GT. 2) tmed = (nyrs+1)/2    ! Regional test - annual data
+
+                             results(5)=tmed
+
+      index = 0                             ! Last used location in ydiff.
+      do 80 i = 1 , nyrs*nseas
+      if (y(i).le.ycheck) go to 80          ! Skip if missing.
+      index = index + 1                     ! Next location.
+      ydiff(index) = y(i)                   ! Save good value.
+   80 continue
+      call vsrta(ydiff,index)               ! Sort the data.
+      dmed = (ydiff((index+1)/2) + ydiff((index+2)/2)) / 2.0
+
+                             results(6)=dmed
+
+      IF (itype .GT. 2) GOTO 90
+      WRITE(*,1002)nyrs,results(6),results(5)
+ 1002 FORMAT('             Number of water years =',i3//
+     2       ' Median Y =',g12.4,',  median time =',g12.4/)
+      return
+   90 WRITE(*,1003)nyrs,results(6),results(5)
+ 1003 FORMAT('             Number of years =',i3//
+     2       ' Median Y =',g12.4,',  median time =',g12.4/)
+      return
+c     debugging section.
+  400 write(*,1004) sumsiggh
+ 1004 format(' Warning: In subroutine seaken, sumsiggh =',f15.2/
+     2       ' See output file for Y array:')
+      write(30,3001) y
+ 3001 format(1x,12f10.1)
+      plevel = 1.00
+      return
+
+      end
+
+
+      subroutine makeseas(yin,dectime,nobs,nseas,yout,nprds,
+     1                        maxprds,base,itype)
+c
+c     Convert an irregularly spaced observation vector to a regularly
+c        spaced one.
+c
+c     Arguments:
+c        yin is the input data vector containing the irregularly spaced
+c           observations. Missing values should be indicated by -99999.0.
+c        dectime is the input vector containing the time of observation
+c           of the corresponding element of yin. Time should be given in years
+c           and fractions of years (calendar years). A handy formula for this
+c           is     dectime = year + (day_of_year - 0.5) / 365.
+c           Then dectime = 1985.01233 for 5 Jan 85. Use a denominator of 366
+c           in leap years.
+c        nobs is the length (number of values) of yin and dectime.
+c        nseas is the number of time periods (seasons) the water year is to be
+c           divided into. A value of nseas = 12 gives seasons corresponding
+c           approximately to months. If one uses
+c                  dectime = year + (month - 0.5) / 12,
+c           the seasons will correspond exactly to months.
+c        yout is the output vector containing one data value (or missing
+c           value = -99999.0) per time period (season or month). The value
+c           is the median of all values falling in that time period that were
+c           in yin. yout(1) contains the value for time period 1 in the first
+c           water year in which there is data and yout(nprds) contains the
+c           value for the time period nseas of the last water year in which
+c           there is data.
+c           NOTE: for 50 complete calendar years of data (max 6000 observations)
+c           yout, on a water year basis, will have a maximum of 6120 values.
+c        nprds is the output number of values - one per time period - created
+c           in yout. nprds will be a multiple of nseas.
+c        maxprds is the input value giving the maximum value that nprds
+c           may be assigned.
+c        base is the base year (zero time) used in determining the intercept
+c           of the Kendall-Thiell line.
+c        itype is the analysis type (1 through 4).
+c
+c     Limitations:
+c        The values in yin & dectime must be in chronological order.
+c        There may be no more than 400 non-missing values in any time period.
+c        There must be data in at least two different water years.
+c
+c     Subprogram called:
+c        vsrta to sort a vector (IMSL).
+c        vsrtx to sort 2 arrays (modified from IMSL).
+c
+c     Code history:
+c        31 May 85  JRSlack:   Initial coding.
+c        22 Sep 88  JRSlack:   Update IMSL sort routine calls.
+c        28 Oct 88  JRSlack:   Converted to Lahey F77L Version 3.00.
+c        10 may 99  DKMueller & DRHelsel:  Added data sorting.
+c        14 aug 05  DKMueller: Revised to calendar year for type 3 analyses
+c
+      real yin(nobs),dectime(nobs),yout(*)
+      real hold(400)
+      real ymiss/-99999.0/,ycheck/-99998.0/   ! Missing value indicator & check.
+      integer wyfirst,wylast
+
+c     Sort the data into chronological order
+
+      call vsrtx(dectime,yin,nobs)
+c
+c     Check extent of data.
+c
+      if (itype .gt. 2) GOTO 10
+      wyfirst = dectime(1) + 0.25             ! Water year of first obsevation.
+      base = wyfirst - 0.25                   ! Beginning of first water year.
+      wylast = dectime(nobs) + 0.25           ! Water year of last observation.
+      GOTO 15
+   10 wyfirst = dectime(1)                    ! Calendar year of first obsevation.
+      base = wyfirst                          ! Beginning of first calendar year.
+      wylast = dectime(nobs)                  ! Calendar year of last observation.
+   15 if (wyfirst.eq.wylast) then
+         WRITE(*,1001)
+ 1001    FORMAT(' Less than 2 years of data passed to subroutine',
+     1      ' makeseas.')
+         stop
+      endif
+      nprds = (wylast - wyfirst + 1) * nseas  ! Number of time periods.
+      if (nprds.gt.maxprds) then
+         WRITE(*,1002)
+ 1002    format (' Data passed to subroutine makeseas would'/
+     1           ' require more time periods than allowed.')
+         stop
+      endif
+c
+c     Clear output array to missing values.
+c
+      do 20 iprd = 1 , nprds
+      yout(iprd) = ymiss
+   20 continue
+c
+c     Process first non-missing value.
+c
+      do 30 iobs = 1 , nobs
+      if (yin(iobs).gt.ycheck) go to 40        ! Find first non-missing value.
+   30 continue
+      WRITE(*,1003)
+ 1003 FORMAT(' Warning: Data vector given to makeseas was all',
+     1   ' missing values.')
+      return
+c
+   40 continue
+      ifirst = iobs                             ! First observation found.
+      iprd = (dectime(iobs) - base) * nseas + 1 ! Time period of occurence.
+      ihold = 1                                 ! First location in array.
+      hold(ihold) = yin(iobs)                   ! Save first non-missing value.
+c
+c     Process rest of values.
+c
+      do 50 iobs = ifirst+1 , nobs              ! Look at the rest of the data.
+      if (yin(iobs).le.ycheck) go to 50         ! Skip missing values.
+      jprd = (dectime(iobs) - base) * nseas + 1 ! Time period.
+c
+c     Previous time period.
+c
+      if (jprd.gt.iprd) then                   ! New time period encountered.
+         call vsrta(hold,ihold)                ! Sort values of previous period.
+         yout(iprd) = (hold((ihold+1)/2) + hold((ihold+2)/2)) / 2.0   ! Save median.
+         iprd = jprd                           ! Reset period indicator.
+         ihold = 0                             ! Reset counter.
+      endif                                    ! Done previous period.
+c
+c     Present time period.
+c
+      ihold = ihold + 1                        ! Increment counter.
+      if (ihold.gt.400) then
+         WRITE(*,1004)
+ 1004    FORMAT(' More than 400 observations in one time',
+     1      ' period given to subroutine makeseas.')
+         stop
+      endif
+      hold(ihold) = yin(iobs)                  ! Save this value.
+   50 continue
+      call vsrta(hold,ihold)                   ! Sort values of last time period.
+      yout(iprd) = (hold((ihold+1)/2) + hold((ihold+2)/2)) / 2.0  ! Save median.
+
+      if (itype .gt. 2) goto 60
+      WRITE(*,1005)wyfirst,wylast,nseas,nprds,base
+ 1005 FORMAT(' Data array created: First complete water year =',i5,/
+     2       '                     Last complete water year = ',i5/
+     3       '             Number of seasons =',i4/
+     4       '             Size of data array (nprds) =',i6/
+     5       '             Base decimal year for trend equation =',f8.2)
+      return
+   60 WRITE(*,1006)wyfirst,wylast,nseas,nprds
+ 1006 FORMAT(' Data array created: First year =',i5,', Last year = ',i5/
+     2       '             Number of locations =',i4/
+     3       '             Size of data array (nprds) =',i6)
+      return                                   ! All done.
+      end                                      ! Go home.
+
+
+      subroutine seakenrp(itype,lws,title,n,nseas,base,f,results)
+c
+c       This subroutine prints out a variety of results
+c       from the seaken program onto a file.
+c
+c     Code history:
+c        28 Oct 88  JRSlack:   Converted to Lahey F77L Version 3.00.
+c        21 Apr 99  DKMueller & DRHelsel:  Output simplified.
+c        14 Aug 05  DKMueller & DRHelsel:  Regional test output added, output modified for all types.
+c
+      real results(8), intcept
+      INTEGER wyfirst, firstyr, lastyr
+      CHARACTER*60 title
+
+      if (itype .gt. 3) GOTO 15
+      if (itype .gt. 2) GOTO 10
+      WRITE(30,1001)
+ 1001 FORMAT('     Seasonal Kendall Test for Trend'/
+     2       '       US Geological Survey, 2005'/)
+      GOTO 20
+   10 WRITE(30,1002)
+ 1002 FORMAT('     Regional Kendall Test for Trend'/
+     2       '       US Geological Survey, 2005'/)
+      GOTO 20
+   15 WRITE(30,1003)
+ 1003 FORMAT("     Kendall's tau Correlation Test"/
+     2       '       US Geological Survey, 2005'/)
+   20 continue
+      write (30,3001) title
+ 3001 format (' Data set:  ',a60,/)
+      if (itype .gt. 3) GOTO 22
+      if (itype .gt. 2) GOTO 21
+
+      wyfirst = base + 0.25                           ! Types 1 and 2
+      write(30,3002) n/nseas, nseas, wyfirst
+ 3002 format(' The record is',i3,' complete water years with ',i3,
+     2       ' seasons per year'/
+     2       '    beginning in water year',i5,'.'/)
+      GOTO 22
+   21 write (30,3003) n/nseas, nseas, base            ! Type 3
+ 3003 format(' The record is',i3,' years at ',i3,' locations'/
+     2       '    beginning in year ',f6.0/)
+   22 continue                                       ! All types - correlation
+      if (lws .gt.0) write (30,3004) f
+ 3004 FORMAT(' Flow-adjusted concentrations were calculated as'/
+     2       '    residuals from a LOWESS smooth line (f = ',f5.2,')'/
+     3       '    for concentration vs. streamflow'/)
+      write(30,3005) results(1),results(7),results(8),results(2)
+ 3005 format(' The tau correlation coefficient is',f7.3/
+     2       '     S =',f8.0/
+     3       '     z =',f8.3/
+     4       '     p =',f8.4)
+
+      if (itype .gt. 3) GOTO 33
+      if (itype .gt. 2) GOTO 32
+      if (lws .gt. 0) GOTO 31
+      intcept = results(6) - (results(4) * results(5))
+      write(30,3007) results(3),intcept,results(4),base
+ 3007 format('     p =',f8.4,' adjusted for correlation among seasons'/
+     2       '                 (such as serial dependence)'/
+     3       ' The adjusted p-value should be used only for data with'/
+     4       '    more than 10 annual values per season.'//
+     5       ' The estimated trend may be described by the equation:'//
+     6       '    Y =',g12.4,' + ',g12.4,' * Time'//
+     7       '    where Time = Year (as a decimal) -',f8.2,
+     8       ' (beginning of first water year)')
+      GOTO 40
+   31 write(30,3008) results(3),intcept,results(4),base
+ 3008 format('     p =',f8.4,' adjusted for correlation among seasons'/
+     2       '                 (such as serial dependence)'/
+     3       ' The adjusted p-value should be used only for data with'/
+     4       '    more than 10 annual values per season.'//
+     5       ' The estimated trend may be described by the equation:'//
+     6       '    Residual =',g12.4,' + ',g12.4,' * Time'//
+     7       '    where Time = Year (as a decimal) -',f8.2,
+     8       ' (beginning of first water year)')
+      GOTO 40
+
+   32 firstyr = base
+      lastyr = firstyr + (n/nseas) - 1
+      write(30,3009) firstyr,lastyr,results(4)
+ 3009 format(1x/' The estimated median trend throughout the region'/
+     2       '    during years',I5,' through',I5,' is:'//
+     3       '    Change in Y =',g12.4,' per year.')
+      GOTO 40
+
+   33  intcept = results(6) - (results(4) * results(5))
+      if (lws .gt. 0) GOTO 34
+      write(30,3010) intcept,results(4)
+ 3010 format(1x/' The relation may be described by the equation:'//
+     2          '    Y =',g12.5,' + ',g12.4,' * X')
+      GOTO 40
+   34 continue
+      write(30,3011) intcept,results(4)
+ 3011 format(1x/' The relation may be described by the equation:'//
+     2          '    Residual =',g12.5,' + ',g12.4,' * X')
+   40 return
+      end
+
+
+      subroutine kens(x,y,n,s,var,ncomp,ydiff)
+c
+c     Computes Kendall's S statistic and other information for
+c        Kendall's tau test for trend. Sample usage of this
+c        routine may be seen in routine kentau.
+c
+c     Arguments:
+c        x is the vector or years (or other observations).
+c        y is the vector of correlated observations
+c           (missing values = -99999.0).
+c        n is the number of observations in y (maximum = 250).
+c        s is returned as Kendall's S statistic.
+c        var is returned as the variance of S adjusted for ties.
+c        ncomp is returned as the number of comparisons made in
+c           computing S.
+c        ydiff is returned as a one-dimensional array containing the values of each
+c           comparison adjusted for the X distance apart.  The maximum dimension
+c           needed is based on the maximum number of years (50) plus 1 and the maximum
+c           number of seasons or locations (120).  The number of comparisons for
+c           each season (location) is (51*(51-1))/2 = 1275.  The total number of
+c           comparisons for all seasons (locations) is then 120*1275 = 153000.
+c           (Note: this dimension is large enough for 553 data pairs using
+c           analysis type 4 - simple Kendal correlation.)
+c
+c     Reference:
+c     Rank Correlation Methods, M.G.Kendall, Charles Griffin,
+c        London, 1975
+c
+c     Subprograms called:
+c        None.
+c
+c     Code history:
+c        28 May 85  JRSlack:  Initial coding.
+c        20 Sep 88  JRSlack:  Clarify the calculation of a tie.
+c        28 Oct 88  JRSlack:  Converted to Lahey F77L Version 3.00.
+c        28 Apr 99  DRHelsel & DKMueller:  Converted for variable X spacing.
+c        12 Aug 05  DRHelsel & DKMueller:  Changed maximum n to 500.
+c
+      real x(n),y(n),ydiff(153000)
+      logical wastie(500)        ! Was a value previously in a tie?
+      real ycheck/-99998.0/       ! Check for missimg values against this.
+      if (n.gt.500) stop ' Subroutine kens called with n > 500.'
+      ncomp = 0                  ! Set number of comparisons to zero.
+      if(n.gt.1) go to 10
+c
+c         Case of n <= 1.
+c
+      s = 0.0           ! Nil S.
+      var = 0.0         ! Nil variance.
+      return
+c
+c        Case of n > 1.
+c
+   10 nplus = 0         ! Number of up ticks.
+      nminus = 0        ! Number of down ticks.
+      fixvar = 0.0      ! Variance correction for ties.
+c
+      do 20 i = 1, n
+      wastie(i) = .false.   ! Clear wastie array.
+   20 continue
+c
+      do 50 istart = 1, n-1              ! Pick an observation.
+      if (y(istart).le.ycheck) go to 50   ! Skip missing values.
+      ntie=1                             ! A value is always tied with itself.
+c
+      do 40 iend = istart+1, n           ! Test each later observation.
+      if (y(iend).le.ycheck) go to 40     ! Skip missing values.
+c
+c         Valid pair. Compare them.
+      ncomp = ncomp + 1                              ! Note comparison.
+c
+c     Y values at tied X's are considered ties.
+      if (x(iend) .gt. x(istart)) GOTO 30
+      yy = 0.0
+      ntie = ntie + 1
+      wastie(iend) = .true.
+      ydiff(ncomp) = 0.0
+      GOTO 40
+c
+c     Explanation of the 20 Sep 88 change:
+c      Any of the y values may be a calculated (rather than read in) value;
+c      e.g., (0.1+0.7)/2.0.  Such a calculated value may not be stored
+c      internally the same as its indicated value (0.4) read directly in.
+c      So the arithmetic may not determine a tie when there is one.  The IF
+c      statement below takes care of this.  Specifically, a tie is declared
+c      if two numbers differ by less than 1.0E-5 (10 to the minus 5th) times
+c      their average.
+   30 yy = y(iend) - y(istart)                     ! Calculte the difference.
+      ave = (y(iend) + y(istart)) / 2.0            ! Calculate the average.
+      if (yy.ne.0.0 .and. ave.ne.0.0) then         ! Find non-zero values.
+         if (abs(yy/ave) .lt. 1.0e-5) yy = 0.0     ! Spurious difference.
+      endif
+      yy = yy / (x(iend) - x(istart))              ! Adjust for separation in X.
+c
+      if (yy.gt.0.0) nplus = nplus + 1               ! Up tick.
+      if (yy.lt.0.0) nminus = nminus + 1             ! Down tick.
+      if (yy.eq.0.0) ntie = ntie + 1                 ! Tie.
+      if (yy.eq.0.0) wastie(iend) = .true.           ! Mark ties.
+      ydiff(ncomp) = yy                              ! Save differences.
+   40 continue
+c
+c        Update variance correction if tie occured and tie was not counted
+c           before.
+c
+      if (ntie.ne.1.and..not.wastie(istart)) fixvar = fixvar +
+     1   ntie * (ntie-1.0) * (2.0*ntie+5.0) / 18.0
+   50 continue
+c
+c         Compute the variance of the test statistic S.
+c
+      nok = (1.0 + sqrt(1.0+8.0*ncomp)) / 2.0       ! Number of actual values.
+      var = nok * (nok-1.0) * (2.0*nok+5.0) / 18.0  ! Simple variance.
+      var = var - fixvar                            ! Adjust for ties.
+c
+c       Compute the test statistic S.
+c
+      s = nplus - nminus
+      return
+      end
+
+
+      subroutine rank(y,r,n)
+c
+c       Computes the ranks of the values in vector y.
+c       y is not re-arranged on return.
+c       In cases of ties, mid-ranks are used.
+c       Missing values are assigned overall mid-rank.
+c
+c     Code history:
+c        22 Sep 88  JRSlack  Update IMSL sort routine calls.
+c        23 Sep 88  JRSlack  Skip sort & adjustment if all missing values.
+c        28 Oct 88  JRSlack  Converted to Lahey F77L Version 3.00.
+c
+      real y(n), r(n), z(500)
+      real ycheck/-99998.0/
+      integer ord(500)
+      if (n.gt.500) stop ' Subroutine rank: n greater than 500.'
+c
+c       Initialize ord and z.
+c
+      m = 0
+      do 10 i = 1 , n
+      if (y(i).le.ycheck) go to 10
+      m = m + 1
+      ord(m) = i
+      z(m) = y(i)
+   10 continue
+c
+c       Rearrange z in ascending order.
+c
+      if (m.ne.0) call vsrtr(z,m,ord)     ! Don't sort if all missing-23Sep88
+c
+c       Assign overall mid-rank to all
+c       to take care of missing values.
+c       Rank is 1/2 if all missing values - 23 Sep 88.
+c
+      if (m.eq.n) go to 30
+      rm = (m + 1) / 2.0
+      do 20 i = 1 , n
+      r(i) = rm
+   20 continue
+      if (m.eq.0) return                 ! Done if all missing values - 23 Sep 88.
+   30 continue
+c
+c       Initial ranking.
+c
+      do 40 i = 1 , m
+      r(ord(i)) = i
+   40 continue
+c
+c       Adjust ranks for ties.
+c
+      i = 1
+c
+c       Value always tied with itself.
+c
+      iend = i
+   50 iend = iend + 1
+      if (iend.le.m.and.z(iend).eq.z(i)) go to 50
+c
+c       Compute average rank.
+c
+      ave = (iend*(iend-1) - i*(i-1)) / (2.0*(iend-i))
+      do 60 j = i , iend-1
+      r(ord(j)) = ave
+   60 continue
+      i = iend
+      if (i.lt.m) go to 50
+      return
+      end
+
+
+      function cdfn(y)
+c     cumulative distribution function for the
+c     '          '            '
+c        normal zero-one distribution.
+c        '
+c     Primary reference is: Abramowitz & Stegun,
+c        NBS Handbook of Mathematical Functions, equation 26.2.19
+c
+c     Code history:
+c        28 Oct 88  JRSlack  Converted to Lahey F77L Version 3.00.
+c
+      if (y) 10,20,30
+c
+c     Negative argument.
+c
+   10 continue
+      if (y.lt.-6.0) go to 40
+      t=-y
+      cdfn=      0.5/(1.0+0.0498673470*t+0.0211410061*t**2
+     1   +0.0032776263*t**3+0.380036e-4*t**4+0.488906e-4*t**5
+     1   +0.53830e-5*t**6)**16
+      return
+c
+c     Zero argument.
+c
+   20 continue
+      cdfn=0.5
+      return
+c
+c     Positive argument.
+c
+   30 continue
+      if (y.gt.6.0) go to 50
+      cdfn=1.0-0.5/(1.0+0.0498673470*y+0.0211410061*y**2
+     1   +0.0032776263*y**3+0.380036e-4*y**4+0.488906e-4*y**5
+     1   +0.53830e-5*y**6)**16
+      return
+c
+c     Outside the range +-6 the approximation is useless.
+c
+   40 continue
+      cdfn=0.0
+      return
+   50 continue
+      cdfn=1.0
+      return
+      end
+
+
+      function sgn(y)
+c
+c     Computes the sign of the argument.
+c
+c     Code history:
+c        28 Oct 88  JRSlack  Converted to Lahey F77L Version 3.00.
+c
+      sgn=1.0
+      if (y.eq.0.0) sgn=0.0
+      if (y.lt.0.0) sgn=-1.0
+      return
+      end
+
+
+      subroutine kentau(x,y,n,results)
+c
+c     Computes Kendall's tau, the associated p-level, and the
+c        slope of the trend line.
+c
+c     Arguments:
+c        x is a vector sorted in ascending order.
+c        y is the vector of values for which tau and the slope will be
+c          computed.
+c        n is the number of observations in x and y (maximum = 250).
+c        results is the output vector containing
+c           results(1) = Kendall's tau,
+c           results(2) = p-level without serial correlation correction,
+c           results(3) = not used in this subroutine
+c           results(4) = slope estimate,
+c           results(5) = median value of X,
+c           results(6) = median value of Y,
+c           results(7) = Kendall S (sum of pluses and minuses), and
+c           results(8) = normal variate (z-value).
+c
+c     Reference:
+c     Rank Correlation Methods, M.G.Kendall, Charles Griffin,
+c        London, 1975
+c
+c     Subprograms called:
+c        kens  to compute Kendall's tau.
+c        cdfn  to compute the cumulative Normal distribution function.
+c        vsrta to sort a vector (IMSL, included in code).
+c        vsrtx to sort 2 vectors (modified from IMSL).
+c
+c     Code history:
+c        28 May 85  JRSlack:    Initial coding.
+c        18 Dec 85  JRSlack:    Slope calculation corrected.
+c        27 Apr 99  DRHelsel & DKMueller:  Converted to general X vs. Y correlation.
+c
+      real x(n),y(n),results(8)
+      common /holddiff/ ydiff(153000)          ! Hold the adjusted differences.
+c
+      call kens(x,y,n,s,var,ncomp,ydiff)      ! Get the basic statistics.
+c
+      tau = s / ncomp                         ! Kendall's tau.
+                                results(7) = s
+                                results(1) = tau
+c
+      if (s.gt.0.0) s = s - 1.0               ! Continuity correction.
+      if (s.lt.0.0) s = s + 1.0
+      z = s / sqrt(var)                       ! Approximately Normal deviate.
+      if (z.le.0.0) plevel = 2.0 * cdfn(z)          ! Calculate the p-level.
+      if (z.gt.0.0) plevel = 2.0 * (1.0 - cdfn(z))
+                                results(8) = z
+                                results(2) = plevel
+c
+      call vsrta(ydiff,ncomp)                 ! Sort the difference vector.
+c                                             ! The median is the slope.
+      slope = (ydiff((ncomp+1)/2) + ydiff((ncomp+2)/2)) / 2.0
+                                results(4) = slope
+c
+      call vsrtx(y,x,n)                        ! Sort Y, retain X pairing.
+      ymed = (y((n+1)/2) + y((n+2)/2)) / 2.0   ! Compute median Y.
+      call vsrtx(x,y,n)                        ! Sort X, retain Y pairing.
+      xmed = (x((n+1)/2) + x((n+2)/2)) / 2.0   ! Compute median X.
+                                results(5) = xmed
+                                results(6) = ymed
+      return
+      end
+
+
+      subroutine lowess(x,y,n,f,yhat)
+
+c      implicit double precision (a-h,o-z)
+      dimension x(6000),y(6000),yhat(6000)
+      dimension d(6000),e(6000),window(6000),r(6000),ex(6000),r1(6000)
+
+      if (f .le. 0.0) f=0.25
+      m=int(n*f+0.5)
+      do 100 j=1,n
+        do 50 i=1,n
+          d(i)=abs(x(i)-x(j))
+          r1(i) = 1.0
+   50   continue
+        call vsrta(d,n)
+        window(j)=d(m)
+        call rwlreg(x,y,n,window(j),r1,x(j),yhat(j))
+  100 continue
+      do 400 it=1,2
+        do 200 i=1,n
+          e(i)=abs(y(i)-yhat(i))
+          ex(i)=e(i)
+  200   continue
+        call vsrta(ex,n)
+        s=rmed(ex,n)
+        do 300 i=1,n
+          r(i)=e(i)/(6.0*s)
+          r(i)=1.0-r(i)**2
+          r(i)=max(0.d0,r(i))
+          r(i)=r(i)**2
+  300   continue
+        do 350 j=1,n
+          call rwlreg(x,y,n,window(j),r,x(j),yhat(j))
+  350   continue
+  400 continue
+      return
+      end
+c
+c
+      function rmed(xdum,n)
+c     computes the median of xdum
+c      implicit double precision (a-h,o-z)
+      dimension xdum(6000)
+      logical even
+      i = ( n + 1 ) / 2
+      even = 2*i.eq.( n + 1 )
+      if (even) rmed = xdum(i)
+      if (.not.even) rmed = ( xdum(i) + xdum(i + 1) ) / 2.
+      return
+      end
+c
+c
+      SUBROUTINE RWLREG(X,Y,N,D,R,XX,YY)
+C
+C  MODIFICATION OF CHECK FOR 10 OR MORE NON-ZERO WEIGHTS BY RHIRSCH 4JUNE1987
+c
+C  ROBUST WEIGHTED REGRESSION ,BISQUARE WEIGHTS BY DISTANCE ON X AXIS.
+C  XX IS THE ESTIMATION POINT
+C  YY IS THE ESTIMATES VALUE OF Y AT XX
+C  DD IS THE HALF WIDTH OF THE WINDOW
+C  R IS THE ROBUSTNESS WEIGHT, A BISQUARE WEIGHT OF RESIDUALS.
+C
+      dimension X(6000),Y(6000),R(6000),W(6000)
+
+      DD=D
+      ddmax = abs(x(n) - x(1))
+      if (dd .eq.0.0) go to 400
+
+    1 NUM = 0
+      TOT = 0.0
+      DO 100 I=1,N
+        F=ABS(X(I)-XX)/DD
+        F=1.0-F**3
+        WEIGHT=max(0.d0,F)
+        WEIGHT=WEIGHT**3
+        W(I)=WEIGHT*R(I)
+        TOT=TOT+W(I)
+        IF(W(I) .GT. 0.0) NUM=NUM+1
+  100 CONTINUE
+      IF(NUM.GT.3) GO TO 150
+
+C  NOT ENOUGH POINTS INCLUDED - INCREASE WINDOW SIZE
+      DD=1.28*DD
+      if (DD .gt. ddmax) go to 300
+      write (*,1001) NUM, DD
+ 1001 FORMAT(' Subroutine RWLREG: Num =',I8,
+     2       '            LOWESS window size increased to ',G12.4)
+      GO TO 1
+
+  150 CONTINUE
+      DO 200 I=1,N
+      W(I)=W(I)/TOT
+  200 CONTINUE
+      CALL WLSQ(X,Y,W,N,A,B)
+      YY=A+B*XX
+      RETURN
+
+  300 write (*,1002)
+ 1002 format(' LOWESS window size exceeded X extent')
+      stop
+  400 write (*,1003)
+ 1003 FORMAT(' LOWESS window size = 0.  Increase f.')
+      stop
+      END
+
+
+      SUBROUTINE WLSQ(X,Y,W,N,A,B)
+
+C  WEIGHTED LEAST SQUARES
+C THE WEIGHTS ,W , MUST SUM TO ONE
+
+      dimension X(6000),Y(6000),W(6000)
+
+      WXX=0.0
+      WX=0.0
+      WXY=0.0
+      WY=0.0
+      DO 10 I=1,N
+        WW=DBLE(W(I))
+        XX=DBLE(X(I))
+        YY=DBLE(Y(I))
+        WXX=WXX+WW*XX*XX
+        WX=WX+WW*XX
+        WXY=WXY+WW*XX*YY
+        WY=WY+WW*YY
+   10 CONTINUE
+      B=(WXY-WY*WX)/(WXX-WX*WX)
+      A=WY-B*WX
+      RETURN
+      END
+
+
+C   IMSL ROUTINE NAME   - VSRTA                                         VSRA0010
+C                                                                       VSRA0020
+C-----------------------------------------------------------------------VSRA0030
+C                                                                       VSRA0040
+C   COMPUTER            - PRIM77/SINGLE                                 VSRA0050
+C                                                                       VSRA0060
+C   LATEST REVISION     - JANUARY 1, 1978                               VSRA0070
+C                                                                       VSRA0080
+C   PURPOSE             - SORTING OF ARRAYS BY ALGEBRAIC VALUE          VSRA0090
+C                                                                       VSRA0100
+C   USAGE               - CALL VSRTA (A,LA)                             VSRA0110
+C                                                                       VSRA0120
+C   ARGUMENTS    A      - ON INPUT, A CONTAINS THE ARRAY TO BE SORTED.  VSRA0130
+C                         ON OUTPUT, A CONTAINS THE SORTED ARRAY.       VSRA0140
+C                LA     - INPUT VARIABLE CONTAINING THE NUMBER OF       VSRA0150
+C                           ELEMENTS IN THE ARRAY TO BE SORTED.         VSRA0160
+C                                                                       VSRA0170
+C   PRECISION/HARDWARE  - SINGLE/ALL                                    VSRA0180
+C                                                                       VSRA0190
+C   REQD. IMSL ROUTINES - NONE REQUIRED                                 VSRA0200
+C                                                                       VSRA0210
+C   NOTATION            - INFORMATION ON SPECIAL NOTATION AND           VSRA0220
+C                           CONVENTIONS IS AVAILABLE IN THE MANUAL      VSRA0230
+C                           INTRODUCTION OR THROUGH IMSL ROUTINE UHELP  VSRA0240
+C                                                                       VSRA0250
+C   COPYRIGHT           - 1978 BY IMSL, INC. ALL RIGHTS RESERVED.       VSRA0260
+C                                                                       VSRA0270
+C   WARRANTY            - IMSL WARRANTS ONLY THAT IMSL TESTING HAS BEEN VSRA0280
+C                           APPLIED TO THIS CODE.  NO OTHER WARRANTY,   VSRA0290
+C                           EXPRESSED OR IMPLIED, IS APPLICABLE.        VSRA0300
+C                                                                       VSRA0310
+C-----------------------------------------------------------------------VSRA0320
+C                                                                       VSRA0330
+      SUBROUTINE VSRTA  (A,LA)                                          VSRA0340
+C                                  SPECIFICATIONS FOR ARGUMENTS         VSRA0350
+      INTEGER            LA                                             VSRA0360
+      REAL               A(LA)                                          VSRA0370
+C                                  SPECIFICATIONS FOR LOCAL VARIABLES   VSRA0380
+      INTEGER            IU(21),IL(21),I,M,J,K,IJ,L                     VSRA0390
+      REAL               T,TT,R                                         VSRA0400
+C                                  FIRST EXECUTABLE STATEMENT           VSRA0410
+      M=1                                                               VSRA0420
+      I=1                                                               VSRA0430
+      J=LA                                                              VSRA0440
+      R=.375                                                            VSRA0450
+      IF (LA.LE.0) RETURN                                               VSRA0460
+   10 IF (I .EQ. J) GO TO 55                                            VSRA0470
+   15 IF (R .GT. .5898437) GO TO 20                                     VSRA0480
+      R=R+3.90625E-2                                                    VSRA0490
+      GO TO 25                                                          VSRA0500
+   20 R=R-.21875                                                        VSRA0510
+   25 K=I                                                               VSRA0520
+C                                  SELECT A CENTRAL ELEMENT OF THE      VSRA0530
+C                                  ARRAY AND SAVE IT IN LOCATION T      VSRA0540
+      IJ=I+(J-I)*R                                                      VSRA0550
+      T=A(IJ)                                                           VSRA0560
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER VSRA0570
+C                                  THAN T, INTERCHANGE WITH T           VSRA0580
+      IF (A(I) .LE. T) GO TO 30                                         VSRA0590
+      A(IJ)=A(I)                                                        VSRA0600
+      A(I)=T                                                            VSRA0610
+      T=A(IJ)                                                           VSRA0620
+   30 L=J                                                               VSRA0630
+C                                  IF LAST ELEMENT OF ARRAY IS LESS THANVSRA0640
+C                                  T, INTERCHANGE WITH T                VSRA0650
+      IF (A(J) .GE. T) GO TO 40                                         VSRA0660
+      A(IJ)=A(J)                                                        VSRA0670
+      A(J)=T                                                            VSRA0680
+      T=A(IJ)                                                           VSRA0690
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER VSRA0700
+C                                  THAN T, INTERCHANGE WITH T           VSRA0710
+      IF (A(I) .LE. T) GO TO 40                                         VSRA0720
+      A(IJ)=A(I)                                                        VSRA0730
+      A(I)=T                                                            VSRA0740
+      T=A(IJ)                                                           VSRA0750
+      GO TO 40                                                          VSRA0760
+   35 IF(A(L).EQ.A(K)) GO TO 40                                         VSRA0770
+      TT=A(L)                                                           VSRA0780
+      A(L)=A(K)                                                         VSRA0790
+      A(K)=TT                                                           VSRA0800
+C                                  FIND AN ELEMENT IN THE SECOND HALF OFVSRA0810
+C                                  THE ARRAY WHICH IS SMALLER THAN T    VSRA0820
+   40 L=L-1                                                             VSRA0830
+      IF (A(L) .GT. T) GO TO 40                                         VSRA0840
+C                                  FIND AN ELEMENT IN THE FIRST HALF OF VSRA0850
+C                                  THE ARRAY WHICH IS GREATER THAN T    VSRA0860
+   45 K=K+1                                                             VSRA0870
+      IF (A(K) .LT. T) GO TO 45                                         VSRA0880
+C                                  INTERCHANGE THESE ELEMENTS           VSRA0890
+      IF (K .LE. L) GO TO 35                                            VSRA0900
+C                                  SAVE UPPER AND LOWER SUBSCRIPTS OF   VSRA0910
+C                                  THE ARRAY YET TO BE SORTED           VSRA0920
+      IF (L-I .LE. J-K) GO TO 50                                        VSRA0930
+      IL(M)=I                                                           VSRA0940
+      IU(M)=L                                                           VSRA0950
+      I=K                                                               VSRA0960
+      M=M+1                                                             VSRA0970
+      GO TO 60                                                          VSRA0980
+   50 IL(M)=K                                                           VSRA0990
+      IU(M)=J                                                           VSRA1000
+      J=L                                                               VSRA1010
+      M=M+1                                                             VSRA1020
+      GO TO 60                                                          VSRA1030
+C                                  BEGIN AGAIN ON ANOTHER PORTION OF    VSRA1040
+C                                  THE UNSORTED ARRAY                   VSRA1050
+   55 M=M-1                                                             VSRA1060
+      IF (M .EQ. 0) RETURN                                              VSRA1070
+      I=IL(M)                                                           VSRA1080
+      J=IU(M)                                                           VSRA1090
+   60 IF (J-I .GE. 11) GO TO 25                                         VSRA1100
+      IF (I .EQ. 1) GO TO 10                                            VSRA1110
+      I=I-1                                                             VSRA1120
+   65 I=I+1                                                             VSRA1130
+      IF (I .EQ. J) GO TO 55                                            VSRA1140
+      T=A(I+1)                                                          VSRA1150
+      IF (A(I) .LE. T) GO TO 65                                         VSRA1160
+      K=I                                                               VSRA1170
+   70 A(K+1)=A(K)                                                       VSRA1180
+      K=K-1                                                             VSRA1190
+      IF (T .LT. A(K)) GO TO 70                                         VSRA1200
+      A(K+1)=T                                                          VSRA1210
+      GO TO 65                                                          VSRA1220
+      END                                                               VSRA1230
+
+
+C   IMSL ROUTINE NAME   - VSRTR                                         VSRR0010
+C                                                                       VSRR0020
+C-----------------------------------------------------------------------VSRR0030
+C                                                                       VSRR0040
+C   COMPUTER            - PRIM77/SINGLE                                 VSRR0050
+C                                                                       VSRR0060
+C   LATEST REVISION     - JANUARY 1, 1978                               VSRR0070
+C                                                                       VSRR0080
+C   PURPOSE             - SORTING OF ARRAYS BY ALGEBRAIC VALUE -        VSRR0090
+C                           PERMUTATIONS RETURNED                       VSRR0100
+C                                                                       VSRR0110
+C   USAGE               - CALL VSRTR (A,LA,IR)                          VSRR0120
+C                                                                       VSRR0130
+C   ARGUMENTS    A      - ON INPUT, A CONTAINS THE ARRAY TO BE SORTED.  VSRR0140
+C                         ON OUTPUT, A CONTAINS THE SORTED ARRAY.       VSRR0150
+C                LA     - INPUT VARIABLE CONTAINING THE NUMBER OF       VSRR0160
+C                           ELEMENTS IN THE ARRAY TO BE SORTED.         VSRR0170
+C                IR     - VECTOR OF LENGTH LA.                          VSRR0180
+C                         ON INPUT, IR CONTAINS THE INTEGER VALUES      VSRR0190
+C                           1,2,...,LA. SEE REMARKS.                    VSRR0200
+C                         ON OUTPUT, IR CONTAINS A RECORD OF THE        VSRR0210
+C                           PERMUTATIONS MADE ON THE VECTOR A.          VSRR0220
+C                                                                       VSRR0230
+C   PRECISION/HARDWARE  - SINGLE/ALL                                    VSRR0240
+C                                                                       VSRR0250
+C   REQD. IMSL ROUTINES - NONE REQUIRED                                 VSRR0260
+C                                                                       VSRR0270
+C   NOTATION            - INFORMATION ON SPECIAL NOTATION AND           VSRR0280
+C                           CONVENTIONS IS AVAILABLE IN THE MANUAL      VSRR0290
+C                           INTRODUCTION OR THROUGH IMSL ROUTINE UHELP  VSRR0300
+C                                                                       VSRR0310
+C   REMARKS      THE VECTOR IR MUST BE INITIALIZED BEFORE ENTERING      VSRR0320
+C                VSRTR.  ORDINARILY, IR(1)=1, IR(2)=2, ...,             VSRR0330
+C                IR(LA)=LA.  FOR WIDER APPLICABILITY, ANY INTEGER       VSRR0340
+C                THAT IS TO BE ASSOCIATED WITH A(I) FOR I=1,2,...,LA    VSRR0350
+C                MAY BE ENTERED INTO IR(I).                             VSRR0360
+C                                                                       VSRR0370
+C   COPYRIGHT           - 1978 BY IMSL, INC. ALL RIGHTS RESERVED.       VSRR0380
+C                                                                       VSRR0390
+C   WARRANTY            - IMSL WARRANTS ONLY THAT IMSL TESTING HAS BEEN VSRR0400
+C                           APPLIED TO THIS CODE.  NO OTHER WARRANTY,   VSRR0410
+C                           EXPRESSED OR IMPLIED, IS APPLICABLE.        VSRR0420
+C                                                                       VSRR0430
+C-----------------------------------------------------------------------VSRR0440
+C                                                                       VSRR0450
+      SUBROUTINE VSRTR  (A,LA,IR)                                       VSRR0460
+C                                  SPECIFICATIONS FOR ARGUMENTS         VSRR0470
+      INTEGER            LA,IR(LA)                                      VSRR0480
+      REAL               A(LA)                                          VSRR0490
+C                                  SPECIFICATIONS FOR LOCAL VARIABLES   VSRR0500
+      INTEGER            IU(21),IL(21),I,M,J,K,IJ,IT,L,ITT              VSRR0510
+      REAL               T,TT,R                                         VSRR0520
+C                                  FIRST EXECUTABLE STATEMENT           VSRR0530
+      IF (LA.LE.0) RETURN                                               VSRR0540
+      M = 1                                                             VSRR0550
+      I = 1                                                             VSRR0560
+      J = LA                                                            VSRR0570
+      R = .375                                                          VSRR0580
+    5 IF (I.EQ.J) GO TO 45                                              VSRR0590
+      IF (R.GT..5898437) GO TO 10                                       VSRR0600
+      R = R+3.90625E-2                                                  VSRR0610
+      GO TO 15                                                          VSRR0620
+   10 R = R-.21875                                                      VSRR0630
+   15 K = I                                                             VSRR0640
+C                                  SELECT A CENTRAL ELEMENT OF THE      VSRR0650
+C                                  ARRAY AND SAVE IT IN LOCATION T      VSRR0660
+      IJ = I+(J-I)*R                                                    VSRR0670
+      T = A(IJ)                                                         VSRR0680
+      IT = IR(IJ)                                                       VSRR0690
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER VSRR0700
+C                                  THAN T, INTERCHANGE WITH T           VSRR0710
+      IF (A(I).LE.T) GO TO 20                                           VSRR0720
+      A(IJ) = A(I)                                                      VSRR0730
+      A(I) = T                                                          VSRR0740
+      T = A(IJ)                                                         VSRR0750
+      IR(IJ) = IR(I)                                                    VSRR0760
+      IR(I) = IT                                                        VSRR0770
+      IT = IR(IJ)                                                       VSRR0780
+   20 L = J                                                             VSRR0790
+C                                  IF LAST ELEMENT OF ARRAY IS LESS THANVSRR0800
+C                                  T, INTERCHANGE WITH T                VSRR0810
+      IF (A(J).GE.T) GO TO 30                                           VSRR0820
+      A(IJ) = A(J)                                                      VSRR0830
+      A(J) = T                                                          VSRR0840
+      T = A(IJ)                                                         VSRR0850
+      IR(IJ) = IR(J)                                                    VSRR0860
+      IR(J) = IT                                                        VSRR0870
+      IT = IR(IJ)                                                       VSRR0880
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER VSRR0890
+C                                  THAN T, INTERCHANGE WITH T           VSRR0900
+      IF (A(I).LE.T) GO TO 30                                           VSRR0910
+      A(IJ) = A(I)                                                      VSRR0920
+      A(I) = T                                                          VSRR0930
+      T = A(IJ)                                                         VSRR0940
+      IR(IJ) = IR(I)                                                    VSRR0950
+      IR(I) = IT                                                        VSRR0960
+      IT = IR(IJ)                                                       VSRR0970
+      GO TO 30                                                          VSRR0980
+   25 IF (A(L).EQ.A(K)) GO TO 30                                        VSRR0990
+      TT = A(L)                                                         VSRR1000
+      A(L) = A(K)                                                       VSRR1010
+      A(K) = TT                                                         VSRR1020
+      ITT = IR(L)                                                       VSRR1030
+      IR(L) = IR(K)                                                     VSRR1040
+      IR(K) = ITT                                                       VSRR1050
+C                                  FIND AN ELEMENT IN THE SECOND HALF OFVSRR1060
+C                                  THE ARRAY WHICH IS SMALLER THAN T    VSRR1070
+   30 L = L-1                                                           VSRR1080
+      IF (A(L).GT.T) GO TO 30                                           VSRR1090
+C                                  FIND AN ELEMENT IN THE FIRST HALF OF VSRR1100
+C                                  THE ARRAY WHICH IS GREATER THAN T    VSRR1110
+   35 K = K+1                                                           VSRR1120
+      IF (A(K).LT.T) GO TO 35                                           VSRR1130
+C                                  INTERCHANGE THESE ELEMENTS           VSRR1140
+      IF (K.LE.L) GO TO 25                                              VSRR1150
+C                                  SAVE UPPER AND LOWER SUBSCRIPTS OF   VSRR1160
+C                                  THE ARRAY YET TO BE SORTED           VSRR1170
+      IF (L-I.LE.J-K) GO TO 40                                          VSRR1180
+      IL(M) = I                                                         VSRR1190
+      IU(M) = L                                                         VSRR1200
+      I = K                                                             VSRR1210
+      M = M+1                                                           VSRR1220
+      GO TO 50                                                          VSRR1230
+   40 IL(M) = K                                                         VSRR1240
+      IU(M) = J                                                         VSRR1250
+      J = L                                                             VSRR1260
+      M = M+1                                                           VSRR1270
+      GO TO 50                                                          VSRR1280
+C                                  BEGIN AGAIN ON ANOTHER PORTION OF    VSRR1290
+C                                  THE UNSORTED ARRAY                   VSRR1300
+   45 M = M-1                                                           VSRR1310
+      IF (M.EQ.0) RETURN                                                VSRR1320
+      I = IL(M)                                                         VSRR1330
+      J = IU(M)                                                         VSRR1340
+   50 IF (J-I.GE.11) GO TO 15                                           VSRR1350
+      IF (I.EQ.1) GO TO 5                                               VSRR1360
+      I = I-1                                                           VSRR1370
+   55 I = I+1                                                           VSRR1380
+      IF (I.EQ.J) GO TO 45                                              VSRR1390
+      T = A(I+1)                                                        VSRR1400
+      IT = IR(I+1)                                                      VSRR1410
+      IF (A(I).LE.T) GO TO 55                                           VSRR1420
+      K = I                                                             VSRR1430
+   60 A(K+1) = A(K)                                                     VSRR1440
+      IR(K+1) = IR(K)                                                   VSRR1450
+      K = K-1                                                           VSRR1460
+      IF (T.LT.A(K)) GO TO 60                                           VSRR1470
+      A(K+1) = T                                                        VSRR1480
+      IR(K+1) = IT                                                      VSRR1490
+      GO TO 55                                                          VSRR1500
+      END                                                               VSRR1510
+
+
+      SUBROUTINE VSRTX  (X,Y,LA)
+C   Modified from IMSL subroutine VSRTR
+C
+C   ARGUMENTS    X      - ON INPUT, X CONTAINS THE ARRAY TO BE SORTED.
+C                         ON OUTPUT, X CONTAINS THE SORTED ARRAY.
+C                Y      - VECTOR  Containing values paired with values in X.
+C                         Pairing is maintained after X is sorted.
+C                LA     - INPUT VARIABLE CONTAINING THE NUMBER OF
+C                           ELEMENTS IN THE ARRAY TO BE SORTED.
+C
+C                                  SPECIFICATIONS FOR ARGUMENTS
+      INTEGER            LA
+      REAL               X(LA), Y(LA)
+C                                  SPECIFICATIONS FOR LOCAL VARIABLES
+      INTEGER            IU(21),IL(21),I,M,J,K,IJ,L
+      REAL               XT,XTT,YT,YTT,R
+C                                  FIRST EXECUTABLE STATEMENT
+      IF (LA.LE.0) RETURN
+      M = 1
+      I = 1
+      J = LA
+      R = .375
+    5 IF (I.EQ.J) GO TO 45
+      IF (R.GT..5898437) GO TO 10
+      R = R+3.90625E-2
+      GO TO 15
+   10 R = R-.21875
+   15 K = I
+C                                  SELECT A CENTRAL ELEMENT OF THE
+C                                  ARRAY AND SAVE IT IN LOCATION XT
+      IJ = I+(J-I)*R
+      XT = X(IJ)
+      YT = Y(IJ)
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER
+C                                  THAN T, INTERCHANGE WITH XT
+      IF (X(I).LE.XT) GO TO 20
+      X(IJ) = X(I)
+      X(I) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(I)
+      Y(I) = YT
+      YT = Y(IJ)
+   20 L = J
+C                                  IF LAST ELEMENT OF ARRAY IS LESS THAN
+C                                  T, INTERCHANGE WITH XT
+      IF (X(J).GE.XT) GO TO 30
+      X(IJ) = X(J)
+      X(J) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(J)
+      Y(J) = YT
+      YT = Y(IJ)
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER
+C                                  THAN T, INTERCHANGE WITH XT
+      IF (X(I).LE.XT) GO TO 30
+      X(IJ) = X(I)
+      X(I) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(I)
+      Y(I) = YT
+      YT = Y(IJ)
+      GO TO 30
+   25 IF (X(L).EQ.X(K)) GO TO 30
+      XTT = X(L)
+      X(L) = X(K)
+      X(K) = XTT
+      YTT = Y(L)
+      Y(L) = Y(K)
+      Y(K) = YTT
+C                                  FIND AN ELEMENT IN THE SECOND HALF OF
+C                                  THE ARRAY WHICH IS SMALLER THAN XT
+   30 L = L-1
+      IF (X(L).GT.XT) GO TO 30
+C                                  FIND AN ELEMENT IN THE FIRST HALF OF
+C                                  THE ARRAY WHICH IS GREATER THAN XT
+   35 K = K+1
+      IF (X(K).LT.XT) GO TO 35
+C                                  INTERCHANGE THESE ELEMENTS
+      IF (K.LE.L) GO TO 25
+C                                  SAVE UPPER AND LOWER SUBSCRIPTS OF
+C                                  THE ARRAY YET TO BE SORTED
+      IF (L-I.LE.J-K) GO TO 40
+      IL(M) = I
+      IU(M) = L
+      I = K
+      M = M+1
+      GO TO 50
+   40 IL(M) = K
+      IU(M) = J
+      J = L
+      M = M+1
+      GO TO 50
+C                                  BEGIN AGAIN ON ANOTHER PORTION OF
+C                                  THE UNSORTED ARRAY
+   45 M = M-1
+      IF (M.EQ.0) RETURN
+      I = IL(M)
+      J = IU(M)
+   50 IF (J-I.GE.11) GO TO 15
+      IF (I.EQ.1) GO TO 5
+      I = I-1
+   55 I = I+1
+      IF (I.EQ.J) GO TO 45
+      XT = X(I+1)
+      YT = Y(I+1)
+      IF (X(I).LE.XT) GO TO 55
+      K = I
+   60 X(K+1) = X(K)
+      Y(K+1) = Y(K)
+      K = K-1
+      IF (XT.LT.X(K)) GO TO 60
+      X(K+1) = XT
+      Y(K+1) = YT
+      GO TO 55
+      END
+
+
+      SUBROUTINE VSRT3  (X,Y,Z,LA)
+C   Modified from IMSL subroutine VSRTR
+C
+C   ARGUMENTS    X      - ON INPUT, X CONTAINS THE ARRAY TO BE SORTED.
+C                         ON OUTPUT, X CONTAINS THE SORTED ARRAY.
+C                Y & Z  - Array containing values paired with values in X.
+C                         Pairing is maintained after X is sorted.
+C                LA     - INPUT VARIABLE CONTAINING THE NUMBER OF
+C                           ELEMENTS IN THE ARRAY TO BE SORTED.
+C
+C                                  SPECIFICATIONS FOR ARGUMENTS
+      INTEGER            LA
+      REAL               X(LA), Y(LA), Z(LA)
+C                                  SPECIFICATIONS FOR LOCAL VARIABLES
+      INTEGER            IU(21),IL(21),I,M,J,K,IJ,L
+      REAL               XT,XTT,YT,YTT,ZT,ZTT,R
+C                                  FIRST EXECUTABLE STATEMENT
+      IF (LA.LE.0) RETURN
+      M = 1
+      I = 1
+      J = LA
+      R = .375
+    5 IF (I.EQ.J) GO TO 45
+      IF (R.GT..5898437) GO TO 10
+      R = R+3.90625E-2
+      GO TO 15
+   10 R = R-.21875
+   15 K = I
+C                                  SELECT A CENTRAL ELEMENT OF THE
+C                                  ARRAY AND SAVE IT IN LOCATION XT
+      IJ = I+(J-I)*R
+      XT = X(IJ)
+      YT = Y(IJ)
+      ZT = Z(IJ)
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER
+C                                  THAN T, INTERCHANGE WITH XT
+      IF (X(I).LE.XT) GO TO 20
+      X(IJ) = X(I)
+      X(I) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(I)
+      Y(I) = YT
+      YT = Y(IJ)
+      Z(IJ) = Z(I)
+      Z(I) = ZT
+      ZT = Z(IJ)
+   20 L = J
+C                                  IF LAST ELEMENT OF ARRAY IS LESS THAN
+C                                  T, INTERCHANGE WITH XT
+      IF (X(J).GE.XT) GO TO 30
+      X(IJ) = X(J)
+      X(J) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(J)
+      Y(J) = YT
+      YT = Y(IJ)
+      Z(IJ) = Z(J)
+      Z(J) = ZT
+      ZT = Z(IJ)
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER
+C                                  THAN T, INTERCHANGE WITH XT
+      IF (X(I).LE.XT) GO TO 30
+      X(IJ) = X(I)
+      X(I) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(I)
+      Y(I) = YT
+      YT = Y(IJ)
+      Z(IJ) = Z(I)
+      Z(I) = ZT
+      ZT = Z(IJ)
+      GO TO 30
+   25 IF (X(L).EQ.X(K)) GO TO 30
+      XTT = X(L)
+      X(L) = X(K)
+      X(K) = XTT
+      YTT = Y(L)
+      Y(L) = Y(K)
+      Y(K) = YTT
+      ZTT = Z(L)
+      Z(L) = Z(K)
+      Z(K) = ZTT
+C                                  FIND AN ELEMENT IN THE SECOND HALF OF
+C                                  THE ARRAY WHICH IS SMALLER THAN XT
+   30 L = L-1
+      IF (X(L).GT.XT) GO TO 30
+C                                  FIND AN ELEMENT IN THE FIRST HALF OF
+C                                  THE ARRAY WHICH IS GREATER THAN XT
+   35 K = K+1
+      IF (X(K).LT.XT) GO TO 35
+C                                  INTERCHANGE THESE ELEMENTS
+      IF (K.LE.L) GO TO 25
+C                                  SAVE UPPER AND LOWER SUBSCRIPTS OF
+C                                  THE ARRAY YET TO BE SORTED
+      IF (L-I.LE.J-K) GO TO 40
+      IL(M) = I
+      IU(M) = L
+      I = K
+      M = M+1
+      GO TO 50
+   40 IL(M) = K
+      IU(M) = J
+      J = L
+      M = M+1
+      GO TO 50
+C                                  BEGIN AGAIN ON ANOTHER PORTION OF
+C                                  THE UNSORTED ARRAY
+   45 M = M-1
+      IF (M.EQ.0) RETURN
+      I = IL(M)
+      J = IU(M)
+   50 IF (J-I.GE.11) GO TO 15
+      IF (I.EQ.1) GO TO 5
+      I = I-1
+   55 I = I+1
+      IF (I.EQ.J) GO TO 45
+      XT = X(I+1)
+      YT = Y(I+1)
+      ZT = Z(I+1)
+      IF (X(I).LE.XT) GO TO 55
+      K = I
+   60 X(K+1) = X(K)
+      Y(K+1) = Y(K)
+      Z(K+1) = Z(K)
+      K = K-1
+      IF (XT.LT.X(K)) GO TO 60
+      X(K+1) = XT
+      Y(K+1) = YT
+      Z(K+1) = ZT
+      GO TO 55
+      END
+
+       SUBROUTINE VSRT5  (X,Y,Z,A,B,LA)
+C   Modified from IMSL subroutine VSRTR
+C
+C   ARGUMENTS    X       - ON INPUT, X CONTAINS THE ARRAY TO BE SORTED.
+C                          ON OUTPUT, X CONTAINS THE SORTED ARRAY.
+C                Y,Z,A&B - Arrays containing values paired with values in X.
+C                          Pairing is maintained after X is sorted.
+C                LA      - INPUT VARIABLE CONTAINING THE NUMBER OF
+C                          ELEMENTS IN THE ARRAY TO BE SORTED.
+C
+C                                  SPECIFICATIONS FOR ARGUMENTS
+      INTEGER            LA
+      REAL               X(LA), Y(LA), Z(LA), A(LA), B(LA)
+C                                  SPECIFICATIONS FOR LOCAL VARIABLES
+      INTEGER            IU(21),IL(21),I,M,J,K,IJ,L
+      REAL               XT,XTT,YT,YTT,ZT,ZTT,AT,ATT,BT,BTT,R
+C                                  FIRST EXECUTABLE STATEMENT
+      IF (LA.LE.0) RETURN
+      M = 1
+      I = 1
+      J = LA
+      R = .375
+    5 IF (I.EQ.J) GO TO 45
+      IF (R.GT..5898437) GO TO 10
+      R = R+3.90625E-2
+      GO TO 15
+   10 R = R-.21875
+   15 K = I
+C                                  SELECT A CENTRAL ELEMENT OF THE
+C                                  ARRAY AND SAVE IT IN LOCATION XT
+      IJ = I+(J-I)*R
+      XT = X(IJ)
+      YT = Y(IJ)
+      ZT = Z(IJ)
+      AT = A(IJ)
+      BT = B(IJ)
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER
+C                                  THAN T, INTERCHANGE WITH XT
+      IF (X(I).LE.XT) GO TO 20
+      X(IJ) = X(I)
+      X(I) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(I)
+      Y(I) = YT
+      YT = Y(IJ)
+      Z(IJ) = Z(I)
+      Z(I) = ZT
+      ZT = Z(IJ)
+      A(IJ) = A(I)
+      A(I) = AT
+      AT = A(IJ)
+      B(IJ) = B(I)
+      B(I) = BT
+      BT = B(IJ)
+   20 L = J
+C                                  IF LAST ELEMENT OF ARRAY IS LESS THAN
+C                                  T, INTERCHANGE WITH XT
+      IF (X(J).GE.XT) GO TO 30
+      X(IJ) = X(J)
+      X(J) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(J)
+      Y(J) = YT
+      YT = Y(IJ)
+      Z(IJ) = Z(J)
+      Z(J) = ZT
+      ZT = Z(IJ)
+      A(IJ) = A(J)
+      A(J) = AT
+      AT = A(IJ)
+      B(IJ) = B(J)
+      B(J) = BT
+      BT = B(IJ)
+C                                  IF FIRST ELEMENT OF ARRAY IS GREATER
+C                                  THAN T, INTERCHANGE WITH XT
+      IF (X(I).LE.XT) GO TO 30
+      X(IJ) = X(I)
+      X(I) = XT
+      XT = X(IJ)
+      Y(IJ) = Y(I)
+      Y(I) = YT
+      YT = Y(IJ)
+      Z(IJ) = Z(I)
+      Z(I) = ZT
+      ZT = Z(IJ)
+      A(IJ) = A(I)
+      A(I) = AT
+      AT = A(IJ)
+      B(IJ) = B(I)
+      B(I) = BT
+      BT = B(IJ)
+      GO TO 30
+   25 IF (X(L).EQ.X(K)) GO TO 30
+      XTT = X(L)
+      X(L) = X(K)
+      X(K) = XTT
+      YTT = Y(L)
+      Y(L) = Y(K)
+      Y(K) = YTT
+      ZTT = Z(L)
+      Z(L) = Z(K)
+      Z(K) = ZTT
+      ATT = A(L)
+      A(L) = A(K)
+      A(K) = ATT
+      BTT = B(L)
+      B(L) = B(K)
+      B(K) = BTT
+C                                  FIND AN ELEMENT IN THE SECOND HALF OF
+C                                  THE ARRAY WHICH IS SMALLER THAN XT
+   30 L = L-1
+      IF (X(L).GT.XT) GO TO 30
+C                                  FIND AN ELEMENT IN THE FIRST HALF OF
+C                                  THE ARRAY WHICH IS GREATER THAN XT
+   35 K = K+1
+      IF (X(K).LT.XT) GO TO 35
+C                                  INTERCHANGE THESE ELEMENTS
+      IF (K.LE.L) GO TO 25
+C                                  SAVE UPPER AND LOWER SUBSCRIPTS OF
+C                                  THE ARRAY YET TO BE SORTED
+      IF (L-I.LE.J-K) GO TO 40
+      IL(M) = I
+      IU(M) = L
+      I = K
+      M = M+1
+      GO TO 50
+   40 IL(M) = K
+      IU(M) = J
+      J = L
+      M = M+1
+      GO TO 50
+C                                  BEGIN AGAIN ON ANOTHER PORTION OF
+C                                  THE UNSORTED ARRAY
+   45 M = M-1
+      IF (M.EQ.0) RETURN
+      I = IL(M)
+      J = IU(M)
+   50 IF (J-I.GE.11) GO TO 15
+      IF (I.EQ.1) GO TO 5
+      I = I-1
+   55 I = I+1
+      IF (I.EQ.J) GO TO 45
+      XT = X(I+1)
+      YT = Y(I+1)
+      ZT = Z(I+1)
+      AT = A(I+1)
+      BT = B(I+1)
+      IF (X(I).LE.XT) GO TO 55
+      K = I
+   60 X(K+1) = X(K)
+      Y(K+1) = Y(K)
+      Z(K+1) = Z(K)
+      A(K+1) = A(K)
+      B(K+1) = B(K)
+      K = K-1
+      IF (XT.LT.X(K)) GO TO 60
+      X(K+1) = XT
+      Y(K+1) = YT
+      Z(K+1) = ZT
+      A(K+1) = AT
+      B(K+1) = BT
+      GO TO 55
+      END
+
+        
