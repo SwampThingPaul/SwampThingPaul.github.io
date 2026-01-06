@@ -1,0 +1,410 @@
+---
+title: "Time series Analysis (Part IV), Stationarity and Peroidicity"
+author:
+  - name: Paul Julian
+date: 2024-12-08
+categories: [blog, time series, stationarity, perodicity]
+# image: /images/...
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r,include=F}
+library(AnalystHelper)
+
+wd = "C:/Julian_LaCie/_GitHub/SwampThingPaul.github.io"
+paths = c("/news/assests/20241208_Timeseries4/")
+plot.path = paste0(wd,paths[1])
+# Folder.Maker(plot.path)
+
+simulate_timeseries <- function(n = 1000,            # Number of observations
+                                trend_slope = 0.01,    # Slope of linear trend
+                                seasonal_amp = 2,      # Amplitude of seasonal component
+                                seasonal_period = 12,  # Period length
+                                noise_mean = 1,        # mean of noise
+                                noise_sd = 0.5,        # Standard deviation of noise  
+                                seed.val = 123         # value to set.seed(...)
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # Create components
+  # 1. Linear trend
+  trend <- trend_slope * t
+  # 2. Seasonal component using sine wave
+  seasonal <- seasonal_amp * sin(2 * pi * t / seasonal_period)
+  # 3. Random noise (stationary component)
+  noise <- rnorm(n, mean = noise_mean, sd = noise_sd)
+  # Combine components
+  ts_data <- trend + seasonal + noise
+  
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components for analysis
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise
+    )
+  ))
+}
+
+simulate_timeseries_vol <- function(n = 1000,              # Number of observations
+                                    trend_slope = 0.01,    # Slope of linear trend
+                                    seasonal_amp = 2,      # seasonal component
+                                    seasonal_period = 12,  # Period length
+                                    init_vol = 0.5,        # Initial volatility
+                                    vol_persistence = 0.95,# Persistence in volatility
+                                    rw_sd = 0.1,           # Random walk innovation SD
+                                    seed.val = 123         # value to set.seed(...)  
+){         
+  if(is.null(seed.val)==F){set.seed(seed.val)} # for reproducibility
+  # Generate time points
+  t <- 1:n
+  # 1. Create non-linear trend (combining linear trend with random walk)
+  linear_trend <- trend_slope * t
+  random_walk <- cumsum(rnorm(n, 0, rw_sd))
+  trend <- linear_trend + random_walk
+  # 2. Create time-varying seasonal component
+  # Amplitude changes over time following a random walk
+  varying_amplitude <- seasonal_amp + cumsum(rnorm(n, 0, rw_sd/5))
+  seasonal <- varying_amplitude * sin(2 * pi * t / seasonal_period)
+  # 3. Generate time-varying volatility (GARCH-like process)
+  # Initialize volatility vector
+  volatility <- numeric(n)
+  volatility[1] <- init_vol
+  # Generate volatility process
+  for(i in 2:n) {
+    # Volatility follows AR(1) process with innovations
+    volatility[i] <- sqrt(0.01 + 
+                            vol_persistence * volatility[i-1]^2 + 
+                            (1 - vol_persistence) * rnorm(1, 0, 0.1)^2)
+  }
+  # 4. Generate heteroskedastic noise
+  noise <- rnorm(n, 0, 1) * volatility
+  # 5. Add structural breaks
+  # Add random level shifts
+  n_breaks <- max(1, round(n/200))  # Approximately one break every 200 observations
+  break_points <- sort(sample(2:n, n_breaks))
+  level_shifts <- cumsum(rnorm(n_breaks, 0, 2))  # Random shift magnitudes
+  breaks <- numeric(n)
+  current_break <- 1
+  for(i in 1:n) {
+    if(current_break <= length(break_points) && i >= break_points[current_break]) {
+      breaks[i:n] <- level_shifts[current_break]
+      current_break <- current_break + 1
+    }
+  }
+  
+  # Combine all components
+  ts_data <- trend + seasonal + noise + breaks
+  # Convert to time series object
+  ts_result <- ts(ts_data, frequency = seasonal_period)
+  # Return both the time series and its components
+  return(list(
+    timeseries = data.frame(time = t, value = as.numeric(ts_result)),
+    components = list(
+      trend = trend,
+      seasonal = seasonal,
+      noise = noise,
+      breaks = breaks,
+      volatility = volatility
+    )
+  ))
+}
+
+```
+
+Congrats, you made it to the fourth installment of the time-series analysis blog post series. So far we've gone over the basics of time series ([Part I](https://swampthingecology.org/news/20241026_Timeseries1.html){target="_blank"}), minimum number of samples, power analyses and some basic trend analyses ([Part II](https://swampthingecology.org/news/20241103_Timeseries2.html){target="_blank"}), and met the family ... Kendall family that is ([Part III](https://swampthingecology.org/news/20241117_Timeseries3.html){target="_blank"}) . In this post we will begin the discussion of time-series stationarity and periodicity, both of which are important considerations in time series forcasts, time-series decomposition and other analyses. 
+
+## Time-series 
+Before we dig too deep into the definitions and tests associated with stationarity and periodicity lets simulate a dataset. If you remember in the first post of this series ([Part I](https://swampthingecology.org/news/20241026_Timeseries1.html){target="_blank"}), I had a couple of functions put together to simulate a time-series. 
+
+```{r dat}
+n.vals <- 15*12 # 15 years 12 months per year 
+dat1 <- simulate_timeseries(
+  n = n.vals,           # About 15 years of monthly data
+  trend_slope = 0.025,  # Upward trend
+  seasonal_amp = 2,     # Seasonal fluctuation of ±2
+  seasonal_period = 12, # Monthly seasonality
+  noise_sd = 0.5,       # Moderate noise
+  noise_mean = 3
+)
+## add some years and months
+dat1$timeseries  <-  cbind(dat1$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004)
+)
+dat1$timeseries$date <-  with(dat1$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+
+dat2 <- simulate_timeseries_vol(
+  n = n.vals,           # About 15 years of daily data
+  trend_slope = 0.05,   # Upward trend
+  seasonal_amp = 2,     # Base seasonal amplitude
+  seasonal_period = 10, # Monthly seasonality
+  init_vol = 0.5,      # Initial volatility
+  vol_persistence = 0.65,
+  rw_sd = 0.3
+)
+## add some years and months
+dat2$timeseries  <-  cbind(dat2$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004)
+)
+dat2$timeseries$date <-  with(dat2$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+
+dat3 <- simulate_timeseries(
+  n = n.vals,           # About 15 years of monthly data
+  trend_slope = 0.001,  # no trend
+  seasonal_amp = 2,     # Seasonal fluctuation of ±2
+  seasonal_period = 12, # Monthly seasonality
+  noise_sd = 0.5,       # Moderate noise
+  noise_mean = 3
+)
+## add some years and months
+dat3$timeseries  <-  cbind(dat3$timeseries,
+                           expand.grid(Mon = 1:12, Yr = 1990:2004)
+)
+dat3$timeseries$date <-  with(dat3$timeseries,as.Date(paste(Yr,Mon,"01",sep="-")))
+
+```
+
+```{r dat plots, echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="Quick plots of example data"}
+par(mfrow = c(1,3))
+plot(value~date,dat1$timeseries,type="l",col="indianred", lwd=2,las=1, main = "Simulated Time Series\n(dat1)", ylab = "Value",xlab ="Date")
+plot(value~date,dat2$timeseries,type="l",col="dodgerblue", lwd=2,las=1,main = "Simulated Time Series\n(dat2)", ylab = "Value",xlab ="Date")
+plot(value~date,dat3$timeseries,type="l",col="forestgreen", lwd=2,las=1,main = "Simulated Time Series\n(dat3)", ylab = "Value",xlab ="Date")
+```
+
+
+
+## Stationarity
+
+You might see throughout the literature stationary and stationarity, one term is a definition and the other is a status. For instance a stationary time-series has statistical properties or moments that do not vary in time. These proprieties or moments refer to the mean, variance or covariance of a time-series. Therefore a stationary time-series is a constant mean, variance and autocorrelation. Stationarity, is therefore, the status of a time-series. These words and their antonyms (e.g. stationarity vs non-stationarity, stationary vs non-stationary) are scatter throughout the literature and used to represent the same things in one way or another. My word savy friends might be able to settle when or how to uses these variants, for now I'll try to remain as consistent as possible.     
+
+To test for stationarity there are several statistical statistical tests and diagnostic tools are available. 
+
+- **Inspect the data**, I know this seems basic but looking at the data will help you gauge the data qualitatively. See plots above.
+
+- **Changes in mean and variance**, given the definitions of stationarity looking at the changes in mean and variance over the time-series could provide insight into the structure of the data and any major shifts or changes. To do that we can look at the cumulative change or deviation in mean values, sometimes called the cusum. Another version of this is looking at the cumulative deviation within the dataset. Cusum with respect to mean is pretty straight forward, estimate the mean of a dataset and calculate the cumulative deviation from the mean. 
+
+```{r cusums}
+## cusum (WRT mean)
+dat1.mu <- mean(dat1$timeseries$value)
+dat1.cusum <- cumsum(dat1$timeseries$value - dat1.mu)
+
+dat2.mu <- mean(dat2$timeseries$value)
+dat2.cusum <- cumsum(dat2$timeseries$value - dat2.mu)
+
+dat3.mu <- mean(dat3$timeseries$value)
+dat3.cusum <- cumsum(dat3$timeseries$value - dat3.mu)
+```
+
+```{r cusum plot,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=5.5,fig.align='center',fig.cap="Deviance and cusum for each dataset"}
+layout(matrix(1:6,2,3,byrow=T))
+par(mar=c(1,4,3,0.5),oma=c(3,1,0,0))
+plot(dat1$timeseries$value - dat1.mu,pch=19,col="indianred", lwd=2,las=1, main = "Simulated Time Series\n(dat1)", ylab = "Deviance from mean")
+plot(dat2$timeseries$value - dat2.mu,pch=19,col="dodgerblue", lwd=2,las=1, main = "Simulated Time Series\n(dat2)", ylab = "Deviance from mean")
+plot(dat3$timeseries$value - dat3.mu,pch=19,col="forestgreen", lwd=2,las=1, main = "Simulated Time Series\n(dat3)", ylab = "Deviance from mean")
+
+plot(dat1.cusum,pch=19,col="indianred", lwd=2,las=1, ylab = "cusum",xlab ="Index")
+mtext(side=1,line=2.5,"Index")
+plot(dat2.cusum,pch=19,col="dodgerblue", lwd=2,las=1, ylab = "cusum",xlab ="Index")
+mtext(side=1,line=2.5,"Index")
+plot(dat3.cusum,pch=19,col="forestgreen", lwd=2,las=1, ylab = "cusum",xlab ="Index")
+mtext(side=1,line=2.5,"Index")
+
+```
+
+Based on the deviation from mean and cusum plots you can see that there are some similarities and differences between time-series. With `dat1` and `dat2` given their generally increasing trends the deviation from the overall mean also increases, meanwhile `dat3` is relatively constant. Simularly the cusum plots look similar for `dat1` and `dat2` with a big "U", however the shape of the U is different between time-series. The bottom of "U" inidicates where in the time-series is the greatest deviation from the overall mean. 
+
+The cusum approach can also be applied to looking at changes in variance across the time-series. The approach is similar, the overall variance is calculated and compared to a squared deviance.
+
+```{r cusum var}
+## cusum (WRT variance)
+dat1.var <- var(dat1$timeseries$value)
+dat1.sqdev <- (dat1$timeseries$value - dat1.mu)^2
+dat1.cusum_variance <- cumsum(dat1.sqdev - dat1.var)
+
+dat2.var <- var(dat2$timeseries$value)
+dat2.sqdev <- (dat2$timeseries$value - dat2.mu)^2
+dat2.cusum_variance <- cumsum(dat2.sqdev - dat2.var)
+
+dat3.var <- var(dat3$timeseries$value)
+dat3.sqdev <- (dat3$timeseries$value - dat3.mu)^2
+dat3.cusum_variance <- cumsum(dat3.sqdev - dat3.var)
+
+```
+
+```{r cusum var plot,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=5.5,fig.align='center',fig.cap="Deviance and cusum for each dataset"}
+layout(matrix(1:6,2,3,byrow = T),heights=c(1,1))
+par(mar=c(1,4,3,0.5),oma=c(3,1,0,0))
+plot(dat1.sqdev,pch=19,col="indianred", lwd=2,las=1, main = "Simulated Time Series\n(dat1)", ylab = "Square deviance")
+plot(dat2.sqdev,pch=19,col="dodgerblue", lwd=2,las=1, main = "Simulated Time Series\n(dat2)", ylab = "Square deviance")
+plot(dat3.sqdev,pch=19,col="forestgreen", lwd=2,las=1, main = "Simulated Time Series\n(dat3)", ylab = "Square deviance")
+
+par(mar=c(1,4,3,0.5))
+plot(dat1.cusum_variance,pch=19,col="indianred", lwd=2,las=1, ylab = "cusum var",xlab ="Index")
+mtext(side=1,line=2.5,"Index")
+plot(dat2.cusum_variance,pch=19,col="dodgerblue", lwd=2,las=1, ylab = "cusum var",xlab ="Index")
+mtext(side=1,line=2.5,"Index")
+plot(dat3.cusum_variance,pch=19,col="forestgreen", lwd=2,las=1, ylab = "cusum var",xlab ="Index")
+mtext(side=1,line=2.5,"Index")
+```
+
+Changes in the cusum variance lines gives an indication of changes in variability over time within the time-series. Positive "trend" indicates increasing variability and vice-versa. 
+
+
+- **Augmented Dickey-Fuller (ADF) Test**, the ADF test checks for a unit root in the time-series, where the null hypothesis is that the series is non-stationary
+
+```{r,warning=FALSE,message=FALSE}
+library(tseries)
+
+adf.test(dat1$timeseries$value)
+adf.test(dat2$timeseries$value)
+adf.test(dat3$timeseries$value)
+
+```
+
+These results suggest that both `dat1` and `dat3` are stationary datasets due to the low p-values. To some extent you can see that in the plots of the raw data with `dat2` time-series looks like something changes towards the back end of the time-series. 
+
+- **KPSS Test (Kwiatkowski-Philips-Schmidt-Shin)**, this test complements the ADF test 
+
+```{r,warning=FALSE,message=FALSE}
+kpss.test(dat1$timeseries$value,null = "Trend")
+kpss.test(dat2$timeseries$value,null = "Trend")
+kpss.test(dat3$timeseries$value,null = "Trend")
+```
+
+At first glance you would think these results are giving contradictory results. This is where understanding the null hypothesis comes in handy. With the KPSS test, when p-values are low (i.e. <0.05) they indicate the time-series is non-stationary while high p-values suggest stationary time-series. Therefore the KPSS results are consistent with the ADF results.
+
+Both the ADF and KPSS tests assess data for stationarity by evaluating the unit-root) but they differ fundamentally in their hypotheses and objectives.
+    
+  - ADF Test
+      - Null hypothesis ($H_0$): The time series has a unit root (i.e. it is non-stationary).
+      - Goal: Test for the presence of a unit root (non-stationarity).
+  - KPSS Test
+      - Null hypothesis ($H_0$): The time series is stationary (trend-stationary or level-stationary).
+      - Goal: Test for stationarity.
+
+There are ways to make non-stationary time-series stationary by using differencing methods, however in most cases (in my field) these methods remove some of the fundamental information from the dataset and make interpretation and "back"-calculating difficult. 
+
+## Periodicity
+
+Periodicity can be defined as the frequency at which observations occur in a time-series. As with everything there are a couple different ways to assess periodicity.
+
+- **Autocorrelation Function (ACF)**, the most basic look at a time-series, aside from just plotting the data is looking at the autocorrelation of the data. The ACF can reveal periodicity and if there are significant correlations at regular lags then this could qualtatively indicate that time-series has periodic cycles. 
+
+```{r,eval=F}
+acf(dat1$timeseries$value)
+acf(dat2$timeseries$value)
+acf(dat3$timeseries$value)
+```
+
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="ACF plots of example data"}
+
+layout(matrix(1:3,1,3,byrow = T),heights=c(1))
+par(mar=c(1,4,3,0.5),oma=c(3,1,0,0))
+
+acf(dat1$timeseries$value,col="indianred", main = "ACF of dat1")
+acf(dat2$timeseries$value,col="dodgerblue", main = "ACF of dat2")
+acf(dat3$timeseries$value,col="forestgreen", main = "ACF of dat3")
+
+```
+
+The ACF plots present the degree of autocorrelation (i.e. correlation coefficient) of the data. The horizontal blue dashed line is the approximate line indicating significant correlations. Based on this first look we can see that each time-series has some degree of periodicity. 
+
+- **Fourier Transform / Periodogram** A periodogram or spectral density plot will show the relative strength of different frequencies (periodicities) in a given time-series. The `spectrum` function is in base R and will provide a plot with results "hidden". If you give it a variable name it will store the output as an object. (i.e. `test1 <- spectrum(...)`).  
+
+```{r}
+spectrum(dat1$timeseries$value,main = "Series: dat1")
+spectrum(dat2$timeseries$value,main = "Series: dat1")
+spectrum(dat3$timeseries$value,main = "Series: dat1")
+```
+
+Here is a comparison of the different time-series 
+```{r,echo = FALSE, results='hide',dpi=96,fig.width=7,fig.height=4.5,fig.align='center',fig.cap="Combined spectral density estimation"}
+dat1.ft <- spectrum(dat1$timeseries$value,plot=F)
+dat1.ft.df <- data.frame(spec = dat1.ft$spec,freq = dat1.ft$freq)
+
+dat2.ft <- spectrum(dat2$timeseries$value,plot=F)
+dat2.ft.df <- data.frame(spec = dat2.ft$spec,freq = dat2.ft$freq)
+
+dat3.ft <- spectrum(dat3$timeseries$value,plot=F)
+dat3.ft.df <- data.frame(spec = dat3.ft$spec,freq = dat3.ft$freq)
+
+plot(spec~freq,dat1.ft.df,log="y",type="n",ylim=c(1e-4,1e2))
+lines(spec~freq,dat1.ft.df,col="indianred")
+lines(spec~freq,dat2.ft.df,col="dodgerblue")
+lines(spec~freq,dat3.ft.df,col="forestgreen")
+```
+
+Interestingly, the combined spectral density plot shows that `dat1` and `dat3` have identical spectral densities. Which makes sense if you go back to how the data was simulated. The only difference in the function was `trend_slope` value which made `dat3` a much more flat time-series.
+
+<!--   - **Fast Fourier Transform (FFT)** this method decomposes the time-series into its frequency components, allowing to identify dominant frequencies (or periods). The general code looks like this and generates something very close to above.  -->
+
+<!-- ```{r} -->
+<!-- # FFT to detect dominant frequency -->
+<!-- fft_res <- fft(dat1.ft$spec) -->
+<!-- n <- length(dat1.ft$spec) -->
+<!-- freq <- (0:(n/2)) / n  # Frequency components -->
+<!-- amplitude <- Mod(fft_res)[1:(n/2 + 1)]  # Amplitude -->
+
+<!-- # Find the dominant frequency -->
+<!-- dominant_freq <- freq[which.max(amplitude)] -->
+<!-- period <- 1 / dominant_freq -->
+<!-- cat("Estimated Period:", period, "\n") -->
+
+<!-- # Plot frequency spectrum -->
+<!-- plot(freq, amplitude, type = "h", main = "Frequency Spectrum",  -->
+<!--      xlab = "Frequency", ylab = "Amplitude") -->
+
+<!-- ``` -->
+
+- **Lomb-Scargle Periodogram**, a method similar to fourier transformations, the Lomb-Scargle periodgrams fits a sinusoidal model to each frequency. This method can be applied to time-series with regular and irregular sampling intervals (periodicity).  
+
+```{r}
+library(lomb)
+dat1.lsp_result <- lsp(dat1$timeseries$value,type= "period")
+
+dat2.lsp_result <- lsp(dat2$timeseries$value,type= "period")
+
+dat3.lsp_result <- lsp(dat3$timeseries$value,type= "period")
+
+```
+
+Other functions in the `lomb` library can help visualize and extract information like `getpeaks(...)` and `summary(...)`. There is a lot more to this method and package than we can dedicate here, therefore I encourage exploration of this package and method.
+
+
+# Whats next?
+
+Now that we have a basic understanding of these components, combined with what we've learned so far about time-series analysis. The next post will cover time series decomposition. Stay tuned. 
+
+
+<!-- Recommended Resource: https://otexts.com/fpp2/ -->
+
+:::{.callout-tip collapse="true"}
+# Session Info
+```{r, echo = FALSE,warning=FALSE,message=FALSE}
+library(sessioninfo)
+# save the session info as an object
+pkg_sesh <- session_info(pkgs = "attached",info=c("platform","package"))
+
+# Remove package library path
+pkg_sesh$packages$library = NULL
+
+# get the quarto version
+quarto_version <- system("quarto --version", intern = TRUE)
+
+# inject the quarto info
+pkg_sesh$platform$quarto <- system("quarto --version", intern = TRUE)
+
+# modify pandoc info
+pkg_sesh$platform$pandoc = trimws(sapply(strsplit(pkg_sesh$platform$pandoc,"@"),"[",1))
+
+# print it out
+pkg_sesh
+
+```
+
+:::
