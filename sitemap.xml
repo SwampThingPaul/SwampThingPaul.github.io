@@ -2,42 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://swampthingecology.org/Publications.html</loc>
-    <lastmod>2026-01-06T13:21:38.477Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/news/20241117_Timeseries3.html</loc>
-    <lastmod>2026-01-06T13:21:26.140Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/news/20241026_Timeseries1.html</loc>
-    <lastmod>2026-01-06T13:20:57.337Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/index.html</loc>
-    <lastmod>2026-01-06T13:20:51.613Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/Authorship.html</loc>
-    <lastmod>2026-01-06T13:20:47.769Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/about.html</loc>
-    <lastmod>2026-01-06T13:20:46.065Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/blog.html</loc>
-    <lastmod>2026-01-06T13:20:48.683Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/news/2023-12-16-previous-posts.html</loc>
-    <lastmod>2026-01-06T13:20:52.023Z</lastmod>
-  </url>
-  <url>
-    <loc>https://swampthingecology.org/news/20241103_Timeseries2.html</loc>
-    <lastmod>2026-01-06T13:21:19.288Z</lastmod>
+    <lastmod>2023-12-17T03:12:05.737Z</lastmod>
   </url>
   <url>
     <loc>https://swampthingecology.org/news/20241208_Timeseries4.html</loc>
-    <lastmod>2026-01-06T13:21:33.252Z</lastmod>
+    <lastmod>2024-12-08T22:00:12.649Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/news/20241103_Timeseries2.html</loc>
+    <lastmod>2024-11-04T13:30:26.414Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/news/2023-12-16-previous-posts.html</loc>
+    <lastmod>2023-12-16T20:36:18.915Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/blog.html</loc>
+    <lastmod>2023-12-16T20:33:21.152Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/about.html</loc>
+    <lastmod>2023-12-16T20:24:45.688Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/Authorship.html</loc>
+    <lastmod>2023-12-16T20:49:12.454Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/index.html</loc>
+    <lastmod>2024-03-28T13:06:48.963Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/news/20241026_Timeseries1.html</loc>
+    <lastmod>2024-10-28T12:39:26.778Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/news/20241117_Timeseries3.html</loc>
+    <lastmod>2024-11-18T01:10:49.469Z</lastmod>
+  </url>
+  <url>
+    <loc>https://swampthingecology.org/news/20260630_DMSTAr.html</loc>
+    <lastmod>2026-06-30T11:41:51.640Z</lastmod>
   </url>
 </urlset>

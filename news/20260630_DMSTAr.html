@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Paul Julian">
+<meta name="dcterms.date" content="2026-06-30">
 
-<title>about – Paul Julian II, PhD</title>
+<title>DMSTAr: Bringing a Legacy Wetland Water Quality Model into R – Paul Julian II, PhD</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,28 +22,63 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/SWE_logo_small.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-72626000fd5c974522b50490e5116bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/SWE_logo_small.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-72626000fd5c974522b50490e5116bcf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -85,7 +122,7 @@ ga('send', {
 </script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="floating nav-fixed quarto-light">
@@ -95,11 +132,11 @@ ga('send', {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/SWE_logo_small.png" alt="" class="navbar-logo light-content">
-    <img src="./images/SWE_logo_small.png" alt="" class="navbar-logo dark-content">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/SWE_logo_small.png" alt="" class="navbar-logo light-content">
+    <img src="../images/SWE_logo_small.png" alt="" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Paul Julian II, PhD</span>
     </a>
   </div>
@@ -110,15 +147,15 @@ ga('send', {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./_files/Julian_CV.pdf"> 
+    <a class="nav-link" href="../_files/Julian_CV.pdf"> 
 <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -144,40 +181,148 @@ ga('send', {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-layout-custom page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#why-translate-dmsta-into-r" id="toc-why-translate-dmsta-into-r" class="nav-link active" data-scroll-target="#why-translate-dmsta-into-r">Why translate DMSTA into R?</a></li>
+  <li><a href="#what-does-dmstar-do" id="toc-what-does-dmstar-do" class="nav-link" data-scroll-target="#what-does-dmstar-do">What does DMSTAr do?</a></li>
+  <li><a href="#preserving-legacy-behavior" id="toc-preserving-legacy-behavior" class="nav-link" data-scroll-target="#preserving-legacy-behavior">Preserving legacy behavior</a></li>
+  <li><a href="#how-well-does-dmstar-reproduce-dmsta" id="toc-how-well-does-dmstar-reproduce-dmsta" class="nav-link" data-scroll-target="#how-well-does-dmstar-reproduce-dmsta">How well does DMSTAr reproduce DMSTA?</a></li>
+  <li><a href="#what-is-available-now" id="toc-what-is-available-now" class="nav-link" data-scroll-target="#what-is-available-now">What is available now?</a></li>
+  <li><a href="#a-few-caveats" id="toc-a-few-caveats" class="nav-link" data-scroll-target="#a-few-caveats">A few caveats</a></li>
+  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters">Why this matters</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DMSTAr: Bringing a Legacy Wetland Water Quality Model into R</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Everglades</div>
+    <div class="quarto-category">water quality</div>
+    <div class="quarto-category">wetlands</div>
+    <div class="quarto-category">open science</div>
+    <div class="quarto-category">modeling</div>
+  </div>
+  </div>
 
 
 
+<div class="quarto-title-meta">
 
-<div class="grid">
-<div class="g-col-2">
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Paul Julian </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 30, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
+
+</header>
+
+
+<p>Over the past several months, I have been working on something that sits squarely at the intersection of wetland biogeochemistry, Everglades restoration planning, and love of reproducible and open science: <strong>DMSTAr</strong>.</p>
+<p>DMSTAr is an open-source R implementation of the <a href="http://www.wwwalker.net/dmsta/"><strong>Dynamic Model for Stormwater Treatment Areas</strong></a>, more commonly known as <strong>DMSTA</strong>. DMSTA has been used for years to simulate hydrologic routing and phosphorus removal in stormwater treatment wetlands, particularly in the Florida Everglades. It is a model that has been used in restoration planning, treatment wetland evaluations, and scenario analyses where water quantity and water quality have to be considered together. However, the legacy implementation exists as a spreadsheet/VBA-based workflow, which can make transparency, version control, reproducibility, and large-scale scenario testing cumbersome.</p>
+<p>The goal of DMSTAr was not to create a new wetland water quality model or to reassess the assumptions behind DMSTA. Instead, the goal was more focused: translate the existing model behavior into a modular, script-based R framework while preserving the numerical behavior of the legacy implementation. In other words, DMSTAr is intended to reproduce DMSTA, but in a form that is easier to inspect, test, document, share, and integrate into modern scientific workflows.</p>
+<section id="why-translate-dmsta-into-r" class="level2">
+<h2 class="anchored" data-anchor-id="why-translate-dmsta-into-r">Why translate DMSTA into R?</h2>
+<p>Spreadsheet models can be incredibly useful. They are accessible, familiar, and often become the practical backbone of applied environmental modeling. But as models become more complex, the spreadsheet environment can also become limiting. Logic can be distributed across cells, worksheets, macros, named ranges, and hidden dependencies. That makes it harder to know exactly what is happening at each step, harder to test individual pieces of model logic, and harder to run many scenarios in a consistent and reproducible way.</p>
+<p>DMSTAr restructures that workflow into explicit R functions. Inputs are handled as data frames or lists, model configuration is defined in code, simulations return R objects, and intermediate states can be inspected directly. This makes the model easier to debug, easier to document, and easier to connect with the broader R ecosystem for data processing, visualization, sensitivity analysis, and reporting.</p>
+<p>From an open science perspective, this was one of the major motivations. A model used in planning and decision support should be as transparent and reproducible as possible. Moving DMSTA into R does not automatically solve every modeling challenge, but it does make the implementation easier to examine and easier to build on.</p>
+</section>
+<section id="what-does-dmstar-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-dmstar-do">What does DMSTAr do?</h2>
+<p>DMSTAr preserves the core structure of DMSTA while organizing the model into reusable functions. The package supports workflows that move from input data, to model configuration, to simulation execution. At a high level, DMSTAr includes tools to define model parameters, construct treatment wetland cells, validate model inputs, simulate hydrology and phosphorus dynamics at the cell level, run case-level simulations, and route flows and loads through networked configurations. Ultmately the package was designed around the same conceptual hierarchy used in DMSTA</p>
+</section>
+<section id="preserving-legacy-behavior" class="level2">
+<h2 class="anchored" data-anchor-id="preserving-legacy-behavior">Preserving legacy behavior</h2>
+<p>The biggest challenges in translating a legacy model is deciding what “equivalent” means. For DMSTAr, the goal was not to produce a cleaner theoretical version of DMSTA or perfectly replicate VBA code to work in R. The goal was to preserve the behavior of the legacy model as closely as possible, including version-specific operational logic that affects hydrology and routing in the R environment.</p>
+<p>DMSTAr includes support for multiple DMSTA version semantics through an explicit configuration parameter. This matters because some legacy DMSTA applications differ in operational details such as release gating, depth controls, inflow fraction handling, and offline/resting-period behavior. Those details may seem minor, but they can affect simulated water movement, phosphorus loads, and downstream performance metrics.</p>
+<p>Rather than performing a simple line-by-line conversion of spreadsheet formulas and VBA code, the model translation focused on preserving governing equations, numerical integration procedures, execution logic, and model behavior. Spreadsheet-based calculations that depended on implicit cell relationships were reformulated as explicit state-space updates in R. That means the model states, fluxes, and intermediate values are much easier to inspect during simulation.</p>
+</section>
+<section id="how-well-does-dmstar-reproduce-dmsta" class="level2">
+<h2 class="anchored" data-anchor-id="how-well-does-dmstar-reproduce-dmsta">How well does DMSTAr reproduce DMSTA?</h2>
+<p>A major part of the development process was verification. DMSTAr was compared directly against legacy DMSTA outputs using identical input data, parameter values, initial conditions, and network structures. These comparisons included major Everglades planning applications such as Restoration Strategies, the Central Everglades Planning Project, the Western Everglades Restoration Project, and the Lake Okeechobee System Operating Manual.</p>
+<p>Agreement was evaluated at both the time-series scale and the annual performance-metric scale. The comparison included total discharge, total phosphorus load, and flow-weighted mean total phosphorus concentration. Across the evaluated applications, DMSTAr reproduced legacy DMSTA behavior with negligible systematic bias and high agreement. For the overall comparison, 99.8% of annual total discharge estimates, 95.4% of annual total load estimates, and 96.1% of annual flow-weighted mean estimates were within ±1% symmetric percent difference.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assests/20260630_DMSTAr/LOSOM_STAs_compare.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Time series plots of annually aggregated total outflow discharge, total outflow total phosphorus (TP) load and TP flow-weighted mean concentration using the DMSTA legacy and DMSTAr estimated value for stormwater treatment areas modelled in Lake Okeechobee System Operating Manual.</figcaption>
+</figure>
 </div>
-<div class="g-col-4">
-<p>Currently I work for the Everglades Foundation (<a href="https://www.evergladesfoundation.org/" target="_blank">The Foundation</a>) where I am part of the Science Team that provides technical support for ongoing Everglades Restoration efforts. We work with partners, local stakeholders, State and Federal agencies to advocate for the environment. In addition to my work with the Foundation I also am working collaboratively with others to develope and hone my research and data analysis abilities.</p>
-<p>During my post doctoral studies at University of Montreal (Université de Montréal) I studied harmful algae bloom dynamics in Dr Sébastien Sauvé’s lab. My specific focus was using time-series and statistical models to evaluate limnological characteristics, genomic and climatic conditions relative to algae bloom progression.</p>
-<p>My PhD research focused on understanding biogeochemical processes within the Everglades Stormwater Treatment Areas (wetlands) including nutrient spiraling, nutrient stoichiometry, aquatic productivity and carbon dynamics. I have diverse and varied research interests revolving around aquatic biogeochemistry, ecology and management. My current research interests are split between marine and freshwater wetlands studying the effects of climate change, eutrophication, ecosystem management and restoration on ecosystem function. I like to say that my research spans the aquatic continuum from fresh to marine aquatic ecosystems, and therefore can’t isolated me to one system.</p>
-<p>My other academic achievements pre-PhD include obtaining a BSc of biochemistry from Benedictine College (Atchison, Kansas, USA) and MSc of Environmental Science from Florida Gulf Coast University (Fort Myers, Florida, USA). My masters work involved studying Florida Panther (<em>Puma concolor coryi</em>) habitat selection and home range dynamics in response to exotic plant removal and management within Big Cypress National Preserve (Florida, USA). Post-bachelor’s degree I immediately entered the work force studying coastal water quality, estuarine dissolved organic matter dynamics and harmful algae blooms in southwest Florida. After several years I decided it was time to purse an advanced degree and took a detour studying something outside of my existing background (wildlife ecology). I was a rather un-traditional student and while working full-time I pursed my master’s degree. After obtaining my master’s degree I moved onto studying seagrass ecology and later to Everglades restoration with a focus on water quality which led me to the wetland biogeochemistry lab at University of Florida where I (un-traditionally) achieved my PhD.</p>
-<p>Outside of work and research I like to get stuck in the garden, get lost in nature by going on long hikes through the bush, document my adventure with photography (<a href="https://www.flickr.com/people/swampthingsjourney/" target="_blank">Flickr</a>), snorkel and scuba dive, cook vegan meals, exercise and be overall active.</p>
-</div>
-<div class="g-col-6">
-<p><a><img src="images/about/PJ_dogs.jpg" width="50%"></a></p>
-<!-- ![ ](images/about/PJ_dogs.jpg) -->
-<p><a><img src="images/about/Paul_Kara_wetland.JPG" width="50%"></a></p>
-<!-- ![ ](images/about/Paul_Kara_wetland.JPG) -->
 </div>
 </div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assests/20260630_DMSTAr/DMSTA_blandaltmann.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Bland-Altmann plot comparing symmetric percent difference of annual total discharge, total phosphorus (TP) load and TP flow-weighted mean (FWM) concentration for cases modelled in Restoration Strategies (RS), Central Everglades Planning Project (CEPP), Western Everglades Planning Project (WERP) and Lake Okeechobee System Operating Manual (LOSOM).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>That does not mean every intermediate calculation is bit-for-bit identical. Minor differences are expected when translating a macro-driven spreadsheet model into a scripted R implementation. These differences can arise from rounding, evaluation order, explicit time-stepping control, numerical precision, or edge-case handling. The important point is that those differences were small, bounded, and did not indicate a change in the underlying model formulation.</p>
+</section>
+<section id="what-is-available-now" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-available-now">What is available now?</h2>
+<p>The DMSTAr source code is available on GitHub: <a href="https://github.com/SwampThingPaul/DMSTAr">DMSTAr GitHub repository</a>. The repository provides access to the package source code, documentation, vignettes, and example workflows. At the time of writing, a draft manuscript is being prepare for submission to support the document the package developement, a separate repository contains code and supporting materials associated with the model comparison analysis. DMSTAr has also been submitted to CRAN as version 0.1.1. Until the CRAN version is available, the developement version can be installed from GitHub using</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"SwampThingPaul/DMSTAr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="a-few-caveats" class="level2">
+<h2 class="anchored" data-anchor-id="a-few-caveats">A few caveats</h2>
+<p>DMSTAr is not intended to replace careful model review, calibration, or interpretation. The current work demonstrates implementation parity, not predictive performance or model adequacy for every possible application. If DMSTAr is applied to substantially different project configurations or future extensions, equivalence should continue to be verified.</p>
+<p>Also, the DMSTAr package repository does not include the original DMSTA source code or the published DMSTA output files evaluated in the manuscript. Those outputs are publicly available through the Statewide Model Management System, with project-specific links provided in the manuscript supplemental materials.</p>
+</section>
+<section id="why-this-matters" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-matters">Why this matters</h2>
+<p>For me, the value of DMSTAr is not simply that DMSTA can now be run in R. The bigger value is that a historically important wetland water quality modeling workflow can now be executed in a way that is more transparent, reproducible, testable, and easier to integrate with modern analysis pipelines.</p>
+<p>That matters for Everglades restoration planning, where decisions often depend on comparing alternatives across hydrology, water quality, ecological response, and operational constraints. It also matters for open science. If models are going to inform public restoration decisions, then the implementation should be as accessible and reproducible as possible.</p>
+<p>DMSTAr is one step in that direction. It preserves the core behavior of a legacy modeling tool while making the workflow more transparent and extensible for future analysis, scenario testing, and model development.</p>
+<p>If you work with treatment wetlands, Everglades restoration planning, phosphorus modeling, or just enjoy seeing legacy environmental models brought into reproducible R workflows, feel free to check out the package, try the examples, and open an issue if something breaks.</p>
+<p>Because, as always, the swamp deserves reproducible science.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assests/20260630_DMSTAr/swampthing_thumbs.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
 
 
+</section>
 
-
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
