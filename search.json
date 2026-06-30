@@ -249,7 +249,7 @@
     "href": "news/20260630_DMSTAr.html#what-does-dmstar-do",
     "title": "DMSTAr: Bringing a Legacy Wetland Water Quality Model into R",
     "section": "What does DMSTAr do?",
-    "text": "What does DMSTAr do?\nDMSTAr preserves the core structure of DMSTA while organizing the model into reusable functions. The package supports workflows that move from input data, to model configuration, to simulation execution. At a high level, DMSTAr includes tools to define model parameters, construct treatment wetland cells, validate model inputs, simulate hydrology and phosphorus dynamics at the cell level, run case-level simulations, and route flows and loads through networked configurations. Ultmately the package was designed around the same conceptual hierarchy used in DMSTA"
+    "text": "What does DMSTAr do?\nDMSTAr preserves the core structure of DMSTA while organizing the model into reusable functions. The package supports workflows that move from input data, to model configuration, to simulation execution. At a high level, DMSTAr includes tools to define model parameters, construct treatment wetland cells, validate model inputs, simulate hydrology and phosphorus dynamics at the cell level, run case-level simulations, and route flows and loads through networked configurations. Ultimately the package was designed around the same conceptual hierarchy used in DMSTA."
   },
   {
     "objectID": "news/20260630_DMSTAr.html#preserving-legacy-behavior",
