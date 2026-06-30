@@ -244,6 +244,15 @@ ga('send', {
 
 
 <p>Over the past several months, I have been working on something that sits squarely at the intersection of wetland biogeochemistry, Everglades restoration planning, and love of reproducible and open science: <strong>DMSTAr</strong>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./assests/20260630_DMSTAr/DMSTAr_hexish.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:25.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>DMSTAr is an open-source R implementation of the <a href="http://www.wwwalker.net/dmsta/"><strong>Dynamic Model for Stormwater Treatment Areas</strong></a>, more commonly known as <strong>DMSTA</strong>. DMSTA has been used for years to simulate hydrologic routing and phosphorus removal in stormwater treatment wetlands, particularly in the Florida Everglades. It is a model that has been used in restoration planning, treatment wetland evaluations, and scenario analyses where water quantity and water quality have to be considered together. However, the legacy implementation exists as a spreadsheet/VBA-based workflow, which can make transparency, version control, reproducibility, and large-scale scenario testing cumbersome.</p>
 <p>The goal of DMSTAr was not to create a new wetland water quality model or to reassess the assumptions behind DMSTA. Instead, the goal was more focused: translate the existing model behavior into a modular, script-based R framework while preserving the numerical behavior of the legacy implementation. In other words, DMSTAr is intended to reproduce DMSTA, but in a form that is easier to inspect, test, document, share, and integrate into modern scientific workflows.</p>
 <section id="why-translate-dmsta-into-r" class="level2">
